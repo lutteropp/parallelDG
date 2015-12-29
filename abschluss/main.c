@@ -107,3 +107,49 @@ float f1(float x,float y)
     float asdf=(32*(x*(1-x)+y*(1-y)));
     return asdf;
 }
+/*
+float* wavefront(float * matrix,float h, float* f)
+{
+    float* a0=matrix;
+    float* a1=matrix;
+    int k =0;
+    int size=1/h;
+    //todo abbruchbedingung
+    for( k =0; k<100000; k++)
+    {
+        
+        a0=a1;
+        int currentEle=1;
+        int border =0;
+        int durchlauf;
+        for(durchlauf =0;border>(n/2);durchlauf++){
+            if(currentEle>=(n/2)){
+                currentEle--;
+                border++;
+            }else{
+                currentEle++;
+            }
+            int i =0;
+            for(i=0;i<currentEle;i++){
+                a1[(durchlauf+border-i*size + i+border]=0,25*(a1[i*size + (j-1)] + a1[(i-1)*size + j]+a0[(i+1)*size + j]+a0[i*size + (j+1)]+h*h*f[i*size+j]);
+            }//indexe machen
+        }
+        
+                //todo erinnern was x war
+                 a1[i*size + j]=0,25*(a1[i*size + (j-1)] + a1[(i-1)*size + j]+a0[(i+1)*size + j]+a0[i*size + (j+1)]+h*h*f[i*size+j]);
+       
+    }
+    return a1;
+}
+
+current elemente =1
+border =0;
+for durchauf ++ bis border >n/2
+
+if (current ele >=n/2) curre ele--; border++; else cur el ++;
+ for(current elemente auf der diagonalen
+	int lala = (durchlauf -i)(i)
+ A(durchlauf+border -i)(i+border) =bla blub
+
+
+*/
