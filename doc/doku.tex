@@ -2,6 +2,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{ngerman}
+\usepackage{amsmath}
+\usepackage{amsfonts}
 		     
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
@@ -22,6 +24,18 @@ Ausarbeitung für das Abschlussprojekt ``Projekt 1: Parallele Lösungsmethodik p
 \end{abstract}
 
 \section{Mathematischer Hintergrund}
+
+Wir haben folgendes Setting:
+\begin{itemize}
+	\item $\Omega \cup \Gamma = [0,1]^2$
+	\item Rand $\Gamma = \{(x,y) \in \mathbb{R}^2 : x \in \{0,1\} \text{ oder }  y \in \{0,1\} \}$
+	\item $-\Delta u(x,y) = f(x,y) \quad \forall (x,y) \in (0,1)^2$
+	\item $u(x,y) = 0 \quad \forall (x,y) \in [0,1]^2 \backslash (0,1)^2$
+	
+	\item Diskretisierungsparameter $h$
+	\item $(x,y)$ sind also Koordinaten im diskretisierten Einheitsquadrat
+\end{itemize}
+
 Blabla
 \subsection{Jacobi-Verfahren}
 Blabla
