@@ -8,7 +8,6 @@ float* gausseidel(float * matrix, float h, float* f);
 float* f(float*x, float*y, float h);
 
 int main() {
-  printf("Hello world!asdf\n");
   float h = 2;
   float* otto = createTestMatrix(h);
 
@@ -16,7 +15,7 @@ int main() {
 }
 
 float* createTestMatrix(int h) {
-  int size = 1 / h;
+  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
   float* a = (float *) malloc(size * size * sizeof(float));
   int i;
   for (i = 0; i < size; i++)
@@ -68,7 +67,7 @@ float* jacobi(float * matrix, float h, float* f) {
   float* a0 = matrix;
   float* a1 = matrix;
   int k = 0;
-  int size = 1 / h;
+  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
   //todo abbruchbedingung
   for (k = 0; k < 100000; k++)
   {
@@ -91,7 +90,7 @@ float* jacobi(float * matrix, float h, float* f) {
 }
 
 float* f(float*x, float*y, float h) {
-  int size = 1 / h;
+  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
   float* tmp = x;
   int i = 0;
 
@@ -109,8 +108,8 @@ float* f(float*x, float*y, float h) {
 }
 
 float f1(float x, float y) {
-  float asdf = (32 * (x * (1 - x) + y * (1 - y)));
-  return asdf;
+  float result = (32 * (x * (1 - x) + y * (1 - y)));
+  return result;
 }
 
 /*
