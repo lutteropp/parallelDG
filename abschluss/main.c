@@ -52,7 +52,7 @@ float* gausseidel(float * matrix, float h, float* f) {
       int i;
       for (i = 1; i < size; i++)
       {
-        //todo erinnern was x war
+        //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
         a1[i * size + j] = 0, 25
             * (a1[i * size + (j - 1)] + a1[(i - 1) * size + j]
                 + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
@@ -78,7 +78,7 @@ float* jacobi(float * matrix, float h, float* f) {
       int i;
       for (i = 1; i < size; i++)
       {
-        //todo erinnern was x war
+        //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
         a1[i * size + j] = 0, 25
             * (a0[i * size + (j - 1)] + a0[(i - 1) * size + j]
                 + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
