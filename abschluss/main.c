@@ -1,24 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 float f1(float x, float y);
-float* jacobi(float* startVector, float h, float* f);
-float* gaussSeidel(float * startVector, float h, float* f);
-float* computeFunctionTable(float h);
-void printResultMatrix(float* matrix);
+void jacobi(const float* startVector, float h, const float* f, float* jacobiResult);
+void gaussSeidel(const float * startVector, float h, const float* f, float* gaussSeidelResult);
+void computeFunctionTable(float h, float* functionTable);
+void printResultMatrix(const float* matrix);
 void printAnalyticalResult(float h);
 
 int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-float* jacobi(float* startVector, float h, float* f) {
-	float* a0 = startVector; // last iteration
-	float* a1 = startVector; // current iteration
+void jacobi(const float* startVector, float h, const float* f, float* jacobiResult) {
 	int i, j, k;
+	float* array0 = (float*) malloc(size * size * sizeof(float));
+	float* array1 = (float*) malloc(size * size * sizeof(float));
+
+	float* a0 = array0; // last iteration
+	float* a1 = array1; // current iteration
+
+	for (i = 0; i < size * size; ++i) {
+		a0[i] = startVector[i];
+		a1[i] = startVector[i];
+	}
+
 	//todo abbruchbedingung
-	for (k = 0; k < 1000000; ++k) {
+	for (k = 0; k < 10000; ++k) {
+		// swap a0 and a1
+		float* temp = a0;
 		a0 = a1;
+		a1 = temp;
 		for (j = 1; j < size; j++) {
 			for (i = 1; i < size; i++) {
 				a1[CO(i,j)] = a0[CO(i, j - 1)]
@@ -30,16 +43,34 @@ float* jacobi(float* startVector, float h, float* f) {
 			}
 		}
 	}
-	return a1;
+
+	for (i = 0; i < size * size; ++i) {
+		jacobiResult[i] = a1[i];
+	}
+
+	free(a0);
+	free(a1);
 }
 
-float* gaussSeidel(float * startVector, float h, float* f) {
-	float* a0 = startVector; // last iteration
-	float* a1 = startVector; // current iteration
+void gaussSeidel(const float * startVector, float h, const float* f, float* gaussSeidelResult) {
 	int i, j, k;
+	float* array0 = (float*) malloc(size * size * sizeof(float));
+	float* array1 = (float*) malloc(size * size * sizeof(float));
+
+	float* a0 = array0; // last iteration
+	float* a1 = array1; // current iteration
+
+	for (i = 0; i < size * size; ++i) {
+		a0[i] = startVector[i];
+		a1[i] = startVector[i];
+	}
+
 	//todo abbruchbedingung
-	for (k = 0; k < 1000000; ++k) {
+	for (k = 0; k < 10000; ++k) {
+		// swap a0 and a1
+		float* temp = a0;
 		a0 = a1;
+		a1 = temp;
 		for (j = 1; j < size; j++) {
 			for (i = 1; i < size; i++) {
 				a1[CO(i,j)] = a1[CO(i, j - 1)]
@@ -51,12 +82,16 @@ float* gaussSeidel(float * startVector, float h, float* f) {
 			}
 		}
 	}
-	return a1;
+	
+	for (i = 0; i < size * size; ++i) {
+		gaussSeidelResult[i] = a1[i];
+	}
+	free(a0);
+	free(a1);
 }
 
 
-float* computeFunctionTable(float h) {
-	float* functionTable = (float*) malloc(size * size* sizeof(float));
+void computeFunctionTable(float h, float* functionTable) {
 	int i, j;
 	for (i = 0; i < size; ++i) {
 		for (j = 0; j < size; ++j) {
@@ -65,14 +100,13 @@ float* computeFunctionTable(float h) {
 			functionTable[CO(i, j)] = f1(x1, y1);
 		}
 	}
-	return functionTable;
 }
 
 float f1(float x, float y) {
 	return (32 * (x * (1 - x) + y * (1 - y)));
 }
 
-void printResultMatrix(float* matrix) {
+void printResultMatrix(const float* matrix) {
 	int i, j;
 	for (i = 0; i < size; ++i) {
 		for (j = 0; j < size; ++j) {
@@ -125,7 +159,8 @@ int main(int argc, char *argv[]) {
 	}
 	float h = 1 / (float) (size - 1);
 	// Precompute function f
-	float* precomputedF = computeFunctionTable(h);
+	float* precomputedF = malloc(size * size * sizeof(float));
+	computeFunctionTable(h, precomputedF);
 	// Create random start vector with zeroes at the proper positions (at the border)
 	float* startVector = (float*) malloc(size * size * sizeof(float));
 	srand(time(NULL));
@@ -140,9 +175,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	// Call Jacobi
-	float* jacobiResult = jacobi(startVector, h, precomputedF);
+	float* jacobiResult = malloc(size * size * sizeof(float));
+	printf("I am here...\n");
+	jacobi(startVector, h, precomputedF, jacobiResult);
+
 	// Call Gauss-Seidel
-	float* gaussSeidelResult = gaussSeidel(startVector, h, precomputedF);
+	float* gaussSeidelResult = malloc(size * size * sizeof(float));
+	gaussSeidel(startVector, h, precomputedF, gaussSeidelResult);
 
 	// TODO: Check for correctness and compare both results
 
@@ -154,7 +193,7 @@ int main(int argc, char *argv[]) {
 	printf("\nErgebnis analytisch:\n");
 	printAnalyticalResult(h);
 
-
+	if (!jacobiResult) printf("WTF?\n");
 	free(jacobiResult);
 	free(gaussSeidelResult);
 	free(startVector);
