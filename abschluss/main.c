@@ -108,6 +108,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 	float* s0 = arraySchwarz0; // last iteration Schwarz
 	float* s1 = arraySchwarz1; // current iteration Schwarz
 
+	#pragma omp parallel for private(i, j)
 	for (j = 0; j < size; ++j) {
 		//printf("Spalte %d:\n", j);
 		//printf(" IdxRot: ");
@@ -216,6 +217,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 	}
 	printf("\n");*/
 
+	#pragma omp parallel for private(i, j)
 	for (j = 0; j < size; ++j) {
 		for (i = 0; i < size/2; ++i) {
 			int idx = j * size/2 + i;
@@ -242,6 +244,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 void computeFunctionTable(float h, float* functionTable) {
 	int i, j;
 	float hSquared = h * h;
+	#pragma omp parallel for private(i, j)
 	for (i = 0; i < size; ++i) {
 		for (j = 0; j < size; ++j) {
 			float x1 = i * h;
@@ -314,6 +317,8 @@ int main(int argc, char *argv[]) {
 	float* startVector = (float*) malloc(size * size * sizeof(float));
 	srand(time(NULL));
 	int i, j;
+
+	#pragma omp parallel for private(i, j)
 	for (i = 0; i < size; ++i) {
 		for (j = 0; j < size; ++j) {
 			float val = 0;
