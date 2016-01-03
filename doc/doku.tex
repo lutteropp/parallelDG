@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+		     
+		      
+\title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
+\author{Sarah Lutteropp und Johannes Sailer}
+
+\date{\today}
+% Hinweis: \title{um was auch immer es geht}, \author{wer es auch immer 
+% geschrieben hat} und  \date{wann auch immer das war} k\"onnen vor 
+% oder nach dem  Kommando \begin{document} stehen 
+% Aber der \maketitle Befehl mu\ss{} nach dem \begin{document} Kommando stehen! 
+\begin{document}
+
+\maketitle
+
+
+\begin{abstract}
+Ausarbeitung für das Abschlussprojekt ``Projekt 1: Parallele Lösungsmethodik partieller Differentialgleichungen'' für das Praktikum Multicore-Programmierung im WS 15/16.
+\end{abstract}
+
+\section{Mathematischer Hintergrund}
+
+Wir haben folgendes Setting:
+\begin{itemize}
+	\item $\Omega \cup \Gamma = [0,1]^2$
+	\item Rand $\Gamma = \{(x,y) \in \mathbb{R}^2 : x \in \{0,1\} \text{ oder }  y \in \{0,1\} \}$
+	\item $-\Delta u(x,y) = f(x,y) \quad \forall (x,y) \in (0,1)^2$
+	\item $u(x,y) = 0 \quad \forall (x,y) \in [0,1]^2 \backslash (0,1)^2$
+	
+	\item Diskretisierungsparameter $h$
+	\item $(x,y)$ sind also Koordinaten im diskretisierten Einheitsquadrat
+	\item Vereinfachte Schreibweise: $u_{i,j} = u(x_i, y_j) \in \mathbb{R}$
+	\item $n$ ist die Anzahl der Gitterpunkte pro Dimension
+	\item Im Vektor $u^k \in \mathbb{R}^{n^2}$ stehen die Werte von $u$ für alle Gitterpunkte im Iterationsschritt $k$. Diese Notation ist echt doof, weil man das ständig mit der Funktion $u$ selbst verwechselt. :-(
+	\item Wir benötigen im Code keine einzige Matrix!
+\end{itemize}
+
+Blabla
+\subsection{Jacobi-Verfahren}
+Blabla
+\subsubsection{Herleitung}
+Blabla
+\subsubsection{Abbruchkriterium}
+Blabla
+
+\subsection{Gauß-Seidel-Verfahren}
+Blabla
+\subsubsection{Herleitung}
+Blabla
+\subsubsection{Abbruchkriterium}
+Blabla
+
+\subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}
+Blabla
+
+\section{Serielle Implementierung}
+Blabla
+\subsection{Laufzeiten bei verschiedenen Verfeinerungen}
+Blabla
+\subsection{Approximationsfehler}
+Blabla
+
+\section{Parallelisierung}
+Blabla
+\subsection{Jacobi-Verfahren}
+Blabla
+\subsection{Gauß-Seidel-Verfahren}
+Blabla
+\subsubsection{Naiver Parallelisierungsansatz}
+Blabla
+\subsubsection{Erweiterter Parallelisierungsansatz}
+Blabla
+
+\section{Methodenwahl}
+Blabla
+
+\end{document}
