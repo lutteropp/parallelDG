@@ -7,154 +7,159 @@ float* jacobi(float * matrix, float h, float* f);
 float* gausseidel(float * matrix, float h, float* f);
 float* f(float*x, float*y, float h);
 
-int main() {
-  float h = 2;
-  float* otto = createTestMatrix(h);
+int main()
+{
+    float h = 2;
+    float* otto = createTestMatrix(h);
 
-  return 0;
+    return 0;
 }
 
-float* createTestMatrix(int h) {
-  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
-  float* a = (float *) malloc(size * size * sizeof(float));
-  int i;
-  for (i = 0; i < size; i++)
-  {
-    int j;
-    for (j = 0; j < size; j++)
+float* createTestMatrix(int h)
+{
+    int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
+    float* a = (float *) malloc(size * size * sizeof(float));
+    int i;
+    for (i = 0; i < size; i++)
     {
-      if (i == j)
-        a[i * size + j] = 4;
+        int j;
+        for (j = 0; j < size; j++)
+        {
+            if (i == j)
+                a[i * size + j] = 4;
+        }
+        if (i == (j - 1) || (i - 1) == j)
+        {
+            a[i * size + j] = 1;
+        }
+
     }
-    if (i == (j - 1) || (i - 1) == j)
+    return a;
+
+}
+
+float* gausseidel(float * matrix, float h, float* f)
+{
+
+    float* a0 = matrix;
+    float* a1 = matrix;
+    int k = 0;
+    int size = 1 / h;
+    //todo abbruchbedingung
+    for (k = 0; k < 100000; k++)
     {
-      a[i * size + j] = 1;
+        a0 = a1;
+        int j;
+        for (j = 1; j < size; j++)
+        {
+            int i;
+            for (i = 1; i < size; i++)
+            {
+                //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
+                a1[i * size + j] = 0, 25
+                                   * (a1[i * size + (j - 1)] + a1[(i - 1) * size + j]
+                                      + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
+                                      + h * h * f[i * size + j]);
+            }
+        }
     }
-
-  }
-  return a;
-
+    return a1;
 }
 
-float* gausseidel(float * matrix, float h, float* f) {
-
-  float* a0 = matrix;
-  float* a1 = matrix;
-  int k = 0;
-  int size = 1 / h;
-  //todo abbruchbedingung
-  for (k = 0; k < 100000; k++)
-  {
-    a0 = a1;
-    int j;
-    for (j = 1; j < size; j++)
+float* jacobi(float * matrix, float h, float* f)
+{
+    float* a0 = matrix;
+    float* a1 = matrix;
+    int k = 0;
+    int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
+    //todo abbruchbedingung
+    for (k = 0; k < 100000; k++)
     {
-      int i;
-      for (i = 1; i < size; i++)
-      {
-        //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
-        a1[i * size + j] = 0, 25
-            * (a1[i * size + (j - 1)] + a1[(i - 1) * size + j]
-                + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
-                + h * h * f[i * size + j]);
-      }
+        a0 = a1;
+        int j;
+        for (j = 1; j < size; j++)
+        {
+            int i;
+            for (i = 1; i < size; i++)
+            {
+                //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
+                a1[i * size + j] = 0, 25
+                                   * (a0[i * size + (j - 1)] + a0[(i - 1) * size + j]
+                                      + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
+                                      + h * h * f[i * size + j]);
+            }
+        }
     }
-  }
-  return a1;
+    return a1;
 }
 
-float* jacobi(float * matrix, float h, float* f) {
-  float* a0 = matrix;
-  float* a1 = matrix;
-  int k = 0;
-  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
-  //todo abbruchbedingung
-  for (k = 0; k < 100000; k++)
-  {
-    a0 = a1;
-    int j;
-    for (j = 1; j < size; j++)
+float* f(float*x, float*y, float h)
+{
+    int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
+    float* tmp = x;
+    int i = 0;
+
+    for (i = 0; i < size; i++)
     {
-      int i;
-      for (i = 1; i < size; i++)
-      {
-        //TODO erinnern was x war -> Es gilt (x_{i+1}, y_{i+1}) = (x_i + h, y_i + h)
-        a1[i * size + j] = 0, 25
-            * (a0[i * size + (j - 1)] + a0[(i - 1) * size + j]
-                + a0[(i + 1) * size + j] + a0[i * size + (j + 1)]
-                + h * h * f[i * size + j]);
-      }
+        int j = 0;
+        for (j = 0; j < size; j++)
+        {
+            float x1 = x[i * size + j];
+            float y1 = y[i * size + j];
+            tmp[i * size + j] = f1(x1, y1);
+        }
     }
-  }
-  return a1;
+    return tmp;
 }
 
-float* f(float*x, float*y, float h) {
-  int size = 1 / h; // TODO: Sicher, dass das so funktioniert?
-  float* tmp = x;
-  int i = 0;
+float f1(float x, float y)
+{
+    float result = (32 * (x * (1 - x) + y * (1 - y)));
+    return result;
+}
 
-  for (i = 0; i < size; i++)
-  {
-    int j = 0;
-    for (j = 0; j < size; j++)
+
+float* wavefront(float * matrix,float h, float* f)
+{
+    float* a0=matrix;
+    float* a1=matrix;
+    int k =0;
+    int size=1/h;
+//todo abbruchbedingung
+    for( k =0; k<100000; k++)
     {
-      float x1 = x[i * size + j];
-      float y1 = y[i * size + j];
-      tmp[i * size + j] = f1(x1, y1);
+
+        a0=a1;
+        int currentEle=1;
+        int border =0;
+        int durchlauf;
+        for(durchlauf =0; border>(size/2); durchlauf++)
+        {
+            if(currentEle>=(size/2))
+            {
+                currentEle--;
+                border++;
+            }
+            else
+            {
+                currentEle++;
+            }
+            int i =0;
+            for(i=0; i<currentEle; i++)
+            {
+                a1[(durchlauf+border-i)*size + i+border]=0,25*(a1[(durchlauf+border-i)*size + i+border-1] + a1[(durchlauf+border-1-i)*size + i+border]+a0[(durchlauf+border+1-i)*size + i+border]
+                                                            +a0[(durchlauf+border-i)*size + i+border+1]+h*h*f[(durchlauf+border-i)*size + i+border]);
+            }//indexe machen
+        }
+
+//todo erinnern was x war
+       // a1[i*size + j]=0,25*(a1[i*size + (j-1)] + a1[(i-1)*size + j]+a0[(i+1)*size + j]+a0[i*size + (j+1)]+h*h*f[i*size+j]);
+
     }
-  }
-  return tmp;
+    return a1;
 }
 
-float f1(float x, float y) {
-  float result = (32 * (x * (1 - x) + y * (1 - y)));
-  return result;
-}
-
-/*
- float* wavefront(float * matrix,float h, float* f)
- {
- float* a0=matrix;
- float* a1=matrix;
- int k =0;
- int size=1/h;
- //todo abbruchbedingung
- for( k =0; k<100000; k++)
- {
-
- a0=a1;
- int currentEle=1;
- int border =0;
- int durchlauf;
- for(durchlauf =0;border>(n/2);durchlauf++){
- if(currentEle>=(n/2)){
- currentEle--;
- border++;
- }else{
- currentEle++;
- }
- int i =0;
- for(i=0;i<currentEle;i++){
- a1[(durchlauf+border-i*size + i+border]=0,25*(a1[i*size + (j-1)] + a1[(i-1)*size + j]+a0[(i+1)*size + j]+a0[i*size + (j+1)]+h*h*f[i*size+j]);
- }//indexe machen
- }
-
- //todo erinnern was x war
- a1[i*size + j]=0,25*(a1[i*size + (j-1)] + a1[(i-1)*size + j]+a0[(i+1)*size + j]+a0[i*size + (j+1)]+h*h*f[i*size+j]);
-
- }
- return a1;
- }
-
- current elemente =1
- border =0;
- for durchauf ++ bis border >n/2
-
- if (current ele >=n/2) curre ele--; border++; else cur el ++;
- for(current elemente auf der diagonalen
- int lala = (durchlauf -i)(i)
- A(durchlauf+border -i)(i+border) =bla blub
 
 
- */
+
+
