@@ -13,7 +13,6 @@ void printAnalyticalResult(float h);
 int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
-#define CO_RotSchwarz(i,j) ( (j) * ((size)/2) + (i) )
 
 static int MAX_ITERATIONS = 100;
 
