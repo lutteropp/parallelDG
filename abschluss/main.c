@@ -86,10 +86,6 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 						+ a0[CO(i + 1, j)]
 						+ functionTable[CO(i, j)];
 				a1[CO(i,j)] *= 0.25;
-
-				/*if (i == 3 && j == 2) {
-					printf("  oben: %.3f\n", a1[CO(i-1,j)]);
-				}*/
 			}
 		}
 	}
