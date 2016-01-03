@@ -32,6 +32,7 @@ void jacobi(const float* startVector, float h, const float* f, float* jacobiResu
 		float* temp = a0;
 		a0 = a1;
 		a1 = temp;
+		#pragma omp parallel for private(j, i)
 		for (j = 1; j < size - 1; j++) {
 			for (i = 1; i < size - 1; i++) {
 				a1[CO(i,j)] = a0[CO(i, j - 1)]
@@ -176,7 +177,6 @@ int main(int argc, char *argv[]) {
 	}
 	// Call Jacobi
 	float* jacobiResult = malloc(size * size * sizeof(float));
-	printf("I am here...\n");
 	jacobi(startVector, h, precomputedF, jacobiResult);
 
 	// Call Gauss-Seidel
