@@ -153,6 +153,12 @@ int main(int argc, char *argv[]) {
 	printResultMatrix(gaussSeidelResult);
 	printf("\nErgebnis analytisch:\n");
 	printAnalyticalResult(h);
+
+
+	free(jacobiResult);
+	free(gaussSeidelResult);
+	free(startVector);
+	free(precomputedF);
 	return 0;
 }
 
