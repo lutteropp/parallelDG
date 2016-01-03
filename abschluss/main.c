@@ -32,8 +32,8 @@ void jacobi(const float* startVector, float h, const float* f, float* jacobiResu
 		float* temp = a0;
 		a0 = a1;
 		a1 = temp;
-		for (j = 1; j < size; j++) {
-			for (i = 1; i < size; i++) {
+		for (j = 1; j < size - 1; j++) {
+			for (i = 1; i < size - 1; i++) {
 				a1[CO(i,j)] = a0[CO(i, j - 1)]
 						+ a0[CO(i - 1, j)]
 						+ a0[CO(i, j + 1)]
@@ -71,8 +71,8 @@ void gaussSeidel(const float * startVector, float h, const float* f, float* gaus
 		float* temp = a0;
 		a0 = a1;
 		a1 = temp;
-		for (j = 1; j < size; j++) {
-			for (i = 1; i < size; i++) {
+		for (j = 1; j < size - 1; j++) {
+			for (i = 1; i < size - 1; i++) {
 				a1[CO(i,j)] = a1[CO(i, j - 1)]
 						+ a1[CO(i - 1, j)]
 						+ a0[CO(i, j + 1)]
@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
 	for (i = 0; i < size; ++i) {
 		for (j = 0; j < size; ++j) {
 			float val = 0;
-			if (i != 0 && j != 0) {
+			if (i != 0 && j != 0 && i != size - 1 && j != size - 1) {
 				val = (float) rand() / RAND_MAX;
 			}
 			startVector[CO(i, j)] = val;
@@ -186,7 +186,9 @@ int main(int argc, char *argv[]) {
 	// TODO: Check for correctness and compare both results
 
 	// TODO: The following is just debug code. Remove afterwards.
-	printf("Ergebnis Jacobi-Verfahren:\n");
+	printf("Startvektor:\n");
+	printResultMatrix(startVector);
+	printf("\nErgebnis Jacobi-Verfahren:\n");
 	printResultMatrix(jacobiResult);
 	printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
 	printResultMatrix(gaussSeidelResult);
