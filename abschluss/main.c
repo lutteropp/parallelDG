@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+#include <sys/time.h>
 
 float f1(float x, float y);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
@@ -14,7 +16,16 @@ int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-static int MAX_ITERATIONS = 100;
+static int MAX_ITERATIONS = 10000;
+
+double get_wall_time() { // returns wall time in seconds
+	struct timeval time;
+	if (gettimeofday(&time,NULL)) {
+		return 0;
+	}
+	double wtime = (double)time.tv_sec + (double)time.tv_usec * 0.000001;
+	return wtime;
+}
 
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult) {
 	int i, j, k;
@@ -328,22 +339,34 @@ int main(int argc, char *argv[]) {
 			startVector[CO(i, j)] = val;
 		}
 	}
+
+	double start, end;
+
 	// Call Jacobi
 	float* jacobiResult = malloc(size * size * sizeof(float));
+	start = get_wall_time();
 	jacobi(startVector, h, precomputedF, jacobiResult);
+	end = get_wall_time();
+	printf("Execution time Jacobi: %.3f seconds\n", end - start);
 
 	// Call Gauss-Seidel
 	float* gaussSeidelResult = malloc(size * size * sizeof(float));
+	start = get_wall_time();
 	gaussSeidel(startVector, h, precomputedF, gaussSeidelResult);
+	end = get_wall_time();
+	printf("Execution time Gauss-Seidel: %.3f seconds\n", end - start);
 
 	// Call Gauss-Seidel Rot-Schwarz
 	float* gaussSeidelRotSchwarzResult = malloc(size * size * sizeof(float));
+	start = get_wall_time();
 	gaussSeidelRotSchwarz(startVector, h, precomputedF, gaussSeidelRotSchwarzResult);
+	end = get_wall_time();
+	printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds\n", end - start);
 
 	// TODO: Check for correctness and compare both results
 
 	// TODO: The following is just debug code. Remove afterwards.
-	printf("\nFunctionTable:\n");
+	/*printf("\nFunctionTable:\n");
 	printResultMatrix(precomputedF);
 	printf("\nStartvektor:\n");
 	printResultMatrix(startVector);
@@ -354,7 +377,7 @@ int main(int argc, char *argv[]) {
 	printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
 	printResultMatrix(gaussSeidelRotSchwarzResult);
 	printf("\nErgebnis analytisch:\n");
-	printAnalyticalResult(h);
+	printAnalyticalResult(h);*/
 
 	free(jacobiResult);
 	free(gaussSeidelResult);
