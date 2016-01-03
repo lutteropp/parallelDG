@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 float f1(float x, float y);
 void jacobi(const float* startVector, float h, const float* f, float* jacobiResult);
@@ -195,7 +194,6 @@ int main(int argc, char *argv[]) {
 	printf("\nErgebnis analytisch:\n");
 	printAnalyticalResult(h);
 
-	if (!jacobiResult) printf("WTF?\n");
 	free(jacobiResult);
 	free(gaussSeidelResult);
 	free(startVector);
