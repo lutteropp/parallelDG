@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 //Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
     start = get_wall_time();
-   //gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
+   gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
     end = get_wall_time();
     printf("Execution time Gauss-Seidel Wavefront: %.3f seconds ", end - start);
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
@@ -504,12 +504,13 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     {
 printf("2 \n");
         a0 = a1;
-        int currentEle = 1;
+        int currentEle = 0;
         int border = 0;
         int durchlauf;
-        for (durchlauf = 0; border > (size / 2); durchlauf++)
+        for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //border > (size /2)
         {
-            if (currentEle >= (size / 2))
+
+            if (durchlauf > (size -1))
             {
                 currentEle--;
                 border++;
@@ -519,10 +520,14 @@ printf("2 \n");
                 currentEle++;
             }
             int i = 0;
-            printf("3 \n");
+
             for (i = 0; i < currentEle; i++)
             {
- printf("%i ",((durchlauf + border - i)  +( i + border)* size));
+            printf("durchlauf %i ", durchlauf);
+             printf("border %i ", border);
+              printf("i%i ", i);
+              printf("current ele %i ", currentEle);
+            printf(" berechneter index%i \n",((durchlauf + border - i)  +( i + border)* size));
 
                 a1[(durchlauf + border - i)  +( i + border)* size] = 0.25
                         * (a1[(durchlauf + border - i)  + (i + border - 1)* size]
@@ -533,13 +538,14 @@ printf("2 \n");
             }
         }
 
+
+    }
+      printf("dödel \n");
         for (i = 0; i < size * size; ++i)
         {
             gaussSeidelResult[i] = a1[i];
         }
         free(a0);
         free(a1);
-
-    }
 
 }
