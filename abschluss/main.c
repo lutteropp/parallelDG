@@ -121,12 +121,12 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 	float* s0 = arraySchwarz0; // last iteration Schwarz
 	float* s1 = arraySchwarz1; // current iteration Schwarz
 
-	#pragma omp parallel for private(i, j)
+	#pragma omp parallel for private(i, j) collapse(2)
 	for (j = 0; j < size; ++j) {
 		//printf("Spalte %d:\n", j);
 		//printf(" IdxRot: ");
-		int baseIdx = j * halfSize;
 		for (i = 0; i < halfSize; ++i) {
+			int baseIdx = j * halfSize;
 			int idx = baseIdx + i;
 			int idxRot, idxSchwarz;
 			if (j % 2 == 0) {
@@ -235,10 +235,10 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 	}
 	printf("\n");*/
 
-	#pragma omp parallel for private(i, j)
+	#pragma omp parallel for private(i, j) collapse(2)
 	for (j = 0; j < size; ++j) {
-		int baseIdx = j * halfSize;
 		for (i = 0; i < halfSize; ++i) {
+			int baseIdx = j * halfSize;
 			int idx = baseIdx + i;
 			int idxRot, idxSchwarz;
 			if (j % 2 == 0) {
