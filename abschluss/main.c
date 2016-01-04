@@ -499,8 +499,8 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
 
     int k = 0;
 
-//todo abbruchbedingung
-    for (k = 0; k < MAX_ITERATIONS; k++)
+//todo abbruchbedingung Max itera wieder ienführen
+    for (k = 0; k < 1; k++)
     {
 printf("2 \n");
         a0 = a1;
@@ -527,14 +527,14 @@ printf("2 \n");
              printf("border %i ", border);
               printf("i%i ", i);
               printf("current ele %i ", currentEle);
-            printf(" berechneter index%i \n",((durchlauf + border - i)  +( i + border)* size));
+            printf(" berechneter index%i \n",((durchlauf - border - i)  +( i+border )* size));
 
-                a1[(durchlauf + border - i)  +( i + border)* size] = 0.25
-                        * (a1[(durchlauf + border - i)  + (i + border - 1)* size]
-                           + a1[(durchlauf + border - 1 - i)  + (i + border)* size]
-                           + a0[(durchlauf + border + 1 - i)  + (i + border)* size]
-                           + a0[(durchlauf + border - i)  + (i + border + 1)* size]
-                           + h * h * functionTable[(durchlauf + border - i)  + (i + border)* size]);
+                a1[(durchlauf - border - i)  +( i + border)* size] = 0.25
+                        * (a1[(durchlauf - border - i)  + (i + border - 1)* size]
+                           + a1[(durchlauf - border - 1 - i)  + (i + border)* size]
+                           + a0[(durchlauf - border + 1 - i)  + (i + border)* size]
+                           + a0[(durchlauf - border - i)  + (i + border + 1)* size]
+                           + h * h * functionTable[(durchlauf - border - i)  + (i + border)* size]);
             }
         }
 
