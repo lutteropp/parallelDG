@@ -48,7 +48,7 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
 		float* temp = a0;
 		a0 = a1;
 		a1 = temp;
-		#pragma omp parallel for private(j, i)
+		#pragma omp parallel for private(j, i) collapse(2)
 		for (j = 1; j < size - 1; j++) {
 			for (i = 1; i < size - 1; i++) {
 				a1[CO(i,j)] = a0[CO(i, j - 1)]
@@ -169,7 +169,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 		s1 = temp;
 
 		// rote Punkte
-		#pragma omp parallel for private(i, j) firstprivate(s0, s1, functionTable) collapse(2)
+		#pragma omp parallel for private(i, j) firstprivate(s0, s1) collapse(2)
 		for (j = 1; j < size - 1; j++) {
 			for (i1 = halfSize; i1 < size - 1; i1++) {
 				int y = j;
@@ -196,7 +196,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 		}
 		
 		// schwarze Punkte
-		#pragma omp parallel for private(i, j) firstprivate(r0, r1, functionTable) collapse(2)
+		#pragma omp parallel for private(i, j) firstprivate(r0, r1) collapse(2)
 		for (j = 1; j < size - 1; j++) {
 			for (i1 = halfSize; i1 < size - 1; i1++) {
 				int y = j;
