@@ -13,7 +13,7 @@ void computeFunctionTable(float h, float* functionTable);
 void printResultMatrix(const float* matrix);
 void printAnalyticalResult(float h);
 void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
-bool compareTo(float* m1,float* m2);
+bool compare(float* m1,float* m2);
 
 int size;
 
@@ -293,7 +293,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
     free(s1);
 }
 
-    bool compareTo(float* m1,float* m2)
+    bool compare(float* m1,float* m2)
     {
         bool equals = true;
         int i =0;
@@ -301,7 +301,7 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
         //#pragma omp parallel for private (i) shared(equals)
         for(i=0; i<(size*size); i++)
         {
-            printf("%f ", m1[i]-m2[i]);
+       //     printf("%f ", m1[i]-m2[i]);
             if(m1[i]!=m2[i])
             {
                 equals=false;
@@ -449,18 +449,18 @@ int main(int argc, char *argv[])
     end = get_wall_time();
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds", end - start);
     bool correct=true;
-     correct=compareTo(gaussSeidelRotSchwarz,gaussSeidelResult);
+     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
         printf("is it correct: %s  \n" ,(correct)?"true":"false");
 
 //Gaus Seidel Wavefront
-    float* gaussSeidelWavefront= malloc(size * size * sizeof(float));
+    float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
     start = get_wall_time();
-    gaussSeidelRotSchwarz(startVector, h, precomputedF, gaussSeidelWavefront);
+   //gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
     end = get_wall_time();
     printf("Execution time Gauss-Seidel Wavefront: %.3f seconds ", end - start);
-    correct=compareTo(gaussSeidelWavefront,gaussSeidelResult);
+    correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
         printf("is it correct: %s \n" ,(correct)?"true":"false");
-    // TODO: Check for correctness and compare both results
+
 
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
@@ -487,8 +487,9 @@ int main(int argc, char *argv[])
 void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
 
-    float* a0 = startVector;
-    float* a1 = startVector;
+     float* a0 = (float*) malloc(size * size * sizeof(float));
+    float* a1 = (float*) malloc(size * size * sizeof(float));
+
     int i;
     for (i = 0; i < size * size; ++i)
     {
@@ -501,7 +502,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
 //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
-
+printf("2 \n");
         a0 = a1;
         int currentEle = 1;
         int border = 0;
@@ -518,14 +519,17 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 currentEle++;
             }
             int i = 0;
+            printf("3 \n");
             for (i = 0; i < currentEle; i++)
             {
-                a1[(durchlauf + border - i) * size + i + border] = 0.25
-                        * (a1[(durchlauf + border - i) * size + i + border - 1]
-                           + a1[(durchlauf + border - 1 - i) * size + i + border]
-                           + a0[(durchlauf + border + 1 - i) * size + i + border]
-                           + a0[(durchlauf + border - i) * size + i + border + 1]
-                           + h * h * functionTable[(durchlauf + border - i) * size + i + border]);
+ printf("%i ",((durchlauf + border - i)  +( i + border)* size));
+
+                a1[(durchlauf + border - i)  +( i + border)* size] = 0.25
+                        * (a1[(durchlauf + border - i)  + (i + border - 1)* size]
+                           + a1[(durchlauf + border - 1 - i)  + (i + border)* size]
+                           + a0[(durchlauf + border + 1 - i)  + (i + border)* size]
+                           + a0[(durchlauf + border - i)  + (i + border + 1)* size]
+                           + h * h * functionTable[(durchlauf + border - i)  + (i + border)* size]);
             }
         }
 
