@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <sys/time.h>
+#include <omp.h>
 
 float f1(float x, float y);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
@@ -109,10 +110,11 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult) {
 	int i1, i, j, k;
-	float* arrayRot0 = (float*) malloc(size * size/2 * sizeof(float));
-	float* arrayRot1 = (float*) malloc(size * size/2 * sizeof(float));
-	float* arraySchwarz0 = (float*) malloc(size * size/2 * sizeof(float));
-	float* arraySchwarz1 = (float*) malloc(size * size/2 * sizeof(float));
+	int halfSize = size / 2;
+	float* arrayRot0 = (float*) malloc(size * halfSize * sizeof(float));
+	float* arrayRot1 = (float*) malloc(size * halfSize * sizeof(float));
+	float* arraySchwarz0 = (float*) malloc(size * halfSize * sizeof(float));
+	float* arraySchwarz1 = (float*) malloc(size * halfSize * sizeof(float));
 
 	float* r0 = arrayRot0; // last iteration Rot
 	float* r1 = arrayRot1; // current iteration Rot
@@ -123,8 +125,9 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 	for (j = 0; j < size; ++j) {
 		//printf("Spalte %d:\n", j);
 		//printf(" IdxRot: ");
-		for (i = 0; i < size/2; ++i) {
-			int idx = j * size/2 + i;
+		int baseIdx = j * halfSize;
+		for (i = 0; i < halfSize; ++i) {
+			int idx = baseIdx + i;
 			int idxRot, idxSchwarz;
 			if (j % 2 == 0) {
 				idxRot = 2 * idx;
@@ -166,24 +169,26 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 		s1 = temp;
 
 		// rote Punkte
-		#pragma omp parallel for private(i, j)
+		#pragma omp parallel for private(i, j) firstprivate(s0, s1, functionTable) collapse(2)
 		for (j = 1; j < size - 1; j++) {
-			int y = j;
-			bool offsetRot = (j % 2 == 0);
-			for (i1 = size/2; i1 < size - 1; i1++) {
-				const int idx = i1 + (j - 1) * size/2 + offsetRot;
-				r1[idx] = s1[idx - size/2] // links
+			for (i1 = halfSize; i1 < size - 1; i1++) {
+				int y = j;
+				bool offsetRot = (j % 2 == 0);
+				const int baseIdx = (j - 1) * halfSize + offsetRot;
+
+				const int idx = i1 + baseIdx;
+				r1[idx] = s1[idx - halfSize] // links
 					  + s1[idx - offsetRot] // oben
-					  + s0[idx + size/2] // rechts
+					  + s0[idx + halfSize] // rechts
 					  + s0[idx + !offsetRot] // unten
 					  + functionTable[idx * 2 + !offsetRot];
 				r1[idx] *= 0.25;
 
 				/*printf("  Rot-Index: %d\n", idx);
 				printf("    offsetRot: %d\n", offsetRot);
-				printf("    Schwarz-Index links: %d enthält: %.3f\n", idx - size/2, s1[idx - size/2]);
+				printf("    Schwarz-Index links: %d enthält: %.3f\n", idx - halfSize, s1[idx - halfSize]);
 				printf("    Schwarz-Index oben: %d enthält: %.3f\n", idx - offsetRot, s1[idx - offsetRot]);
-				printf("    Schwarz-Index rechts: %d enthält: %.3f\n", idx + size/2, s0[idx + size/2]);
+				printf("    Schwarz-Index rechts: %d enthält: %.3f\n", idx + halfSize, s0[idx + halfSize]);
 				printf("    Schwarz-Index unten: %d enthält: %.3f\n", idx + !offsetRot, s0[idx + !offsetRot]);
 				printf("    Zugriff auf f bei: %d\n", idx * 2 + !offsetRot);
 				printf("    Ergebnis: %.3f\n", r1[idx]);*/
@@ -191,15 +196,17 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 		}
 		
 		// schwarze Punkte
-		#pragma omp parallel for private(i, j)
+		#pragma omp parallel for private(i, j) firstprivate(r0, r1, functionTable) collapse(2)
 		for (j = 1; j < size - 1; j++) {
-			int y = j;
-			bool offsetSchwarz = (j % 2 != 0);
-			for (i1 = size/2; i1 < size - 1; i1++) {
-				const int idx = i1 + (j - 1) * size/2 + offsetSchwarz;
-				s1[idx] = r1[idx - size/2] // links
+			for (i1 = halfSize; i1 < size - 1; i1++) {
+				int y = j;
+				bool offsetSchwarz = (j % 2 != 0);
+				const int baseIdx = (j - 1) * halfSize + offsetSchwarz;
+
+				const int idx = i1 + baseIdx;
+				s1[idx] = r1[idx - halfSize] // links
 					  + r1[idx - offsetSchwarz] // oben
-					  + r0[idx + size/2] // rechts
+					  + r0[idx + halfSize] // rechts
 					  + r0[idx + !offsetSchwarz] // unten
 					  + functionTable[idx * 2 + !offsetSchwarz];
 				s1[idx] *= 0.25;
@@ -230,8 +237,9 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
 
 	#pragma omp parallel for private(i, j)
 	for (j = 0; j < size; ++j) {
-		for (i = 0; i < size/2; ++i) {
-			int idx = j * size/2 + i;
+		int baseIdx = j * halfSize;
+		for (i = 0; i < halfSize; ++i) {
+			int idx = baseIdx + i;
 			int idxRot, idxSchwarz;
 			if (j % 2 == 0) {
 				idxRot = 2 * idx;
