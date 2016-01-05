@@ -19,7 +19,7 @@ int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-static int MAX_ITERATIONS = 10000;
+static int MAX_ITERATIONS = 1;
 
 double get_wall_time()   // returns wall time in seconds
 {
@@ -114,6 +114,13 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
                               + a0[CO(i + 1, j)]
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
+
+                printf("%i ",CO(i,j));
+                 printf("%i ",CO(i, j - 1));
+                printf("%i ",CO(i - 1, j));
+                printf("%i ",CO(i, j + 1));
+                printf("%i " ,CO(i + 1, j));
+                printf("\n");
             }
         }
     }
@@ -452,7 +459,7 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
     printf("is it correct: %s  \n" ,(correct)?"true":"false");
 
-//Gaus Seidel Wavefront
+    //Call Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
     start = get_wall_time();
     gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
@@ -462,6 +469,8 @@ int main(int argc, char *argv[])
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
     printResultMatrix(gaussSeidelResult);
+     printf("\n");
+    printResultMatrix(gaussSeidelRotSchwarzResult);
     printf("\n");
     printResultMatrix(gaussSeidelWavefrontResult);
 
@@ -479,6 +488,7 @@ int main(int argc, char *argv[])
     printf("\nErgebnis analytisch:\n");
     printAnalyticalResult(h);*/
 
+    free(gaussSeidelWavefrontResult);
     free(jacobiResult);
     free(gaussSeidelResult);
     free(gaussSeidelRotSchwarzResult);
@@ -506,7 +516,10 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
 
+         float* temp = a0;
         a0 = a1;
+        a1 = temp;
+
         int currentEle = 0;
         int border = 0;
         int durchlauf;
@@ -523,7 +536,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 currentEle++;
             }
             int i = 0;
-            // #omp pragma parallel for
+
             for (i = 0; i < currentEle; i++)
             {
      /*           printf("durchlauf %i ", durchlauf); //indexe passen
@@ -539,6 +552,13 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                            + a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]
                            + h * h * functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
 
+                printf(" %i",(durchlauf - border - i+1)* size +( i + border+1));
+                printf(" %i",(durchlauf - border - i+1)* size  + (i + border - 1+1));
+                 printf(" %i",(durchlauf - border - 1 - i+1)* size  + (i + border+1));
+                printf(" %i",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
+                printf(" %i",((durchlauf - border - i+1)* size  + (i + border + 1+1)));
+                printf("\n");
+
             }
         }
 
@@ -551,7 +571,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
      //   printf("%f \n",gaussSeidelResult[i] );
     }
     free(a0);
-   //  free(a1); //TODO herausfinden warum ich nciht beide arrays wieder in die tonne treten darf
+    free(a1);
 
 
 }
