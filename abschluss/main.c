@@ -558,6 +558,13 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 printf(" %i",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
                 printf(" %i",((durchlauf - border - i+1)* size  + (i + border + 1+1)));
                 printf("\n");
+                /* a1[CO(i,j)] = a1[CO(i, j - 1)]
+                              + a1[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+ */
 
             }
         }
