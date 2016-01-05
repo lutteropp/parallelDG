@@ -293,22 +293,22 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
     free(s1);
 }
 
-    bool compare(float* m1,float* m2)
+bool compare(float* m1,float* m2)
+{
+    bool equals = true;
+    int i =0;
+    printf("\n");
+    //#pragma omp parallel for private (i) shared(equals)
+    for(i=0; i<(size*size); i++)
     {
-        bool equals = true;
-        int i =0;
-        printf("\n");
-        //#pragma omp parallel for private (i) shared(equals)
-        for(i=0; i<(size*size); i++)
+        //     printf("%f ", m1[i]-m2[i]);
+        if(m1[i]!=m2[i])
         {
-       //     printf("%f ", m1[i]-m2[i]);
-            if(m1[i]!=m2[i])
-            {
-                equals=false;
-            }
+            equals=false;
         }
-        return equals;
     }
+    return equals;
+}
 void computeFunctionTable(float h, float* functionTable)
 {
     int i, j;
@@ -449,18 +449,21 @@ int main(int argc, char *argv[])
     end = get_wall_time();
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds", end - start);
     bool correct=true;
-     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
-        printf("is it correct: %s  \n" ,(correct)?"true":"false");
+    correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
+    printf("is it correct: %s  \n" ,(correct)?"true":"false");
 
 //Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
     start = get_wall_time();
-   gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
+    gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
     end = get_wall_time();
     printf("Execution time Gauss-Seidel Wavefront: %.3f seconds ", end - start);
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
-        printf("is it correct: %s \n" ,(correct)?"true":"false");
+    printf("is it correct: %s \n" ,(correct)?"true":"false");
 
+    printResultMatrix(gaussSeidelResult);
+    printf("\n");
+    printResultMatrix(gaussSeidelWavefrontResult);
 
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
@@ -487,7 +490,7 @@ int main(int argc, char *argv[])
 void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
 
-     float* a0 = (float*) malloc(size * size * sizeof(float));
+    float* a0 = (float*) malloc(size * size * sizeof(float));
     float* a1 = (float*) malloc(size * size * sizeof(float));
 
     int i;
@@ -500,9 +503,9 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     int k = 0;
 
 //todo abbruchbedingung Max itera wieder ienführen
-    for (k = 0; k < 1; k++)
+    for (k = 0; k < MAX_ITERATIONS; k++)
     {
-printf("2 \n");
+
         a0 = a1;
         int currentEle = 0;
         int border = 0;
@@ -520,32 +523,35 @@ printf("2 \n");
                 currentEle++;
             }
             int i = 0;
-
+            // #omp pragma parallel for
             for (i = 0; i < currentEle; i++)
             {
-            printf("durchlauf %i ", durchlauf);
-             printf("border %i ", border);
-              printf("i%i ", i);
-              printf("current ele %i ", currentEle);
-            printf(" berechneter index%i \n",((durchlauf - border - i+1)  +( i+border +1)* size));
+     /*           printf("durchlauf %i ", durchlauf); //indexe passen
+                printf("border %i ", border);
+                printf("i%i ", i);
+                printf("current ele %i ", currentEle);
+                printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
+    //TODO fehler finden warum falsches ergebnis
+                a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25
+                        * (a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]
+                           + a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]
+                           + a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]
+                           + a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]
+                           + h * h * functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
 
-                a1[(durchlauf - border - i)  +( i + border)* size] = 0.25
-                        * (a1[(durchlauf - border - i)  + (i + border - 1)* size]
-                           + a1[(durchlauf - border - 1 - i)  + (i + border)* size]
-                           + a0[(durchlauf - border + 1 - i)  + (i + border)* size]
-                           + a0[(durchlauf - border - i)  + (i + border + 1)* size]
-                           + h * h * functionTable[(durchlauf - border - i)  + (i + border)* size]);
             }
         }
 
 
     }
-      printf("dödel \n");
-        for (i = 0; i < size * size; ++i)
-        {
-            gaussSeidelResult[i] = a1[i];
-        }
-        free(a0);
-        free(a1);
+    // #omp pragma parallel for
+    for (i = 0; i < size * size; i++)
+    {
+        gaussSeidelResult[i] = a1[i];
+     //   printf("%f \n",gaussSeidelResult[i] );
+    }
+    free(a0);
+   //  free(a1); //TODO herausfinden warum ich nciht beide arrays wieder in die tonne treten darf
+
 
 }
