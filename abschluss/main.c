@@ -507,10 +507,10 @@ printf("2 \n");
         int currentEle = 0;
         int border = 0;
         int durchlauf;
-        for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //border > (size /2)
+        for (durchlauf = 0; durchlauf<size+size-1-4 ; durchlauf++) //-1 weil diagonalen zahl size+size-1, -4 weil 4 diagonalen wegfallen
         {
 
-            if (durchlauf > (size -1))
+            if (durchlauf > (size -1-2))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
             {
                 currentEle--;
                 border++;
@@ -527,7 +527,7 @@ printf("2 \n");
              printf("border %i ", border);
               printf("i%i ", i);
               printf("current ele %i ", currentEle);
-            printf(" berechneter index%i \n",((durchlauf - border - i)  +( i+border )* size));
+            printf(" berechneter index%i \n",((durchlauf - border - i+1)  +( i+border +1)* size));
 
                 a1[(durchlauf - border - i)  +( i + border)* size] = 0.25
                         * (a1[(durchlauf - border - i)  + (i + border - 1)* size]
