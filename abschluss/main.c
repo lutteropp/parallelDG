@@ -545,7 +545,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 printf("current ele %i ", currentEle);
                 printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
     //TODO fehler finden warum falsches ergebnis
-                a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25
+                a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
                         * (a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]
                            + a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]
