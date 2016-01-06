@@ -19,7 +19,7 @@ int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-static int MAX_ITERATIONS = 1;
+static int MAX_ITERATIONS = 10000;
 
 double get_wall_time()   // returns wall time in seconds
 {
@@ -30,6 +30,53 @@ double get_wall_time()   // returns wall time in seconds
     }
     double wtime = (double)time.tv_sec + (double)time.tv_usec * 0.000001;
     return wtime;
+}
+void jacobiSeriel(const float* startVector, float h, const float* functionTable, float* jacobiResult)
+{
+    int i, j, k;
+    float* array0 = (float*) malloc(size * size * sizeof(float));
+    float* array1 = (float*) malloc(size * size * sizeof(float));
+
+    float* a0 = array0; // last iteration
+    float* a1 = array1; // current iteration
+
+
+    for (i = 0; i < size * size; ++i)
+    {
+        a0[i] = startVector[i];
+        a1[i] = startVector[i];
+    }
+
+    //todo abbruchbedingung
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+        // swap a0 and a1
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+
+        for (j = 1; j < size - 1; j++)
+        {
+            for (i = 1; i < size - 1; i++)
+            {
+                a1[CO(i,j)] = a0[CO(i, j - 1)]
+                              + a0[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+            }
+        }
+    }
+
+
+    for (i = 0; i < size * size; ++i)
+    {
+        jacobiResult[i] = a1[i];
+    }
+
+    free(a0);
+    free(a1);
 }
 
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult)
@@ -444,6 +491,13 @@ int main(int argc, char *argv[])
 
     double start, end;
 
+     // Call Jacobi
+    float* jacobiSerielResult = malloc(size * size * sizeof(float));
+    start = get_wall_time();
+    jacobiSeriel(startVector, h, precomputedF, jacobiResult);
+    end = get_wall_time();
+    printf("Execution time JacobiSeriel: %.3f seconds\n", end - start);
+
     // Call Jacobi
     float* jacobiResult = malloc(size * size * sizeof(float));
     start = get_wall_time();
@@ -477,11 +531,6 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
-     printResultMatrix(gaussSeidelResult);
-     printf("\n");
-    printResultMatrix(gaussSeidelRotSchwarzResult);
-    printf("\n");
-    printResultMatrix(gaussSeidelWavefrontResult);
 
   /*  printResultMatrix(gaussSeidelResult);
      printf("\n");
@@ -553,7 +602,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 currentEle++;
             }
             int i = 0;
-
+            #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
             for (i = 0; i < currentEle; i++)
             {
      /*           printf("durchlauf %i ", durchlauf); //indexe passen
@@ -561,7 +610,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 printf("i%i ", i);
                 printf("current ele %i ", currentEle);
                 printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
-    //TODO fehler finden warum falsches ergebnis
+
 
      /* printf("a1 %f ",a1[(durchlauf - border - i+1)* size +( i + border+1)]);
                 printf("a1 %f ",a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]);
@@ -583,26 +632,23 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                            + a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]
                            +  functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
+/*int nthreads, tid;
+    tid = omp_get_thread_num();
+  printf("Hello World from thread = %d\n", tid); */
 
 
-                /* a1[CO(i,j)] = a1[CO(i, j - 1)]
-                              + a1[CO(i - 1, j)]
-                              + a0[CO(i, j + 1)]
-                              + a0[CO(i + 1, j)]
-                              + functionTable[CO(i, j)];
-                a1[CO(i,j)] *= 0.25;
- */
+
 
             }
         }
 
 
     }
-    // #omp pragma parallel for
+     #pragma omp parallel for
     for (i = 0; i < size * size; i++)
     {
         gaussSeidelResult[i] = a1[i];
-     //   printf("%f \n",gaussSeidelResult[i] );
+
     }
     free(a0);
     free(a1);
