@@ -107,7 +107,21 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
-            {
+            { /*
+              printf("a1 %f ",a1[CO(i,j)]);
+                 printf("a1 %f ",a1[CO(i, j - 1)]);
+                printf("a1 %f ",a1[CO(i - 1, j)]);
+                printf("a0 %f ",a0[CO(i, j + 1)]);
+                printf("a0 %f " ,a0[CO(i + 1, j)]);
+                printf("\n");
+                 printf("a1 %i ",CO(i,j));
+                 printf("a1 %i ",CO(i, j - 1));
+                printf("a1 %i ",CO(i - 1, j));
+                printf("a0 %i ",CO(i, j + 1));
+                printf("a0 %i " ,CO(i + 1, j));
+                printf("\n");
+*/
+
                 a1[CO(i,j)] = a1[CO(i, j - 1)]
                               + a1[CO(i - 1, j)]
                               + a0[CO(i, j + 1)]
@@ -115,12 +129,7 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
 
-                printf("%i ",CO(i,j));
-                 printf("%i ",CO(i, j - 1));
-                printf("%i ",CO(i - 1, j));
-                printf("%i ",CO(i, j + 1));
-                printf("%i " ,CO(i + 1, j));
-                printf("\n");
+
             }
         }
     }
@@ -468,12 +477,18 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
-    printResultMatrix(gaussSeidelResult);
+     printResultMatrix(gaussSeidelResult);
      printf("\n");
     printResultMatrix(gaussSeidelRotSchwarzResult);
     printf("\n");
     printResultMatrix(gaussSeidelWavefrontResult);
 
+  /*  printResultMatrix(gaussSeidelResult);
+     printf("\n");
+    printResultMatrix(gaussSeidelRotSchwarzResult);
+    printf("\n");
+    printResultMatrix(gaussSeidelWavefrontResult);
+*/
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
@@ -513,6 +528,8 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     int k = 0;
 
 //todo abbruchbedingung Max itera wieder ienführen
+
+
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
 
@@ -545,19 +562,29 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 printf("current ele %i ", currentEle);
                 printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
     //TODO fehler finden warum falsches ergebnis
+
+     /* printf("a1 %f ",a1[(durchlauf - border - i+1)* size +( i + border+1)]);
+                printf("a1 %f ",a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]);
+                 printf(" a1%f ",a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]);
+                printf("a0 %f ",a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]);
+                printf("a0 %f ",a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]);
+                printf("\n");
+
+   printf("a1 %i ",(durchlauf - border - i+1)* size +( i + border+1));
+                printf("a1 %i ",(durchlauf - border - i+1)* size  + (i + border - 1+1));
+                 printf(" a1%i ",(durchlauf - border - 1 - i+1)* size  + (i + border+1));
+                printf("a0 %i ",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
+                printf("a0 %i ",(durchlauf - border - i+1)* size  + (i + border + 1+1));
+                printf("\n"); */
+
                 a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
                         * (a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]
                            + a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]
-                           + h * h * functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
+                           +  functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
 
-                printf(" %i",(durchlauf - border - i+1)* size +( i + border+1));
-                printf(" %i",(durchlauf - border - i+1)* size  + (i + border - 1+1));
-                 printf(" %i",(durchlauf - border - 1 - i+1)* size  + (i + border+1));
-                printf(" %i",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
-                printf(" %i",((durchlauf - border - i+1)* size  + (i + border + 1+1)));
-                printf("\n");
+
                 /* a1[CO(i,j)] = a1[CO(i, j - 1)]
                               + a1[CO(i - 1, j)]
                               + a0[CO(i, j + 1)]
