@@ -6,6 +6,7 @@
 #include <omp.h>
 
 float f1(float x, float y);
+void jacobiSeriel(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
@@ -491,18 +492,18 @@ int main(int argc, char *argv[])
 
     double start, end;
 
-     // Call Jacobi
+     // Call JacobiSeriel
     float* jacobiSerielResult = malloc(size * size * sizeof(float));
     start = get_wall_time();
-    jacobiSeriel(startVector, h, precomputedF, jacobiResult);
+    jacobiSeriel(startVector, h, precomputedF, jacobiSerielResult);
     end = get_wall_time();
     printf("Execution time JacobiSeriel: %.3f seconds\n", end - start);
 
     // Call Jacobi
     float* jacobiResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     jacobi(startVector, h, precomputedF, jacobiResult);
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Jacobi: %.3f seconds\n", end - start);
 
     // Call Gauss-Seidel
@@ -514,9 +515,9 @@ int main(int argc, char *argv[])
 
     // Call Gauss-Seidel Rot-Schwarz
     float* gaussSeidelRotSchwarzResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     gaussSeidelRotSchwarz(startVector, h, precomputedF, gaussSeidelRotSchwarzResult);
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds", end - start);
     bool correct=true;
     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
@@ -524,9 +525,9 @@ int main(int argc, char *argv[])
 
     //Call Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Wavefront: %.3f seconds ", end - start);
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
