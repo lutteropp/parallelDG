@@ -395,32 +395,17 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     float* s0 = arraySchwarz0; // last iteration Schwarz
     float* s1 = arraySchwarz1; // current iteration Schwarz
 
-    // fill the arrays, TODO: Optimize, unroll loop, fill the arrays in parallel
-    int idxRot = 0;
-    int idxSchwarz = 0;
-    for (j = 0; j < size * size; ++j) {
-        if (j % 2 == 0) {
-            arrayRot0[idxRot] = startVector[j];
-            arrayRot1[idxRot] = startVector[j];
-            idxRot++;
-        } else {
-            arraySchwarz0[idxRot] = startVector[j];
-            arraySchwarz1[idxRot] = startVector[j];
-            idxSchwarz++;
-        }
-    }
+    // fill the arrays
+    #pragma omp parallel for private(j)
+    for (j = 0; j < (size * size) / 2; j+=2) {
+        // even j:
+        arrayRot0[j/2] = startVector[j];
+        arrayRot1[j/2] = startVector[j];
 
-    /*printf("\narrayRot:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", arrayRot0[i]);
+        // odd j+1:
+        arraySchwarz0[j/2] = startVector[j+1];
+        arraySchwarz1[j/2] = startVector[j+1];
     }
-    printf("\n");
-
-    printf("\narraySchwarz:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", arraySchwarz0[i]);
-    }
-    printf("\n");*/
 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
@@ -460,30 +445,11 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         }
     }
 
-    /*printf("\nr1:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", r1[i]);
-    }
-    printf("\n");
-
-    printf("\ns1:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", s1[i]);
-    }
-    printf("\n");*/
-
-    #pragma omp parallel for private(i, j) collapse(2)
-    for (j = 0; j < size; ++j)
+    #pragma omp parallel for private(j)
+    for (j = 0; j < (size * size) / 2; j+=2)
     {
-        for (i = 0; i < size; ++i)
-        {
-            int idx = j * size + i;
-            if (idx % 2 == 0) {
-            	gaussSeidelResult[idx] = r1[idx / 2];
-            } else {
-            	gaussSeidelResult[idx] = s1[idx / 2];
-            }
-        }
+        gaussSeidelResult[j] = r1[j/2];
+        gaussSeidelResult[j + 1] = s1[j/2];
     }
 
     free(r0);
