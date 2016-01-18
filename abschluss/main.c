@@ -10,9 +10,11 @@ Compile with: gcc -O2 -fopenmp -march=native main.c -o main
 */
 
 float f1(float x, float y);
-void jacobiSeriel(const float* startVector, float h, const float* functionTable, float* jacobiResult);
+void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void computeFunctionTable(float h, float* functionTable);
 void printResultMatrix(const float* matrix);
@@ -37,7 +39,7 @@ double get_wall_time()   // returns wall time in seconds
     double wtime = (double)time.tv_sec + (double)time.tv_usec * 0.000001;
     return wtime;
 }
-void jacobiSeriel(const float* startVector, float h, const float* functionTable, float* jacobiResult)
+void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult)
 {
     int i, j, k;
     float* array0 = (float*) malloc(size * size * sizeof(float));
@@ -196,6 +198,16 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 }
 
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+    if (size % 2 == 0) {
+        gaussSeidelRotSchwarzEven(startVector, h, functionTable, gaussSeidelResult);
+    } else {
+        gaussSeidelRotSchwarzOdd(startVector, h, functionTable, gaussSeidelResult);
+    }
+}
+
+// For size % 2 == 0
+void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
     int i1, i, j, k;
     int halfSize = size / 2;
@@ -362,6 +374,125 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
     free(s1);
 }
 
+
+// For size % 2 == 1
+void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+    int i1, i, j, k;
+    int halfSize = size / 2;
+    int halfSizePlus1 = halfSize + 1;
+
+    unsigned int numRedElements = halfSize * halfSize + halfSizePlus1 * halfSizePlus1;
+    unsigned int numBlackElements = 2 * halfSize * halfSizePlus1;
+
+    float* arrayRot0 = (float*) malloc(numRedElements * sizeof(float));
+    float* arrayRot1 = (float*) malloc(numRedElements * sizeof(float));
+    float* arraySchwarz0 = (float*) malloc(numBlackElements * sizeof(float));
+    float* arraySchwarz1 = (float*) malloc(numBlackElements * sizeof(float));
+
+    float* r0 = arrayRot0; // last iteration Rot
+    float* r1 = arrayRot1; // current iteration Rot
+    float* s0 = arraySchwarz0; // last iteration Schwarz
+    float* s1 = arraySchwarz1; // current iteration Schwarz
+
+    // fill the arrays, TODO: Optimize, unroll loop, fill the arrays in parallel
+    int idxRot = 0;
+    int idxSchwarz = 0;
+    for (j = 0; j < size * size; ++j) {
+        if (j % 2 == 0) {
+            arrayRot0[idxRot] = startVector[j];
+            arrayRot1[idxRot] = startVector[j];
+            idxRot++;
+        } else {
+            arraySchwarz0[idxRot] = startVector[j];
+            arraySchwarz1[idxRot] = startVector[j];
+            idxSchwarz++;
+        }
+    }
+
+    /*printf("\narrayRot:\n");
+    for (i = 0; i < size * size/2; ++i) {
+    	printf("%.3f ", arrayRot0[i]);
+    }
+    printf("\n");
+
+    printf("\narraySchwarz:\n");
+    for (i = 0; i < size * size/2; ++i) {
+    	printf("%.3f ", arraySchwarz0[i]);
+    }
+    printf("\n");*/
+
+    //todo abbruchbedingung
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+        // swap the pointers for current and last iteration
+        float* temp = r0;
+        r0 = r1;
+        r1 = temp;
+        temp = s0;
+        s0 = s1;
+        s1 = temp;
+
+        // rote Punkte
+        #pragma omp parallel for private(j)
+        for (j = halfSizePlus1; j < numRedElements - halfSizePlus1; ++j) {
+            if ((j % size != 0) && ((j + halfSize) % size != 0)) { // ignore border indices, TODO: Check if correct
+                r1[j] = s1[j - halfSizePlus1] // links
+                          + s1[j - 1] // oben
+                          + s0[j + halfSize] // rechts
+                          + s0[j] // unten
+                          + functionTable[j * 2];
+                r1[j] *= 0.25;
+            }
+        }
+
+	// schwarze Punkte
+        #pragma omp parallel for private(j)
+        for (j = halfSizePlus1; j < numBlackElements - halfSize; ++j) {
+            if (((j-halfSize) % size != 0) && ((j + halfSize - 1) % size != 0)) { // ignore border indices, TODO: Check if correct
+                s1[j] = r1[j - halfSize] // links
+                          + r1[j] // oben
+                          + r0[j + halfSizePlus1] // rechts
+                          + r0[j + 1] // unten
+                          + functionTable[j * 2 + 1];
+                s1[j] *= 0.25;
+            }
+        }
+    }
+
+    /*printf("\nr1:\n");
+    for (i = 0; i < size * size/2; ++i) {
+    	printf("%.3f ", r1[i]);
+    }
+    printf("\n");
+
+    printf("\ns1:\n");
+    for (i = 0; i < size * size/2; ++i) {
+    	printf("%.3f ", s1[i]);
+    }
+    printf("\n");*/
+
+    #pragma omp parallel for private(i, j) collapse(2)
+    for (j = 0; j < size; ++j)
+    {
+        for (i = 0; i < size; ++i)
+        {
+            int idx = j * size + i;
+            if (idx % 2 == 0) {
+            	gaussSeidelResult[idx] = r1[idx / 2];
+            } else {
+            	gaussSeidelResult[idx] = s1[idx / 2];
+            }
+        }
+    }
+
+    free(r0);
+    free(r1);
+    free(s0);
+    free(s1);
+}
+
+
 bool compare(float* m1,float* m2)
 {
     bool equals = true;
@@ -497,12 +628,12 @@ int main(int argc, char *argv[])
 
     double start, end;
 
-     // Call JacobiSeriel
-    float* jacobiSerielResult = malloc(size * size * sizeof(float));
+     // Call JacobiSerial
+    float* jacobiSerialResult = malloc(size * size * sizeof(float));
     start = get_wall_time();
-    jacobiSeriel(startVector, h, precomputedF, jacobiSerielResult);
+    jacobiSerial(startVector, h, precomputedF, jacobiSerialResult);
     end = get_wall_time();
-    printf("Execution time JacobiSeriel: %.3f seconds\n", end - start);
+    printf("Execution time JacobiSerial: %.3f seconds\n", end - start);
 
     // Call Jacobi
     float* jacobiResult = malloc(size * size * sizeof(float));
