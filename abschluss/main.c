@@ -137,7 +137,6 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
 
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
-
     int i, j, k;
 
     float* array0 = (float*) malloc(size * size * sizeof(float));
@@ -162,21 +161,7 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
-            { /*
-              printf("a1 %f ",a1[CO(i,j)]);
-                 printf("a1 %f ",a1[CO(i, j - 1)]);
-                printf("a1 %f ",a1[CO(i - 1, j)]);
-                printf("a0 %f ",a0[CO(i, j + 1)]);
-                printf("a0 %f " ,a0[CO(i + 1, j)]);
-                printf("\n");
-                 printf("a1 %i ",CO(i,j));
-                 printf("a1 %i ",CO(i, j - 1));
-                printf("a1 %i ",CO(i - 1, j));
-                printf("a0 %i ",CO(i, j + 1));
-                printf("a0 %i " ,CO(i + 1, j));
-                printf("\n");
-*/
-
+            {
                 a1[CO(i,j)] = a1[CO(i, j - 1)]
                               + a1[CO(i - 1, j)]
                               + a0[CO(i, j + 1)]
@@ -221,9 +206,9 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     float* s0 = arraySchwarz0; // last iteration Schwarz
     float* s1 = arraySchwarz1; // current iteration Schwarz
 
-    // fill the arrays
+    // fill the arrays, TODO: This is wrong!
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) / 2; j+=2) {
+    for (j = 0; j < (size * size) - 1; j+=2) {
         // even j:
         arrayRot0[j/2] = startVector[j];
         arrayRot1[j/2] = startVector[j];
@@ -261,15 +246,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
                           + s0[idx + !offsetRot] // unten
                           + functionTable[idx * 2 + !offsetRot];
                 r1[idx] *= 0.25;
-
-                /*printf("  Rot-Index: %d\n", idx);
-                printf("    offsetRot: %d\n", offsetRot);
-                printf("    Schwarz-Index links: %d enthält: %.3f\n", idx - halfSize, s1[idx - halfSize]);
-                printf("    Schwarz-Index oben: %d enthält: %.3f\n", idx - offsetRot, s1[idx - offsetRot]);
-                printf("    Schwarz-Index rechts: %d enthält: %.3f\n", idx + halfSize, s0[idx + halfSize]);
-                printf("    Schwarz-Index unten: %d enthält: %.3f\n", idx + !offsetRot, s0[idx + !offsetRot]);
-                printf("    Zugriff auf f bei: %d\n", idx * 2 + !offsetRot);
-                printf("    Ergebnis: %.3f\n", r1[idx]);*/
             }
         }
 
@@ -295,7 +271,7 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     }
 
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) / 2; j+=2)
+    for (j = 0; j < (size * size) - 1; j+=2)
     {
         gaussSeidelResult[j] = r1[j/2];
         gaussSeidelResult[j + 1] = s1[j/2];
@@ -330,7 +306,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 
     // fill the arrays
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) / 2; j+=2) {
+    for (j = 0; j < (size * size) - 1; j+=2) {
         // even j:
         arrayRot0[j/2] = startVector[j];
         arrayRot1[j/2] = startVector[j];
@@ -379,7 +355,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     }
 
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) / 2; j+=2)
+    for (j = 0; j < (size * size) - 1; j+=2)
     {
         gaussSeidelResult[j] = r1[j/2];
         gaussSeidelResult[j + 1] = s1[j/2];
