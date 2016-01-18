@@ -5,6 +5,10 @@
 #include <sys/time.h>
 #include <omp.h>
 
+/*
+Compile with: gcc -O2 -fopenmp -march=native main.c -o main
+*/
+
 float f1(float x, float y);
 void jacobiSeriel(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
@@ -20,7 +24,8 @@ int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-static int MAX_ITERATIONS = 10000;
+const static int MAX_ITERATIONS = 10000;
+const static float EPSILON = 0.00000001;
 
 double get_wall_time()   // returns wall time in seconds
 {
@@ -365,9 +370,9 @@ bool compare(float* m1,float* m2)
     //#pragma omp parallel for private (i) shared(equals)
     for(i=0; i<(size*size); i++)
     {
-        //     printf("%f ", m1[i]-m2[i]);
-        if(m1[i]!=m2[i])
+        if(abs(m1[i]-m2[i]) >= EPSILON)
         {
+	    //printf("distance: %f\n", m1[i]-m2[i]);
             equals=false;
         }
     }
