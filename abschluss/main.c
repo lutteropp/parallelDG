@@ -701,6 +701,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     int border = 0;
     int durchlauf;
     //kopieren
+     #pragma omp parallel for firstprivate(border,currentEle)
     for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
@@ -714,12 +715,19 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
             currentEle++;
         }
         int i = 0;
-        //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+
         for (i = 0; i < currentEle; i++)
         {
-            a0[durchlauf*size+i]= startVector[(durchlauf - border - i+1)* size +( i + border+1)];
-            a1[durchlauf*size+i]= startVector[(durchlauf - border - i+1)* size +( i + border+1)];
+            int indexZu=durchlauf*size+i;
+            int indexVon=(durchlauf - border - i)* size +( i + border);
+            a0[indexZu]= startVector[indexVon];
+            a1[indexZu]= startVector[indexVon];
+            //printf("%f ",a1[durchlauf*size+i]);
+          //   printf("%i ",indexVon);
+            /* printf("%i ",i);
+             printf("%i ",durchlauf); */
         }
+       // printf("\n");
     }
 
 
@@ -755,7 +763,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
                 currentEle++;
             }
             int i = 0;
-            //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+              #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
             for (i = 0; i < currentEle; i++)
             {
                 int index= (durchlauf - border - i+1)* size +( i + border+1);
@@ -777,6 +785,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
      border = 0;
 
     //kopieren
+     #pragma omp parallel for firstprivate(border,currentEle)
     for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
@@ -793,7 +802,10 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
         //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
         for (i = 0; i < currentEle; i++)
         {
-            gaussSeidelResult[durchlauf*size+i]= a1[(durchlauf - border - i+1)* size +( i + border+1)];
+              int indexVon=durchlauf*size+i;
+            int indexZu=(durchlauf - border - i)* size +( i + border);
+            gaussSeidelResult[indexZu]= startVector[indexVon];
+
 
         }
     }
