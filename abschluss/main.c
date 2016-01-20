@@ -20,6 +20,7 @@ void computeFunctionTable(float h, float* functionTable);
 void printResultMatrix(const float* matrix);
 void printAnalyticalResult(float h);
 void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelWavefrontCache(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 bool compare(float* m1,float* m2);
 
 int size;
@@ -184,9 +185,12 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
-    if (size % 2 == 0) {
+    if (size % 2 == 0)
+    {
         gaussSeidelRotSchwarzEven(startVector, h, functionTable, gaussSeidelResult);
-    } else {
+    }
+    else
+    {
         gaussSeidelRotSchwarzOdd(startVector, h, functionTable, gaussSeidelResult);
     }
 }
@@ -208,7 +212,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 
     // fill the arrays, TODO: This is wrong!
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) - 1; j+=2) {
+    for (j = 0; j < (size * size) - 1; j+=2)
+    {
         // even j:
         arrayRot0[j/2] = startVector[j];
         arrayRot1[j/2] = startVector[j];
@@ -306,7 +311,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 
     // fill the arrays
     #pragma omp parallel for private(j)
-    for (j = 0; j < (size * size) - 1; j+=2) {
+    for (j = 0; j < (size * size) - 1; j+=2)
+    {
         // even j:
         arrayRot0[j/2] = startVector[j];
         arrayRot1[j/2] = startVector[j];
@@ -329,26 +335,30 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 
         // rote Punkte
         #pragma omp parallel for private(j)
-        for (j = halfSizePlus1; j < numRedElements - halfSizePlus1; ++j) {
-            if ((j % size != 0) && ((j + halfSize) % size != 0)) { // ignore border indices, TODO: Check if correct
+        for (j = halfSizePlus1; j < numRedElements - halfSizePlus1; ++j)
+        {
+            if ((j % size != 0) && ((j + halfSize) % size != 0))   // ignore border indices, TODO: Check if correct
+            {
                 r1[j] = s1[j - halfSizePlus1] // links
-                          + s1[j - 1] // oben
-                          + s0[j + halfSize] // rechts
-                          + s0[j] // unten
-                          + functionTable[j * 2];
+                        + s1[j - 1] // oben
+                        + s0[j + halfSize] // rechts
+                        + s0[j] // unten
+                        + functionTable[j * 2];
                 r1[j] *= 0.25;
             }
         }
 
-	// schwarze Punkte
+        // schwarze Punkte
         #pragma omp parallel for private(j)
-        for (j = halfSizePlus1; j < numBlackElements - halfSize; ++j) {
-            if (((j-halfSize) % size != 0) && ((j + halfSize - 1) % size != 0)) { // ignore border indices, TODO: Check if correct
+        for (j = halfSizePlus1; j < numBlackElements - halfSize; ++j)
+        {
+            if (((j-halfSize) % size != 0) && ((j + halfSize - 1) % size != 0))   // ignore border indices, TODO: Check if correct
+            {
                 s1[j] = r1[j - halfSize] // links
-                          + r1[j] // oben
-                          + r0[j + halfSizePlus1] // rechts
-                          + r0[j + 1] // unten
-                          + functionTable[j * 2 + 1];
+                        + r1[j] // oben
+                        + r0[j + halfSizePlus1] // rechts
+                        + r0[j + 1] // unten
+                        + functionTable[j * 2 + 1];
                 s1[j] *= 0.25;
             }
         }
@@ -378,7 +388,7 @@ bool compare(float* m1,float* m2)
     {
         if(abs(m1[i]-m2[i]) >= EPSILON)
         {
-	    //printf("distance: %f\n", m1[i]-m2[i]);
+            //printf("distance: %f\n", m1[i]-m2[i]);
             equals=false;
         }
     }
@@ -503,7 +513,7 @@ int main(int argc, char *argv[])
 
     double start, end;
 
-     // Call JacobiSerial
+    // Call JacobiSerial
     float* jacobiSerialResult = malloc(size * size * sizeof(float));
     start = get_wall_time();
     jacobiSerial(startVector, h, precomputedF, jacobiSerialResult);
@@ -543,13 +553,20 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
-
-  /*  printResultMatrix(gaussSeidelResult);
-     printf("\n");
-    printResultMatrix(gaussSeidelRotSchwarzResult);
-    printf("\n");
-    printResultMatrix(gaussSeidelWavefrontResult);
-*/
+    //Call Gaus Seidel Wavefront
+    float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
+    start = omp_get_wtime();
+    gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
+    end = omp_get_wtime();
+    printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds ", end - start);
+    correct=compare(gaussSeidelWavefrontCacheResult,gaussSeidelResult);
+    printf("is it correct: %s \n" ,(correct)?"true":"false");
+    /*  printResultMatrix(gaussSeidelResult);
+       printf("\n");
+      printResultMatrix(gaussSeidelRotSchwarzResult);
+      printf("\n");
+      printResultMatrix(gaussSeidelWavefrontResult);
+    */
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
@@ -594,7 +611,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
 
-         float* temp = a0;
+        float* temp = a0;
         a0 = a1;
         a1 = temp;
 
@@ -617,36 +634,42 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
             #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
             for (i = 0; i < currentEle; i++)
             {
-     /*           printf("durchlauf %i ", durchlauf); //indexe passen
-                printf("border %i ", border);
-                printf("i%i ", i);
-                printf("current ele %i ", currentEle);
-                printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
+                /*           printf("durchlauf %i ", durchlauf); //indexe passen
+                           printf("border %i ", border);
+                           printf("i%i ", i);
+                           printf("current ele %i ", currentEle);
+                           printf(" berechneter index%i \n",((durchlauf - border - i+1) * size +( i+border +1))); */
 
 
-     /* printf("a1 %f ",a1[(durchlauf - border - i+1)* size +( i + border+1)]);
-                printf("a1 %f ",a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]);
-                 printf(" a1%f ",a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]);
-                printf("a0 %f ",a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]);
-                printf("a0 %f ",a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]);
-                printf("\n");
+                /* printf("a1 %f ",a1[(durchlauf - border - i+1)* size +( i + border+1)]);
+                           printf("a1 %f ",a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]);
+                            printf(" a1%f ",a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]);
+                           printf("a0 %f ",a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]);
+                           printf("a0 %f ",a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]);
+                           printf("\n");
 
-   printf("a1 %i ",(durchlauf - border - i+1)* size +( i + border+1));
-                printf("a1 %i ",(durchlauf - border - i+1)* size  + (i + border - 1+1));
-                 printf(" a1%i ",(durchlauf - border - 1 - i+1)* size  + (i + border+1));
-                printf("a0 %i ",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
-                printf("a0 %i ",(durchlauf - border - i+1)* size  + (i + border + 1+1));
-                printf("\n"); */
-
-                a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
+                printf("a1 %i ",(durchlauf - border - i+1)* size +( i + border+1));
+                           printf("a1 %i ",(durchlauf - border - i+1)* size  + (i + border - 1+1));
+                            printf(" a1%i ",(durchlauf - border - 1 - i+1)* size  + (i + border+1));
+                           printf("a0 %i ",(durchlauf - border + 1 - i+1)* size  + (i + border+1));
+                           printf("a0 %i ",(durchlauf - border - i+1)* size  + (i + border + 1+1));
+                           printf("\n"); */
+                int index= (durchlauf - border - i+1)* size +( i + border+1);
+                a1[index] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
+                        * (a1[index-1]
+                           + a1[index-size]
+                           + a0[index+1]
+                           + a0[index+size]
+                           +  functionTable[index]);
+            /*    a1[(durchlauf - border - i+1)* size +( i + border+1)] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
                         * (a1[(durchlauf - border - i+1)* size  + (i + border - 1+1)]
                            + a1[(durchlauf - border - 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border + 1 - i+1)* size  + (i + border+1)]
                            + a0[(durchlauf - border - i+1)* size  + (i + border + 1+1)]
-                           +  functionTable[(durchlauf - border - i+1) * size + (i + border+1)]);
-/*int nthreads, tid;
-    tid = omp_get_thread_num();
-  printf("Hello World from thread = %d\n", tid); */
+                           +  functionTable[(durchlauf - border - i+1) * size + (i + border+1)]); */
+                /*int nthreads, tid;
+                    tid = omp_get_thread_num();
+                  printf("Hello World from thread = %d\n", tid); */
 
 
 
@@ -656,12 +679,127 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
 
 
     }
-     #pragma omp parallel for
+    #pragma omp parallel for
     for (i = 0; i < size * size; i++)
     {
         gaussSeidelResult[i] = a1[i];
 
     }
+    free(a0);
+    free(a1);
+
+
+}
+void gaussSeidelWavefrontCache(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+
+    float* a0 = (float*) malloc((2*size-1) * (2*size-1)  * sizeof(float));
+    float* a1 = (float*) malloc((2*size-1) * (2*size-1)  * sizeof(float));
+
+    int i;
+    int currentEle = 0;
+    int border = 0;
+    int durchlauf;
+    //kopieren
+    for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //-1 weil diagonalen zahl size+size-1
+    {
+
+        if (durchlauf > (size -1))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
+        {
+            currentEle--;
+            border++;
+        }
+        else
+        {
+            currentEle++;
+        }
+        int i = 0;
+        //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+        for (i = 0; i < currentEle; i++)
+        {
+            a0[durchlauf*size+i]= startVector[(durchlauf - border - i+1)* size +( i + border+1)];
+            a1[durchlauf*size+i]= startVector[(durchlauf - border - i+1)* size +( i + border+1)];
+        }
+    }
+
+
+
+
+
+//arbeiten
+
+
+//todo abbruchbedingung Max itera wieder ienführen
+    int k = 0;
+
+    for (k = 0; k < MAX_ITERATIONS; k++)
+    {
+
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+
+         currentEle = 0;
+         border = 0;
+
+        for (durchlauf = 0; durchlauf<size+size-1-4 ; durchlauf++) //-1 weil diagonalen zahl size+size-1, -4 weil 4 diagonalen wegfallen
+        {
+
+            if (durchlauf > (size -1-2))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
+            {
+                currentEle--;
+                border++;
+            }
+            else
+            {
+                currentEle++;
+            }
+            int i = 0;
+            //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+            for (i = 0; i < currentEle; i++)
+            {
+                int index= (durchlauf - border - i+1)* size +( i + border+1);
+                a1[index] = 0.25 //+1 jeweils für den rand dei anderen indexe sind algorythmus relevant
+                        * (a1[index-1]
+                           + a1[index-size]
+                           + a0[index+1]
+                           + a0[index+size]
+                           +  functionTable[index]);
+            }
+        }
+
+
+    }
+    //zurückopieren
+
+       i=0;
+     currentEle = 0;
+     border = 0;
+
+    //kopieren
+    for (durchlauf = 0; durchlauf<size+size-1 ; durchlauf++) //-1 weil diagonalen zahl size+size-1
+    {
+
+        if (durchlauf > (size -1))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
+        {
+            currentEle--;
+            border++;
+        }
+        else
+        {
+            currentEle++;
+        }
+        int i = 0;
+        //   #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+        for (i = 0; i < currentEle; i++)
+        {
+            gaussSeidelResult[durchlauf*size+i]= a1[(durchlauf - border - i+1)* size +( i + border+1)];
+
+        }
+    }
+
+
+
     free(a0);
     free(a1);
 
