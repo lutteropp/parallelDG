@@ -1,0 +1,9 @@
+__________________________________________________________________________________________
+|ID|Short      |Severity|Cou|Context[B|Description                   |1st Acces|2nd Acces|
+|  |Description|Name    |nt |est]     |                              |s[Best]  |s[Best]  |
+__________________________________________________________________________________________
+|1 |Thread     |Informat|1  |Whole    |Thread termination at         |"main.c":|"main.c":|
+|  |termination|ion     |   |Program 1|"main.c":163 - includes stack |163      |163      |
+|  |           |        |   |         |allocation of 8 MB and use of |         |         |
+|  |           |        |   |         |1.574 KB                      |         |         |
+__________________________________________________________________________________________

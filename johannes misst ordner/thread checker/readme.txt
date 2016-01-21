@@ -1,0 +1,1 @@
+der thread checker mag die colapse clauseln nicht.
