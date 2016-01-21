@@ -389,7 +389,7 @@ bool compare(float* m1,float* m2)
     {
 
 
-        if(fabs(m1[i]-m2[i]) >= EPSILON)
+        if((m1[i]-m2[i]) * (m1[i]-m2[i]) >= EPSILON)
         {
 
             equals=false;
