@@ -643,7 +643,7 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
-    //Call Gaus Seidel Wavefront
+    //Call Gaus Seidel Wavefront Cache
     float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
     start = omp_get_wtime();
     gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
@@ -652,20 +652,8 @@ int main(int argc, char *argv[])
     correct=compare(gaussSeidelWavefrontCacheResult,gaussSeidelResult);
     printf("is it correct: %s \n" ,(correct)?"true":"false");
 
-   printResultMatrix(gaussSeidelResult);
-    printf("gaus seidel \n");
-
-//   printResultMatrix(gaussSeidelNaivResult);
-    // printf("gs naiv \n");
-    //  printResultMatrix(gaussSeidelRotSchwarzResult);
-    // printf("rot shcwarz\n");
-    printResultMatrix(gaussSeidelWavefrontResult);
-     printf("wavefront\n");
-    printResultMatrix(gaussSeidelWavefrontCacheResult);
-    printf("wavefrontcache\n");
-
     // TODO: The following is just debug code. Remove afterwards.
-    /*printf("\nFunctionTable:\n");
+    printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
     printf("\nStartvektor:\n");
     printResultMatrix(startVector);
@@ -675,8 +663,12 @@ int main(int argc, char *argv[])
     printResultMatrix(gaussSeidelResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
     printResultMatrix(gaussSeidelRotSchwarzResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront:\n");
+    printResultMatrix(gaussSeidelWavefrontResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
+    printResultMatrix(gaussSeidelWavefrontCacheResult);
     printf("\nErgebnis analytisch:\n");
-    printAnalyticalResult(h);*/
+    printAnalyticalResult(h);
 
     free(gaussSeidelWavefrontResult);
     free(gaussSeidelWavefrontCacheResult);
