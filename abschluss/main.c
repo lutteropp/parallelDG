@@ -464,7 +464,7 @@ bool compare(float* m1,float* m2)
 
         for(j=0; j<size; j++)
         {
-            if(abs(m1[i*size+j]-m2[i*size+j]) >= EPSILON)
+            if((m1[i*size+j]-m2[i*size+j]) * (m1[i*size+j]-m2[i*size+j]) >= EPSILON)
             {
                 printf("\n distance: %f\n", m1[i*size+j]-m2[i*size+j]);
                 equals=false;
