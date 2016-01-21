@@ -679,6 +679,7 @@ int main(int argc, char *argv[])
     printAnalyticalResult(h);*/
 
     free(gaussSeidelWavefrontResult);
+    free(gaussSeidelWavefrontCacheResult);
     free(jacobiResult);
     free(gaussSeidelResult);
     free(gaussSeidelRotSchwarzResult);
