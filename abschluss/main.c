@@ -682,14 +682,14 @@ int main(int argc, char *argv[])
    // printResultMatrix(startVector);
    // printf("\nErgebnis Jacobi-Verfahren:\n");
    // printResultMatrix(jacobiResult);
-    printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
-    printResultMatrix(gaussSeidelResult);
-    printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
-    printResultMatrix(gaussSeidelRotSchwarzResult);
+  //  printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
+   // printResultMatrix(gaussSeidelResult);
+    //printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
+    //printResultMatrix(gaussSeidelRotSchwarzResult);
     //printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront:\n");
    // printResultMatrix(gaussSeidelWavefrontResult);
-    printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
-    printResultMatrix(gaussSeidelWavefrontCacheResult);
+    //printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
+    //printResultMatrix(gaussSeidelWavefrontCacheResult);
     //printf("\nErgebnis analytisch:\n");
     //printAnalyticalResult(h);
 
