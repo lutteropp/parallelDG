@@ -214,8 +214,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     #pragma omp parallel for private(i, j) collapse(2)
     for (j = 0; j < size; ++j)
     {
-        //printf("Spalte %d:\n", j);
-        //printf(" IdxRot: ");
         for (i = 0; i < halfSize; ++i)
         {
             int baseIdx = j * halfSize;
@@ -232,26 +230,12 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
                 idxSchwarz = 2 * idx;
             }
 
-            //printf("%d ", idxRot);
             arrayRot0[idx] = startVector[idxRot];
             arrayRot1[idx] = startVector[idxRot];
             arraySchwarz0[idx] = startVector[idxSchwarz];
             arraySchwarz1[idx] = startVector[idxSchwarz];
         }
-        //printf("\n");
     }
-
-    /*printf("\narrayRot:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", arrayRot0[i]);
-    }
-    printf("\n");
-
-    printf("\narraySchwarz:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", arraySchwarz0[i]);
-    }
-    printf("\n");*/
 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
@@ -263,75 +247,71 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
         temp = s0;
         s0 = s1;
         s1 = temp;
-
-        // rote Punkte
-        #pragma omp parallel for private(i, j) firstprivate(s0, s1) collapse(2)
-        for (j = 1; j < size - 1; j++)
+        
+        // rote Punkte, neuer Versuch
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j+=2)
         {
-            for (i1 = halfSize; i1 < size - 1; i1++)
-            {
-                bool offsetRot = (j % 2 == 0);
-                const int baseIdx = (j - 1) * halfSize + offsetRot;
-
-                const int idx = i1 + baseIdx;
-                r1[idx] = s1[idx - halfSize] // links
-                          + s1[idx - offsetRot] // oben
-                          + s0[idx + halfSize] // rechts
-                          + s0[idx + !offsetRot] // unten
-                          + functionTable[idx * 2 + !offsetRot];
-                r1[idx] *= 0.25;
-
-                /*printf("  Rot-Index: %d\n", idx);
-                printf("    offsetRot: %d\n", offsetRot);
-                printf("    Schwarz-Index links: %d enthält: %.3f\n", idx - halfSize, s1[idx - halfSize]);
-                printf("    Schwarz-Index oben: %d enthält: %.3f\n", idx - offsetRot, s1[idx - offsetRot]);
-                printf("    Schwarz-Index rechts: %d enthält: %.3f\n", idx + halfSize, s0[idx + halfSize]);
-                printf("    Schwarz-Index unten: %d enthält: %.3f\n", idx + !offsetRot, s0[idx + !offsetRot]);
-                printf("    Zugriff auf f bei: %d\n", idx * 2 + !offsetRot);
-                printf("    Ergebnis: %.3f\n", r1[idx]);*/
-            }
+	    	for (i = 1; i < size - 2; i += 2) {
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+	    		//if (k==0) printf("RED: %d\n", idx);
+			r1[idx] = s1[idx - halfSize] // links
+		                  + s1[idx] // oben
+		                  + s0[idx + halfSize] // rechts
+		                  + s0[idx + 1] // unten
+		                  + functionTable[idxWhole];
+		        r1[idx] *= 0.25;
+	    	}
+	    	
+	    	if (j+1 < size - 1) {
+		    	for (i = 2; i < size - 1; i += 2) {
+		    		const int idxWhole = CO(i,j+1);
+		    		const int idx = idxWhole / 2;
+		    		//if (k==0) printf("RED: %d\n", idx);
+				
+				r1[idx] = s1[idx - halfSize] // links
+				          + s1[idx - 1] // oben
+				          + s0[idx + halfSize] // rechts
+				          + s0[idx] // unten
+				          + functionTable[idxWhole];
+				r1[idx] *= 0.25;
+		    	}
+	    	}
         }
-
-        // schwarze Punkte
-        #pragma omp parallel for private(i, j) firstprivate(r0, r1) collapse(2)
-        for (j = 1; j < size - 1; j++)
+        
+        // schwarze Punkte, neuer Versuch
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j+=2)
         {
-            for (i1 = halfSize; i1 < size - 1; i1++)
-            {
-                bool offsetSchwarz = (j % 2 != 0);
-                const int baseIdx = (j - 1) * halfSize + offsetSchwarz;
-
-                const int idx = i1 + baseIdx;
-                s1[idx] = r1[idx - halfSize] // links
-                          + r1[idx - offsetSchwarz] // oben
-                          + r0[idx + halfSize] // rechts
-                          + r0[idx + !offsetSchwarz] // unten
-                          + functionTable[idx * 2 + !offsetSchwarz];
-                s1[idx] *= 0.25;
-
-                /*printf("  Schwarz-Index: %d\n", idx);
-                printf("    offsetSchwarz: %d\n", offsetSchwarz);
-                printf("    Rot-Index links: %d enthält: %.3f\n", idx - size/2, s1[idx - size/2]);
-                printf("    Rot-Index oben: %d enthält: %.3f\n", idx - offsetSchwarz, s1[idx - offsetSchwarz]);
-                printf("    Rot-Index rechts: %d enthält: %.3f\n", idx + size/2, s0[idx + size/2]);
-                printf("    Rot-Index unten: %d enthält: %.3f\n", idx + !offsetSchwarz, s0[idx + !offsetSchwarz]);
-                printf("    Zugriff auf f bei: %d\n", idx * 2 + !offsetSchwarz);
-                printf("    Ergebnis: %.3f\n", s1[idx]);*/
-            }
+	    	for (i = 2; i < size - 1; i += 2) {
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+	    		//if (k==0) printf("BLACK: %d\n", idx);
+	    		s1[idx] = r1[idx - halfSize] // links
+		                  + r1[idx - 1] // oben
+		                  + r0[idx + halfSize] // rechts
+		                  + r0[idx] // unten
+		                  + functionTable[idxWhole];
+		        s1[idx] *= 0.25;
+	    	}
+	    	
+	    	if (j+1 < size - 1) {
+		    	for (i = 1; i < size - 2; i += 2) {
+		    		const int idxWhole = CO(i,j+1);
+		    		const int idx = idxWhole / 2;
+		    		//if (k==0) printf("BLACK: %d\n", idx);
+				
+				s1[idx] = r1[idx - halfSize] // links
+				          + r1[idx] // oben
+				          + r0[idx + halfSize] // rechts
+				          + r0[idx + 1] // unten
+				          + functionTable[idxWhole];
+				s1[idx] *= 0.25;
+		    	}
+	    	}
         }
     }
-
-    /*printf("\nr1:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", r1[i]);
-    }
-    printf("\n");
-
-    printf("\ns1:\n");
-    for (i = 0; i < size * size/2; ++i) {
-    	printf("%.3f ", s1[i]);
-    }
-    printf("\n");*/
 
     #pragma omp parallel for private(i, j) collapse(2)
     for (j = 0; j < size; ++j)
@@ -361,6 +341,7 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     free(s0);
     free(s1);
 }
+
 
 // For size % 2 == 1
 void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
@@ -511,8 +492,6 @@ bool compare(float* m1,float* m2)
 
     for(i=0; i<(size*size); i++)
     {
-
-
         if((m1[i]-m2[i]) * (m1[i]-m2[i]) >= EPSILON)
         {
 
@@ -521,7 +500,6 @@ bool compare(float* m1,float* m2)
         //  printf(" %f ", m1[i*size+j]-m2[i*size+j]);
 
         //printf("\n");
-
     }
     return equals;
 }
