@@ -239,14 +239,13 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
     {   
-        // rote Punkte, neuer Versuch
+        // rote Punkte
         #pragma omp parallel for private(j, i)
         for (j = 1; j < size - 1; j+=2)
         {
 	    	for (i = 1; i < size - 2; i += 2) {
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
-	    		//if (k==0) printf("RED: %d\n", idx);
 			r1[idx] = s1[idx - halfSize] // links
 		                  + s1[idx] // oben
 		                  + s1[idx + halfSize] // rechts
@@ -259,7 +258,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 		    	for (i = 2; i < size - 1; i += 2) {
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
-		    		//if (k==0) printf("RED: %d\n", idx);
 				
 				r1[idx] = s1[idx - halfSize] // links
 				          + s1[idx - 1] // oben
@@ -271,14 +269,13 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 	    	}
         }
         
-        // schwarze Punkte, neuer Versuch
+        // schwarze Punkte
         #pragma omp parallel for private(j, i)
         for (j = 1; j < size - 1; j+=2)
         {
 	    	for (i = 2; i < size - 1; i += 2) {
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
-	    		//if (k==0) printf("BLACK: %d\n", idx);
 	    		s1[idx] = r1[idx - halfSize] // links
 		                  + r1[idx - 1] // oben
 		                  + r1[idx + halfSize] // rechts
@@ -291,7 +288,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 		    	for (i = 1; i < size - 2; i += 2) {
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
-		    		//if (k==0) printf("BLACK: %d\n", idx);
 				
 				s1[idx] = r1[idx - halfSize] // links
 				          + r1[idx] // oben
@@ -366,7 +362,6 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 	    	for (i = 1; i < size - 1; i += 2) {
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
-	    		//if (k==0) printf("RED: %d\n", idx);
 	    		r1[idx] = s1[idx - halfSizePlus1] // links
 			        + s1[idx - 1] // oben
 			        + s1[idx + halfSize] // rechts
@@ -379,7 +374,6 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 		    	for (i = 2; i < size - 2; i += 2) {
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
-		    		//if (k==0) printf("RED: %d\n", idx);
 		    		r1[idx] = s1[idx - halfSizePlus1] // links
 					+ s1[idx - 1] // oben
 					+ s1[idx + halfSize] // rechts
@@ -394,10 +388,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         #pragma omp parallel for private(j,i)
         for (j = 1; j < size - 1; j += 2) {
         	for (i = 2; i < size - 2; i += 2) {
-        		//if (k == 0) printf("ODD j = %d, i = %d\n", j, i);
         		const int idxWhole = CO(i,j);
         		const int idx = idxWhole / 2;
-        		//if (k==0) printf("BLACK: %d\n", idx);
         		s1[idx] = r1[idx - halfSize] // links
 				        + r1[idx] // oben
 				        + r1[idx + halfSizePlus1] // rechts
@@ -408,10 +400,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         	
         	if (j+1 < size - 1) {
 			for (i = 1; i < size - 1; i += 2) {
-				//if (k == 0) printf("EVEN j = %d, i = %d\n", j, i);
 				const int idxWhole = CO(i,j+1);
 				const int idx = idxWhole / 2;
-				//if (k==0) printf("BLACK: %d\n", idx);
 				s1[idx] = r1[idx - halfSize] // links
 						+ r1[idx] // oben
 						+ r1[idx + halfSizePlus1] // rechts
@@ -423,7 +413,6 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         }
     }
 
-    // TODO: Is this correct?
     #pragma omp parallel for private(j)
     for (j = 0; j < (size * size) - 1; j+=2)
     {
