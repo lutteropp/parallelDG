@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
 
     double start, end;
     
-    int repeats = 10;
+    int repeats = 1;
 
     // Call JacobiSerial
     float* jacobiSerialResult = malloc(size * size * sizeof(float));
