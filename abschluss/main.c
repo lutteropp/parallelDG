@@ -270,7 +270,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
         {
             for (i1 = halfSize; i1 < size - 1; i1++)
             {
-                int y = j;
                 bool offsetRot = (j % 2 == 0);
                 const int baseIdx = (j - 1) * halfSize + offsetRot;
 
@@ -299,7 +298,6 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
         {
             for (i1 = halfSize; i1 < size - 1; i1++)
             {
-                int y = j;
                 bool offsetSchwarz = (j % 2 != 0);
                 const int baseIdx = (j - 1) * halfSize + offsetSchwarz;
 
@@ -370,6 +368,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     int i1, i, j, k;
     int halfSize = size / 2;
     int halfSizePlus1 = halfSize + 1;
+    
+    //printf("halfSize = %d\n", halfSize);
 
     unsigned int numRedElements = halfSize * halfSize + halfSizePlus1 * halfSizePlus1;
     unsigned int numBlackElements = 2 * halfSize * halfSizePlus1;
@@ -408,42 +408,65 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         s0 = s1;
         s1 = temp;
 
-        // rote Punkte
+        // rote Punkte, TODO: schneller machen
         #pragma omp parallel for private(j)
         for (j = halfSizePlus1; j < numRedElements - halfSizePlus1; ++j)
         {
-            if ((j % size != 0) && ((j + halfSize) % size != 0))   // ignore border indices, TODO: Check if correct
+            if ((j % size != 0) && ((j - halfSize) % size != 0))   // ignore border indices, TODO: Check if correct
             {
-                r1[j] = s1[j - halfSizePlus1] // links
-                        + s1[j - 1] // oben
-                        + s0[j + halfSize] // rechts
-                        + s0[j] // unten
-                        + functionTable[j * 2];
-                r1[j] *= 0.25;
+                //if (k==0) printf("ArrayRot[%d] used\n", j);
+            
+                const int idx = j;
+                r1[idx] = s1[idx - halfSizePlus1] // links
+                        + s1[idx - 1] // oben
+                        + s0[idx + halfSize] // rechts
+                        + s0[idx] // unten
+                        + functionTable[idx * 2];
+                r1[idx] *= 0.25;
+                
+                //if (k==0) printf("ArrayRot[%d] = %.3f\n", idx, r1[idx]);
             }
         }
-
-        // schwarze Punkte
+        
+        // schwarze Punkte, wieder neuer Versuch
         #pragma omp parallel for private(j)
-        for (j = halfSizePlus1; j < numBlackElements - halfSize; ++j)
-        {
-            if (((j-halfSize) % size != 0) && ((j + halfSize - 1) % size != 0))   // ignore border indices, TODO: Check if correct
-            {
-                s1[j] = r1[j - halfSize] // links
-                        + r1[j] // oben
-                        + r0[j + halfSizePlus1] // rechts
-                        + r0[j + 1] // unten
-                        + functionTable[j * 2 + 1];
-                s1[j] *= 0.25;
-            }
+        for (j = halfSizePlus1; j < numBlackElements - halfSizePlus1; ++j) {
+        	// oberen und unteren Rand ignorieren
+        	if ( ((j + 1) % size != 0) && ((j + halfSizePlus1) % size != 0) ) {
+        			//if (k==0) printf("ArraySchwarz[%d] used\n", j);
+        			const int idx = j;
+				s1[idx] = r1[idx - halfSize] // links
+				        + r1[idx] // oben
+				        + r0[idx + halfSizePlus1] // rechts
+				        + r0[idx + 1] // unten
+				        + functionTable[idx * 2 + 1];
+				s1[idx] *= 0.25;
+        	}
         }
+        
+        /*if (k == 0) {
+        	printf("Array Rot:\n");
+	    for (i = 0; i < numRedElements; ++i) {
+	    	printf("%.3f ", r1[i]);
+	    }
+	    printf("\n");
+	    
+	    printf("Array Schwarz:\n");
+	    for (i = 0; i < numBlackElements; ++i) {
+	    	printf("%.3f ", s1[i]);
+	    }
+	    printf("\n");
+        }*/
     }
 
+    // TODO: Is this correct?
     #pragma omp parallel for private(j)
     for (j = 0; j < (size * size) - 1; j+=2)
     {
+        // even j:
         gaussSeidelResult[j] = r1[j/2];
-        gaussSeidelResult[j + 1] = s1[j/2];
+        // odd j+1:
+        gaussSeidelResult[j+1] = s1[j/2];
     }
 
     free(r0);
