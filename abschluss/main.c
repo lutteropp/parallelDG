@@ -366,17 +366,15 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 			r1[idx] *= 0.25;
 	    	}
 	    	
-	    	if (j+1 < size - 1) {
-		    	for (i = 2; i < size - 2; i += 2) {
-		    		const int idxWhole = CO(i,j+1);
-		    		const int idx = idxWhole / 2;
-		    		r1[idx] = s1[idx - halfSizePlus1] // links
-					+ s1[idx - 1] // oben
-					+ s1[idx + halfSize] // rechts
-					+ s1[idx] // unten
-					+ functionTable[idx * 2];
-				r1[idx] *= 0.25;
-		    	}
+	    	for (i = 2; i < size - 2; i += 2) {
+	    		const int idxWhole = CO(i,j+1);
+	    		const int idx = idxWhole / 2;
+	    		r1[idx] = s1[idx - halfSizePlus1] // links
+				+ s1[idx - 1] // oben
+				+ s1[idx + halfSize] // rechts
+				+ s1[idx] // unten
+				+ functionTable[idx * 2];
+			r1[idx] *= 0.25;
 	    	}
         }
         
@@ -394,18 +392,16 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 				s1[idx] *= 0.25;
         	}
         	
-        	if (j+1 < size - 1) {
-			for (i = 1; i < size - 1; i += 2) {
-				const int idxWhole = CO(i,j+1);
-				const int idx = idxWhole / 2;
-				s1[idx] = r1[idx - halfSize] // links
-						+ r1[idx] // oben
-						+ r1[idx + halfSizePlus1] // rechts
-						+ r1[idx + 1] // unten
-						+ functionTable[idxWhole];
-					s1[idx] *= 0.25;
-			}
-        	}
+		for (i = 1; i < size - 1; i += 2) {
+			const int idxWhole = CO(i,j+1);
+			const int idx = idxWhole / 2;
+			s1[idx] = r1[idx - halfSize] // links
+					+ r1[idx] // oben
+					+ r1[idx + halfSizePlus1] // rechts
+					+ r1[idx + 1] // unten
+					+ functionTable[idxWhole];
+				s1[idx] *= 0.25;
+		}
         }
     }
 
