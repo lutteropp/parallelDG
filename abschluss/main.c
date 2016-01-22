@@ -201,15 +201,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 {
     int i1, i, j, k;
     int halfSize = size / 2;
-    float* arrayRot0 = (float*) malloc(size * halfSize * sizeof(float));
-    float* arrayRot1 = (float*) malloc(size * halfSize * sizeof(float));
-    float* arraySchwarz0 = (float*) malloc(size * halfSize * sizeof(float));
-    float* arraySchwarz1 = (float*) malloc(size * halfSize * sizeof(float));
-
-    float* r0 = arrayRot0; // last iteration Rot
-    float* r1 = arrayRot1; // current iteration Rot
-    float* s0 = arraySchwarz0; // last iteration Schwarz
-    float* s1 = arraySchwarz1; // current iteration Schwarz
+    float* r1 = (float*) malloc(size * halfSize * sizeof(float));
+    float* s1 = (float*) malloc(size * halfSize * sizeof(float));
 
     #pragma omp parallel for private(i, j) collapse(2)
     for (j = 0; j < size; ++j)
@@ -230,24 +223,14 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
                 idxSchwarz = 2 * idx;
             }
 
-            arrayRot0[idx] = startVector[idxRot];
-            arrayRot1[idx] = startVector[idxRot];
-            arraySchwarz0[idx] = startVector[idxSchwarz];
-            arraySchwarz1[idx] = startVector[idxSchwarz];
+            r1[idx] = startVector[idxRot];
+            s1[idx] = startVector[idxSchwarz];
         }
     }
 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {
-        // swap the pointers for current and last iteration
-        float* temp = r0;
-        r0 = r1;
-        r1 = temp;
-        temp = s0;
-        s0 = s1;
-        s1 = temp;
-        
+    {   
         // rote Punkte, neuer Versuch
         #pragma omp parallel for private(j, i)
         for (j = 1; j < size - 1; j+=2)
@@ -258,8 +241,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 	    		//if (k==0) printf("RED: %d\n", idx);
 			r1[idx] = s1[idx - halfSize] // links
 		                  + s1[idx] // oben
-		                  + s0[idx + halfSize] // rechts
-		                  + s0[idx + 1] // unten
+		                  + s1[idx + halfSize] // rechts
+		                  + s1[idx + 1] // unten
 		                  + functionTable[idxWhole];
 		        r1[idx] *= 0.25;
 	    	}
@@ -272,8 +255,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 				
 				r1[idx] = s1[idx - halfSize] // links
 				          + s1[idx - 1] // oben
-				          + s0[idx + halfSize] // rechts
-				          + s0[idx] // unten
+				          + s1[idx + halfSize] // rechts
+				          + s1[idx] // unten
 				          + functionTable[idxWhole];
 				r1[idx] *= 0.25;
 		    	}
@@ -290,8 +273,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 	    		//if (k==0) printf("BLACK: %d\n", idx);
 	    		s1[idx] = r1[idx - halfSize] // links
 		                  + r1[idx - 1] // oben
-		                  + r0[idx + halfSize] // rechts
-		                  + r0[idx] // unten
+		                  + r1[idx + halfSize] // rechts
+		                  + r1[idx] // unten
 		                  + functionTable[idxWhole];
 		        s1[idx] *= 0.25;
 	    	}
@@ -304,8 +287,8 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 				
 				s1[idx] = r1[idx - halfSize] // links
 				          + r1[idx] // oben
-				          + r0[idx + halfSize] // rechts
-				          + r0[idx + 1] // unten
+				          + r1[idx + halfSize] // rechts
+				          + r1[idx + 1] // unten
 				          + functionTable[idxWhole];
 				s1[idx] *= 0.25;
 		    	}
@@ -336,9 +319,7 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
         }
     }
 
-    free(r0);
     free(r1);
-    free(s0);
     free(s1);
 }
 
@@ -355,40 +336,23 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     unsigned int numRedElements = halfSize * halfSize + halfSizePlus1 * halfSizePlus1;
     unsigned int numBlackElements = 2 * halfSize * halfSizePlus1;
 
-    float* arrayRot0 = (float*) malloc(numRedElements * sizeof(float));
-    float* arrayRot1 = (float*) malloc(numRedElements * sizeof(float));
-    float* arraySchwarz0 = (float*) malloc(numBlackElements * sizeof(float));
-    float* arraySchwarz1 = (float*) malloc(numBlackElements * sizeof(float));
-
-    float* r0 = arrayRot0; // last iteration Rot
-    float* r1 = arrayRot1; // current iteration Rot
-    float* s0 = arraySchwarz0; // last iteration Schwarz
-    float* s1 = arraySchwarz1; // current iteration Schwarz
+    float* r1 = (float*) malloc(numRedElements * sizeof(float));
+    float* s1 = (float*) malloc(numBlackElements * sizeof(float));
 
     // fill the arrays
     #pragma omp parallel for private(j)
     for (j = 0; j < (size * size) - 1; j+=2)
     {
         // even j:
-        arrayRot0[j/2] = startVector[j];
-        arrayRot1[j/2] = startVector[j];
+        r1[j/2] = startVector[j];
 
         // odd j+1:
-        arraySchwarz0[j/2] = startVector[j+1];
-        arraySchwarz1[j/2] = startVector[j+1];
+        s1[j/2] = startVector[j+1];
     }
 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {
-        // swap the pointers for current and last iteration
-        float* temp = r0;
-        r0 = r1;
-        r1 = temp;
-        temp = s0;
-        s0 = s1;
-        s1 = temp;
-        
+    {   
         // rote Punkte, neuer Versuch
         #pragma omp parallel for private(j, i)
         for (j = 1; j < size - 1; j+=2)
@@ -399,8 +363,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 	    		//if (k==0) printf("RED: %d\n", idx);
 	    		r1[idx] = s1[idx - halfSizePlus1] // links
 			        + s1[idx - 1] // oben
-			        + s0[idx + halfSize] // rechts
-			        + s0[idx] // unten
+			        + s1[idx + halfSize] // rechts
+			        + s1[idx] // unten
 			        + functionTable[idx * 2];
 			r1[idx] *= 0.25;
 	    	}
@@ -412,8 +376,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 		    		//if (k==0) printf("RED: %d\n", idx);
 		    		r1[idx] = s1[idx - halfSizePlus1] // links
 					+ s1[idx - 1] // oben
-					+ s0[idx + halfSize] // rechts
-					+ s0[idx] // unten
+					+ s1[idx + halfSize] // rechts
+					+ s1[idx] // unten
 					+ functionTable[idx * 2];
 				r1[idx] *= 0.25;
 		    	}
@@ -430,8 +394,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         		//if (k==0) printf("BLACK: %d\n", idx);
         		s1[idx] = r1[idx - halfSize] // links
 				        + r1[idx] // oben
-				        + r0[idx + halfSizePlus1] // rechts
-				        + r0[idx + 1] // unten
+				        + r1[idx + halfSizePlus1] // rechts
+				        + r1[idx + 1] // unten
 				        + functionTable[idxWhole];
 				s1[idx] *= 0.25;
         	}
@@ -444,8 +408,8 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 				//if (k==0) printf("BLACK: %d\n", idx);
 				s1[idx] = r1[idx - halfSize] // links
 						+ r1[idx] // oben
-						+ r0[idx + halfSizePlus1] // rechts
-						+ r0[idx + 1] // unten
+						+ r1[idx + halfSizePlus1] // rechts
+						+ r1[idx + 1] // unten
 						+ functionTable[idxWhole];
 					s1[idx] *= 0.25;
 			}
@@ -477,12 +441,9 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         gaussSeidelResult[j+1] = s1[j/2];
     }
 
-    free(r0);
     free(r1);
-    free(s0);
     free(s1);
 }
-
 
 bool compare(float* m1,float* m2)
 {
