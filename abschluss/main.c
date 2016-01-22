@@ -640,9 +640,9 @@ int main(int argc, char *argv[])
 
     // Call Gauss-Seidel
     float* gaussSeidelNaivResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start =  omp_get_wtime();
     gaussSeidelNaiv(startVector, h, precomputedF, gaussSeidelNaivResult);
-    end = get_wall_time();
+    end =  omp_get_wtime();
     printf("Execution time Gauss-Seidel Naiv: %.3f seconds", end - start);
     bool correct=true;
     correct=compare(gaussSeidelNaivResult,gaussSeidelResult);
@@ -673,7 +673,7 @@ int main(int argc, char *argv[])
     end = omp_get_wtime();
     printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds ", end - start);
     correct=compare(gaussSeidelWavefrontCacheResult,gaussSeidelResult);
-    printf("is it correct: %s \n" ,(correct)?"true":"false");
+    printf(" is it correct: %s \n" ,(correct)?"true":"false");
 
     // TODO: The following is just debug code. Remove afterwards.
   //  printf("\nFunctionTable:\n");
@@ -684,8 +684,8 @@ int main(int argc, char *argv[])
    // printResultMatrix(jacobiResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
     printResultMatrix(gaussSeidelResult);
-    //printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
-    //printResultMatrix(gaussSeidelRotSchwarzResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
+    printResultMatrix(gaussSeidelRotSchwarzResult);
     //printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront:\n");
    // printResultMatrix(gaussSeidelWavefrontResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
@@ -746,7 +746,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                 currentEle++;
             }
             int i = 0;
-         //  #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
+           #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)
             for (i = 0; i < currentEle; i++)
             {
 
@@ -798,7 +798,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     int border = 0;
     int durchlauf;
     //kopieren
-      #pragma omp parallel for firstprivate(border,currentEle)private(i)
+      #pragma omp parallel for firstprivate(border,currentEle)private(i,durchlauf)
     for (durchlauf = 0; durchlauf<newsize ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
@@ -928,7 +928,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     border = 0;
  //   printf("zurückopieren..:\n");
     //kopieren
-    #pragma omp parallel for firstprivate(border,currentEle) private(i)
+    #pragma omp parallel for firstprivate(border,currentEle) private(i,durchlauf)
     for (durchlauf = 0; durchlauf<newsize ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
