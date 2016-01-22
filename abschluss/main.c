@@ -204,24 +204,32 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     float* r1 = (float*) malloc(size * halfSize * sizeof(float));
     float* s1 = (float*) malloc(size * halfSize * sizeof(float));
 
-    #pragma omp parallel for private(i, j) collapse(2)
-    for (j = 0; j < size; ++j)
+    // fill the arrays
+    #pragma omp parallel for private(i, j)
+    for (j = 0; j < size-1; j+=2)
     {
-        for (i = 0; i < halfSize; ++i)
+        for (i = 0; i < halfSize; ++i) // for even j
         {
             int baseIdx = j * halfSize;
             int idx = baseIdx + i;
             int idxRot, idxSchwarz;
-            if (j % 2 == 0)
-            {
-                idxRot = 2 * idx;
-                idxSchwarz = 2 * idx + 1;
-            }
-            else
-            {
-                idxRot = 2 * idx + 1;
-                idxSchwarz = 2 * idx;
-            }
+            
+            idxRot = 2 * idx;
+            idxSchwarz = 2 * idx + 1;
+            
+
+            r1[idx] = startVector[idxRot];
+            s1[idx] = startVector[idxSchwarz];
+        }
+        
+        for (i = 0; i < halfSize; ++i) // for odd j+1
+        {
+            int baseIdx = (j+1) * halfSize;
+            int idx = baseIdx + i;
+            int idxRot, idxSchwarz;
+            
+            idxRot = 2 * idx + 1;
+            idxSchwarz = 2 * idx;
 
             r1[idx] = startVector[idxRot];
             s1[idx] = startVector[idxSchwarz];
@@ -296,24 +304,24 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
         }
     }
 
-    #pragma omp parallel for private(i, j) collapse(2)
-    for (j = 0; j < size; ++j)
+    #pragma omp parallel for private(i, j)
+    for (j = 0; j < size-1; j+=2)
     {
-        for (i = 0; i < halfSize; ++i)
+        for (i = 0; i < halfSize; ++i) // for even j
         {
             int baseIdx = j * halfSize;
             int idx = baseIdx + i;
-            int idxRot, idxSchwarz;
-            if (j % 2 == 0)
-            {
-                idxRot = 2 * idx;
-                idxSchwarz = 2 * idx + 1;
-            }
-            else
-            {
-                idxRot = 2 * idx + 1;
-                idxSchwarz = 2 * idx;
-            }
+            int idxRot = 2 * idx;
+            int idxSchwarz = 2 * idx + 1;
+            gaussSeidelResult[idxRot] = r1[idx];
+            gaussSeidelResult[idxSchwarz] = s1[idx];
+        }
+        for (i = 0; i < halfSize; ++i) // for odd j+1
+        {
+            int baseIdx = (j+1) * halfSize;
+            int idx = baseIdx + i;
+            int idxRot = 2 * idx + 1;
+            int idxSchwarz = 2 * idx;
             gaussSeidelResult[idxRot] = r1[idx];
             gaussSeidelResult[idxSchwarz] = s1[idx];
         }
@@ -330,8 +338,6 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     int i1, i, j, k;
     int halfSize = size / 2;
     int halfSizePlus1 = halfSize + 1;
-    
-    //printf("halfSize = %d\n", halfSize);
 
     unsigned int numRedElements = halfSize * halfSize + halfSizePlus1 * halfSizePlus1;
     unsigned int numBlackElements = 2 * halfSize * halfSizePlus1;
@@ -415,20 +421,6 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 			}
         	}
         }
-        
-        /*if (k == 0) {
-        	printf("Array Rot:\n");
-	    for (i = 0; i < numRedElements; ++i) {
-	    	printf("%.3f ", r1[i]);
-	    }
-	    printf("\n");
-	    
-	    printf("Array Schwarz:\n");
-	    for (i = 0; i < numBlackElements; ++i) {
-	    	printf("%.3f ", s1[i]);
-	    }
-	    printf("\n");
-        }*/
     }
 
     // TODO: Is this correct?
