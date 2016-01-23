@@ -4,6 +4,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <omp.h>
+#include <immintrin.h>
 
 /*
 Compile with: gcc -O2 -fopenmp -march=native main.c -o main
@@ -13,10 +14,13 @@ float f1(float x, float y);
 void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarzSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelNaiv(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
-void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void computeFunctionTable(float h, float* functionTable);
 void printResultMatrix(const float* matrix);
 void printAnalyticalResult(float h);
@@ -196,6 +200,18 @@ void gaussSeidelRotSchwarz(const float * startVector, float h, const float* func
     }
 }
 
+void gaussSeidelRotSchwarzSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+    if (size % 2 == 0)
+    {
+        gaussSeidelRotSchwarzEvenSSE(startVector, h, functionTable, gaussSeidelResult);
+    }
+    else
+    {
+        gaussSeidelRotSchwarzOddSSE(startVector, h, functionTable, gaussSeidelResult);
+    }
+}
+
 // For size % 2 == 0
 void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
@@ -323,6 +339,132 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     free(s1);
 }
 
+// For size % 2 == 0
+void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+    int i1, i, j, k;
+    int halfSize = size / 2;
+    float* r1 = (float*) malloc(size * halfSize * sizeof(float));
+    float* s1 = (float*) malloc(size * halfSize * sizeof(float));
+
+    // fill the arrays
+    #pragma omp parallel for private(i, j)
+    for (j = 0; j < size-1; j+=2)
+    {
+        for (i = 0; i < halfSize; ++i) // for even j
+        {
+            int baseIdx = j * halfSize;
+            int idx = baseIdx + i;
+            int idxRot, idxSchwarz;
+            
+            idxRot = 2 * idx;
+            idxSchwarz = 2 * idx + 1;
+            
+
+            r1[idx] = startVector[idxRot];
+            s1[idx] = startVector[idxSchwarz];
+        }
+        
+        for (i = 0; i < halfSize; ++i) // for odd j+1
+        {
+            int baseIdx = (j+1) * halfSize;
+            int idx = baseIdx + i;
+            int idxRot, idxSchwarz;
+            
+            idxRot = 2 * idx + 1;
+            idxSchwarz = 2 * idx;
+
+            r1[idx] = startVector[idxRot];
+            s1[idx] = startVector[idxSchwarz];
+        }
+    }
+
+    //todo abbruchbedingung
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {   
+        // rote Punkte
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j+=2)
+        {
+	    	for (i = 1; i < size - 2; i += 2) {
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+			r1[idx] = s1[idx - halfSize] // links
+		                  + s1[idx] // oben
+		                  + s1[idx + halfSize] // rechts
+		                  + s1[idx + 1] // unten
+		                  + functionTable[idxWhole];
+		        r1[idx] *= 0.25;
+	    	}
+	    	
+	    	for (i = 2; i < size - 1; i += 2) {
+	    		const int idxWhole = CO(i,j+1);
+	    		const int idx = idxWhole / 2;
+			
+			r1[idx] = s1[idx - halfSize] // links
+			          + s1[idx - 1] // oben
+			          + s1[idx + halfSize] // rechts
+			          + s1[idx] // unten
+			          + functionTable[idxWhole];
+			r1[idx] *= 0.25;
+	    	}
+        }
+        
+        // schwarze Punkte
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j+=2)
+        {
+	    	for (i = 2; i < size - 1; i += 2) {
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+	    		s1[idx] = r1[idx - halfSize] // links
+		                  + r1[idx - 1] // oben
+		                  + r1[idx + halfSize] // rechts
+		                  + r1[idx] // unten
+		                  + functionTable[idxWhole];
+		        s1[idx] *= 0.25;
+	    	}
+	    	
+	    	for (i = 1; i < size - 2; i += 2) {
+	    		const int idxWhole = CO(i,j+1);
+	    		const int idx = idxWhole / 2;
+			
+			s1[idx] = r1[idx - halfSize] // links
+			          + r1[idx] // oben
+			          + r1[idx + halfSize] // rechts
+			          + r1[idx + 1] // unten
+			          + functionTable[idxWhole];
+			s1[idx] *= 0.25;
+	    	}
+        }
+    }
+
+    #pragma omp parallel for private(i, j)
+    for (j = 0; j < size-1; j+=2)
+    {
+        for (i = 0; i < halfSize; ++i) // for even j
+        {
+            int baseIdx = j * halfSize;
+            int idx = baseIdx + i;
+            int idxRot = 2 * idx;
+            int idxSchwarz = 2 * idx + 1;
+            gaussSeidelResult[idxRot] = r1[idx];
+            gaussSeidelResult[idxSchwarz] = s1[idx];
+        }
+        for (i = 0; i < halfSize; ++i) // for odd j+1
+        {
+            int baseIdx = (j+1) * halfSize;
+            int idx = baseIdx + i;
+            int idxRot = 2 * idx + 1;
+            int idxSchwarz = 2 * idx;
+            gaussSeidelResult[idxRot] = r1[idx];
+            gaussSeidelResult[idxSchwarz] = s1[idx];
+        }
+    }
+
+    free(r1);
+    free(s1);
+}
 
 // For size % 2 == 1
 void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
@@ -368,6 +510,141 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 	    	
 	    	if (j+1 < size - 1) {
 		    	for (i = 2; i < size - 2; i += 2) {
+		    		const int idxWhole = CO(i,j+1);
+		    		const int idx = idxWhole / 2;
+		    		r1[idx] = s1[idx - halfSizePlus1] // links
+					+ s1[idx - 1] // oben
+					+ s1[idx + halfSize] // rechts
+					+ s1[idx] // unten
+					+ functionTable[idx * 2];
+				r1[idx] *= 0.25;
+		    	}
+	    	}
+        }
+        
+        // schwarze Punkte, und wieder neuer Versuch
+        #pragma omp parallel for private(j,i)
+        for (j = 1; j < size - 1; j += 2) {
+        	for (i = 2; i < size - 2; i += 2) {
+        		const int idxWhole = CO(i,j);
+        		const int idx = idxWhole / 2;
+        		s1[idx] = r1[idx - halfSize] // links
+				        + r1[idx] // oben
+				        + r1[idx + halfSizePlus1] // rechts
+				        + r1[idx + 1] // unten
+				        + functionTable[idxWhole];
+				s1[idx] *= 0.25;
+        	}
+        	
+        	if (j+1 < size - 1) {
+			for (i = 1; i < size - 1; i += 2) {
+				const int idxWhole = CO(i,j+1);
+				const int idx = idxWhole / 2;
+				s1[idx] = r1[idx - halfSize] // links
+						+ r1[idx] // oben
+						+ r1[idx + halfSizePlus1] // rechts
+						+ r1[idx + 1] // unten
+						+ functionTable[idxWhole];
+					s1[idx] *= 0.25;
+			}
+        	}
+        }
+    }
+
+    #pragma omp parallel for private(j)
+    for (j = 0; j < (size * size) - 1; j+=2)
+    {
+        // even j:
+        gaussSeidelResult[j] = r1[j/2];
+        // odd j+1:
+        gaussSeidelResult[j+1] = s1[j/2];
+    }
+
+    free(r1);
+    free(s1);
+}
+
+// For size % 2 == 1
+void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+{
+    int i1, i, j, k;
+    int halfSize = size / 2;
+    int halfSizePlus1 = halfSize + 1;
+
+    unsigned int numRedElements = halfSize * halfSize + halfSizePlus1 * halfSizePlus1;
+    unsigned int numBlackElements = 2 * halfSize * halfSizePlus1;
+
+    float* r1 = (float*) malloc(numRedElements * sizeof(float));
+    float* s1 = (float*) malloc(numBlackElements * sizeof(float));
+
+    // fill the arrays
+    #pragma omp parallel for private(j)
+    for (j = 0; j < (size * size) - 1; j+=2)
+    {
+        // even j:
+        r1[j/2] = startVector[j];
+
+        // odd j+1:
+        s1[j/2] = startVector[j+1];
+    }
+    
+    const __m128 vec_0_25 = _mm_set_ps1(0.25);
+
+    //todo abbruchbedingung
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {   
+        // rote Punkte, neuer Versuch
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j+=2)
+        {
+	    	for (i = 1; i < size - 7; i += 8) {
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+	    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSizePlus1]);
+	    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx - 1]);
+	    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
+	    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx]);
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4], 
+	    				functionTable[idx * 2 + 2], functionTable[idx * 2]);
+	    				
+	    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
+	    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
+	    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
+	    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
+	    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
+	    		_mm_storeu_ps(&r1[idx], vec_r1);
+	    	}
+	    	
+	    	for (; i < size - 1; i += 2) { // do the remainder sequentially
+	    		const int idxWhole = CO(i,j);
+	    		const int idx = idxWhole / 2;
+	    		r1[idx] = s1[idx - halfSizePlus1] // links
+			        + s1[idx - 1] // oben
+			        + s1[idx + halfSize] // rechts
+			        + s1[idx] // unten
+			        + functionTable[idx * 2];
+			r1[idx] *= 0.25;
+	    	}
+	    	
+	    	if (j+1 < size - 1) {
+		    	for (i = 2; i < size - 8; i += 8) { // TODO: This is massive code duplication
+				const int idxWhole = CO(i, j + 1);
+		    		const int idx = idxWhole / 2;
+		    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSizePlus1]);
+		    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx - 1]);
+		    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
+		    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx]);
+		    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4], 
+		    				functionTable[idx * 2 + 2], functionTable[idx * 2]);
+		    				
+		    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
+		    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
+		    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
+		    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
+		    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
+		    		_mm_storeu_ps(&r1[idx], vec_r1);
+		    	}
+		    	for (; i < size - 2; i += 2) { // do the remainder sequentially
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
 		    		r1[idx] = s1[idx - halfSizePlus1] // links
@@ -611,6 +888,17 @@ int main(int argc, char *argv[])
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
     printf("is it correct: %s  \n" ,(correct)?"true":"false");
+    
+    // Call Gauss-Seidel Rot-Schwarz SSE
+    float* gaussSeidelRotSchwarzSSEResult = malloc(size * size * sizeof(float));
+    start = get_wall_time();
+    for (i = 0; i < repeats; ++i) {
+    	gaussSeidelRotSchwarzSSE(startVector, h, precomputedF, gaussSeidelRotSchwarzSSEResult);
+    }
+    end = get_wall_time();
+    printf("Execution time Gauss-Seidel Rot-Schwarz SSE: %.3f seconds", (end - start) / repeats);
+    correct=compare(gaussSeidelRotSchwarzSSEResult,gaussSeidelResult);
+    printf("is it correct: %s  \n" ,(correct)?"true":"false");
 
     //Call Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
@@ -645,6 +933,8 @@ int main(int argc, char *argv[])
     printResultMatrix(gaussSeidelResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
     printResultMatrix(gaussSeidelRotSchwarzResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz SSE:\n");
+    printResultMatrix(gaussSeidelRotSchwarzSSEResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront:\n");
     printResultMatrix(gaussSeidelWavefrontResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
@@ -657,6 +947,7 @@ int main(int argc, char *argv[])
     free(jacobiResult);
     free(gaussSeidelResult);
     free(gaussSeidelRotSchwarzResult);
+    free(gaussSeidelRotSchwarzSSEResult);
     free(startVector);
     free(precomputedF);
     return 0;
