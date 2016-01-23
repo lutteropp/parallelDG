@@ -660,7 +660,26 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
         // schwarze Punkte, und wieder neuer Versuch
         #pragma omp parallel for private(j,i)
         for (j = 1; j < size - 1; j += 2) {
-        	for (i = 2; i < size - 2; i += 2) {
+        	for (i = 2; i < size - 8; i += 8) {
+        		const int idxWhole = CO(i,j);
+        		const int idx = idxWhole / 2;
+        		
+        		__m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
+	    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx]);
+	    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSizePlus1]);
+	    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx + 1]);
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
+	    				
+	    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
+	    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
+	    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
+	    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
+	    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
+	    		_mm_storeu_ps(&s1[idx], vec_s1);
+        	}
+        	
+        	for (; i < size - 2; i += 2) { // do the remainder sequentially
         		const int idxWhole = CO(i,j);
         		const int idx = idxWhole / 2;
         		s1[idx] = r1[idx - halfSize] // links
@@ -672,7 +691,26 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
         	}
         	
         	if (j+1 < size - 1) {
-			for (i = 1; i < size - 1; i += 2) {
+			for (i = 1; i < size - 7; i += 8) { // TODO: This is massive code duplication
+				const int idxWhole = CO(i,j+1);
+				const int idx = idxWhole / 2;
+				
+				__m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
+		    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx]);
+		    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSizePlus1]);
+		    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx + 1]);
+		    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+		    				functionTable[idxWhole + 2], functionTable[idxWhole]);
+		    				
+		    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
+		    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
+		    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
+		    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
+		    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
+		    		_mm_storeu_ps(&s1[idx], vec_s1);
+			}
+			
+			for (; i < size - 1; i += 2) { // do the remainder sequentially
 				const int idxWhole = CO(i,j+1);
 				const int idx = idxWhole / 2;
 				s1[idx] = r1[idx - halfSize] // links
