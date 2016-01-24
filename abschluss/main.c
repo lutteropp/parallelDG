@@ -1184,7 +1184,7 @@ int main(int argc, char *argv[])
     	jacobiSerial(startVector, h, precomputedF, jacobiSequentialResult);
     }
     end = get_wall_time();
-    printf("Execution time JacobiSerial: %.3f seconds\n", (end - start) / repeats);
+    printf("Execution time Jacobi Sequential: %.3f seconds\n", (end - start) / repeats);
     bool correct=true;
     correct=compare(jacobiSequentialResult, analyticalResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
