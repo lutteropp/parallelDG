@@ -91,7 +91,7 @@ void jacobiSerial(const float* startVector, float h, const float* functionTable,
     for (k = 0; k < MAX_ITERATIONS; ++k)
     {
     	float diff = 0;
-    	
+
         // swap a0 and a1
         float* temp = a0;
         a0 = a1;
@@ -107,11 +107,11 @@ void jacobiSerial(const float* startVector, float h, const float* functionTable,
                               + a0[CO(i + 1, j)]
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
-                
+
                 diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
             }
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -144,12 +144,12 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
     for (k = 0; k < MAX_ITERATIONS; ++k)
     {
     	float diff = 0;
-    	
+
         // swap a0 and a1
         float* temp = a0;
         a0 = a1;
         a1 = temp;
-        
+
         #pragma omp parallel for private(j, i) collapse(2) reduction(+:diff)
         for (j = 1; j < size - 1; j++)
         {
@@ -161,11 +161,11 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
                               + a0[CO(i + 1, j)]
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
-                
+
                 diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
             }
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -204,7 +204,7 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
         float* temp = a0;
         a0 = a1;
         a1 = temp;
-        
+
         #pragma omp parallel for private(j, i) reduction(+:diff)
         for (j = 1; j < size - 1; j++)
         {
@@ -214,22 +214,22 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
     		__m128 vec_up = _mm_loadu_ps((float const*) &a0[CO(i - 1, j)]);
     		__m128 vec_right = _mm_loadu_ps((float const*) &a0[CO(i, j + 1)]);
     		__m128 vec_down = _mm_loadu_ps((float const*) &a0[CO(i + 1, j)]);
-    		__m128 vec_ft = _mm_set_ps(functionTable[CO(i+3, j)], functionTable[CO(i+2, j)], 
+    		__m128 vec_ft = _mm_set_ps(functionTable[CO(i+3, j)], functionTable[CO(i+2, j)],
     				functionTable[CO(i+1, j)], functionTable[CO(i, j)]);
-    				
+
     		__m128 vec_a1 = _mm_add_ps(vec_left, vec_up);
     		vec_a1 = _mm_add_ps(vec_a1, vec_right);
     		vec_a1 = _mm_add_ps(vec_a1, vec_down);
     		vec_a1 = _mm_add_ps(vec_a1, vec_ft);
     		vec_a1 = _mm_mul_ps(vec_a1, vec_0_25);
     		_mm_storeu_ps(&a1[CO(i,j)], vec_a1);
-    		
+
     		__m128 vec_old = _mm_loadu_ps((float const*) &a0[CO(i, j)]);
     		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_a1, vec_old));
-    		
+
     		diff += sse_sum(vec_diff);
             }
-            
+
             for (; i < size - 1; i++) // do the rest sequentially
             {
                 a1[CO(i,j)] = a0[CO(i, j - 1)]
@@ -238,11 +238,11 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
                               + a0[CO(i + 1, j)]
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
-                
+
                 diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
             }
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -278,7 +278,7 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
         float* temp = a0;
         a0 = a1;
         a1 = temp;
-        
+
         float diff = 0;
         for (j = 1; j < size - 1; j++)
         {
@@ -294,7 +294,7 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 		diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
             }
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -347,21 +347,21 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
             int baseIdx = j * halfSize;
             int idx = baseIdx + i;
             int idxRot, idxSchwarz;
-            
+
             idxRot = 2 * idx;
             idxSchwarz = 2 * idx + 1;
-            
+
 
             r1[idx] = startVector[idxRot];
             s1[idx] = startVector[idxSchwarz];
         }
-        
+
         for (i = 0; i < halfSize; ++i) // for odd j+1
         {
             int baseIdx = (j+1) * halfSize;
             int idx = baseIdx + i;
             int idxRot, idxSchwarz;
-            
+
             idxRot = 2 * idx + 1;
             idxSchwarz = 2 * idx;
 
@@ -371,7 +371,7 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
     }
 
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {   
+    {
     	float diff = 0;
         // rote Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
@@ -381,33 +381,33 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = r1[idx];
-	    		
+
 			r1[idx] = s1[idx - halfSize] // links
 		                  + s1[idx] // oben
 		                  + s1[idx + halfSize] // rechts
 		                  + s1[idx + 1] // unten
 		                  + functionTable[idxWhole];
 		        r1[idx] *= 0.25;
-		        
+
 		        diff += fabsf(r1[idx] - old_val);
 	    	}
-	    	
+
 	    	for (i = 2; i < size - 1; i += 2) {
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = r1[idx];
-			
+
 			r1[idx] = s1[idx - halfSize] // links
 			          + s1[idx - 1] // oben
 			          + s1[idx + halfSize] // rechts
 			          + s1[idx] // unten
 			          + functionTable[idxWhole];
 			r1[idx] *= 0.25;
-			
+
 			diff += fabsf(r1[idx] - old_val);
 	    	}
         }
-        
+
         // schwarze Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
         for (j = 1; j < size - 1; j+=2)
@@ -416,33 +416,33 @@ void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* 
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = s1[idx];
-	    		
+
 	    		s1[idx] = r1[idx - halfSize] // links
 		                  + r1[idx - 1] // oben
 		                  + r1[idx + halfSize] // rechts
 		                  + r1[idx] // unten
 		                  + functionTable[idxWhole];
 		        s1[idx] *= 0.25;
-		        
+
 		        diff += fabsf(s1[idx] - old_val);
 	    	}
-	    	
+
 	    	for (i = 1; i < size - 2; i += 2) {
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = s1[idx];
-			
+
 			s1[idx] = r1[idx - halfSize] // links
 			          + r1[idx] // oben
 			          + r1[idx + halfSize] // rechts
 			          + r1[idx + 1] // unten
 			          + functionTable[idxWhole];
 			s1[idx] *= 0.25;
-			
+
 			diff += fabsf(s1[idx] - old_val);
 	    	}
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -491,21 +491,21 @@ void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const floa
             int baseIdx = j * halfSize;
             int idx = baseIdx + i;
             int idxRot, idxSchwarz;
-            
+
             idxRot = 2 * idx;
             idxSchwarz = 2 * idx + 1;
-            
+
 
             r1[idx] = startVector[idxRot];
             s1[idx] = startVector[idxSchwarz];
         }
-        
+
         for (i = 0; i < halfSize; ++i) // for odd j+1
         {
             int baseIdx = (j+1) * halfSize;
             int idx = baseIdx + i;
             int idxRot, idxSchwarz;
-            
+
             idxRot = 2 * idx + 1;
             idxSchwarz = 2 * idx;
 
@@ -515,78 +515,78 @@ void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const floa
     }
 
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {   
+    {
     	float diff = 0;
         // rote Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
         for (j = 1; j < size - 1; j+=2)
-        {       
+        {
         	for (i = 1; i < size - 8; i += 8) {
         		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		__m128 vec_old = _mm_loadu_ps((float const*) &r1[idx]);
-	    		
+
 	    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSize]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx + 1]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-	    				
+
 	    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
 	    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
 	    		_mm_storeu_ps(&r1[idx], vec_r1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_r1, vec_old));
 	    		diff += sse_sum(vec_diff);
 	    	}
-        
+
 	    	for (; i < size - 2; i += 2) { // do the remainder sequentially
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		const float old_val = r1[idx];
-	    		
+
 			r1[idx] = s1[idx - halfSize] // links
 		                  + s1[idx] // oben
 		                  + s1[idx + halfSize] // rechts
 		                  + s1[idx + 1] // unten
 		                  + functionTable[idxWhole];
 		        r1[idx] *= 0.25;
-		        
+
 		        diff += fabsf(r1[idx] - old_val);
 	    	}
-	    	
+
 	    	for (i = 2; i < size - 7; i += 8) {
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		__m128 vec_old = _mm_loadu_ps((float const*) &r1[idx]);
-	    		
+
 	    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSize]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx - 1]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-	    				
+
 	    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
 	    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
 	    		_mm_storeu_ps(&r1[idx], vec_r1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_r1, vec_old));
 	    		diff += sse_sum(vec_diff);
 	    	}
-	    	
+
 	    	for (i = 2; i < size - 1; i += 2) { // do the remainder sequentially
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = r1[idx];
-			
+
 			r1[idx] = s1[idx - halfSize] // links
 			          + s1[idx - 1] // oben
 			          + s1[idx + halfSize] // rechts
@@ -596,7 +596,7 @@ void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const floa
 			diff += fabsf(r1[idx] - old_val);
 	    	}
         }
-        
+
         // schwarze Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
         for (j = 1; j < size - 1; j+=2)
@@ -605,68 +605,68 @@ void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const floa
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		__m128 vec_old = _mm_loadu_ps((float const*) &s1[idx]);
-	    		
+
 		        __m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx - 1]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSize]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-	    				
+
 	    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
 	    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
 	    		_mm_storeu_ps(&s1[idx], vec_s1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_s1, vec_old));
 	    		diff += sse_sum(vec_diff);
 	    	}
-	    	
+
 	    	for (; i < size - 1; i += 2) { // do the remainder sequentially
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = s1[idx];
-	    		
+
 	    		s1[idx] = r1[idx - halfSize] // links
 		                  + r1[idx - 1] // oben
 		                  + r1[idx + halfSize] // rechts
 		                  + r1[idx] // unten
 		                  + functionTable[idxWhole];
 		        s1[idx] *= 0.25;
-		        
+
 		        diff += fabsf(s1[idx] - old_val);
 	    	}
-	    	
+
 	    	for (i = 1; i < size - 8; i += 8) {
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		__m128 vec_old = _mm_loadu_ps((float const*) &s1[idx]);
-	    		
+
 	    		__m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSize]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx + 1]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-	    				
+
 	    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
 	    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
 	    		_mm_storeu_ps(&s1[idx], vec_s1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_s1, vec_old));
 	    		diff += sse_sum(vec_diff);
 	    	}
-	    	
+
 	    	for (; i < size - 2; i += 2) { // do the remainder sequentially
 	    		const int idxWhole = CO(i,j+1);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = s1[idx];
-			
+
 			s1[idx] = r1[idx - halfSize] // links
 			          + r1[idx] // oben
 			          + r1[idx + halfSize] // rechts
@@ -676,7 +676,7 @@ void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const floa
 			diff += fabsf(s1[idx] - old_val);
 	    	}
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -732,7 +732,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
     }
 
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {   
+    {
     	float diff = 0;
         // rote Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
@@ -742,7 +742,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = r1[idx];
-	    		
+
 	    		r1[idx] = s1[idx - halfSizePlus1] // links
 			        + s1[idx - 1] // oben
 			        + s1[idx + halfSize] // rechts
@@ -751,13 +751,13 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 			r1[idx] *= 0.25;
 			diff += fabsf(r1[idx] - old_val);
 	    	}
-	    	
+
 	    	if (j+1 < size - 1) {
 		    	for (i = 2; i < size - 2; i += 2) {
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
 		    		float old_val = r1[idx];
-		    		
+
 		    		r1[idx] = s1[idx - halfSizePlus1] // links
 					+ s1[idx - 1] // oben
 					+ s1[idx + halfSize] // rechts
@@ -768,7 +768,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 		    	}
 	    	}
         }
-        
+
         // schwarze Punkte
         #pragma omp parallel for private(j,i) reduction(+:diff)
         for (j = 1; j < size - 1; j += 2) {
@@ -776,7 +776,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
         		const int idxWhole = CO(i,j);
         		const int idx = idxWhole / 2;
         		float old_val = s1[idx];
-        		
+
         		s1[idx] = r1[idx - halfSize] // links
 				        + r1[idx] // oben
 				        + r1[idx + halfSizePlus1] // rechts
@@ -785,13 +785,13 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 				s1[idx] *= 0.25;
 			diff += fabsf(s1[idx] - old_val);
         	}
-        	
+
         	if (j+1 < size - 1) {
 			for (i = 1; i < size - 1; i += 2) {
 				const int idxWhole = CO(i,j+1);
 				const int idx = idxWhole / 2;
 				float old_val = s1[idx];
-				
+
 				s1[idx] = r1[idx - halfSize] // links
 						+ r1[idx] // oben
 						+ r1[idx + halfSizePlus1] // rechts
@@ -802,7 +802,7 @@ void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* f
 			}
         	}
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -846,7 +846,7 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 
     //todo abbruchbedingung
     for (k = 0; k < MAX_ITERATIONS; ++k)
-    {   
+    {
     	float diff = 0;
         // rote Punkte
         #pragma omp parallel for private(j, i) reduction(+:diff)
@@ -856,30 +856,30 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		__m128 vec_old = _mm_loadu_ps((float const*) &r1[idx]);
-	    		
+
 	    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSizePlus1]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx - 1]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4],
 	    				functionTable[idx * 2 + 2], functionTable[idx * 2]);
-	    				
+
 	    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
 	    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
 	    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
 	    		_mm_storeu_ps(&r1[idx], vec_r1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_r1, vec_old));
 	    		diff += sse_sum(vec_diff);
 	    	}
-	    	
+
 	    	for (; i < size - 1; i += 2) { // do the remainder sequentially
 	    		const int idxWhole = CO(i,j);
 	    		const int idx = idxWhole / 2;
 	    		float old_val = r1[idx];
-	    		
+
 	    		r1[idx] = s1[idx - halfSizePlus1] // links
 			        + s1[idx - 1] // oben
 			        + s1[idx + halfSize] // rechts
@@ -888,27 +888,27 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 			r1[idx] *= 0.25;
 			diff += fabsf(r1[idx] - old_val);
 	    	}
-	    	
+
 	    	if (j+1 < size - 1) {
 		    	for (i = 2; i < size - 8; i += 8) { // TODO: This is massive code duplication
 				const int idxWhole = CO(i, j + 1);
 		    		const int idx = idxWhole / 2;
 		    		__m128 vec_old = _mm_loadu_ps((float const*) &r1[idx]);
-		    		
+
 		    		__m128 vec_left = _mm_loadu_ps((float const*) &s1[idx - halfSizePlus1]);
 		    		__m128 vec_up = _mm_loadu_ps((float const*) &s1[idx - 1]);
 		    		__m128 vec_right = _mm_loadu_ps((float const*) &s1[idx + halfSize]);
 		    		__m128 vec_down = _mm_loadu_ps((float const*) &s1[idx]);
-		    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4], 
+		    		__m128 vec_ft = _mm_set_ps(functionTable[idx * 2 + 6], functionTable[idx * 2 + 4],
 		    				functionTable[idx * 2 + 2], functionTable[idx * 2]);
-		    				
+
 		    		__m128 vec_r1 = _mm_add_ps(vec_left, vec_up);
 		    		vec_r1 = _mm_add_ps(vec_r1, vec_right);
 		    		vec_r1 = _mm_add_ps(vec_r1, vec_down);
 		    		vec_r1 = _mm_add_ps(vec_r1, vec_ft);
 		    		vec_r1 = _mm_mul_ps(vec_r1, vec_0_25);
 		    		_mm_storeu_ps(&r1[idx], vec_r1);
-		    		
+
 		    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_r1, vec_old));
 	    			diff += sse_sum(vec_diff);
 		    	}
@@ -916,7 +916,7 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 		    		const int idxWhole = CO(i,j+1);
 		    		const int idx = idxWhole / 2;
 		    		float old_val = r1[idx];
-		    		
+
 		    		r1[idx] = s1[idx - halfSizePlus1] // links
 					+ s1[idx - 1] // oben
 					+ s1[idx + halfSize] // rechts
@@ -927,7 +927,7 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 		    	}
 	    	}
         }
-        
+
         // schwarze Punkte
         #pragma omp parallel for private(j,i) reduction(+:diff)
         for (j = 1; j < size - 1; j += 2) {
@@ -935,30 +935,30 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
         		const int idxWhole = CO(i,j);
         		const int idx = idxWhole / 2;
         		__m128 vec_old = _mm_loadu_ps((float const*) &s1[idx]);
-        		
+
         		__m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
 	    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx]);
 	    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSizePlus1]);
 	    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx + 1]);
-	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+	    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 	    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-	    				
+
 	    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
 	    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
 	    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
 	    		_mm_storeu_ps(&s1[idx], vec_s1);
-	    		
+
 	    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_s1, vec_old));
 	    		diff += sse_sum(vec_diff);
         	}
-        	
+
         	for (; i < size - 2; i += 2) { // do the remainder sequentially
         		const int idxWhole = CO(i,j);
         		const int idx = idxWhole / 2;
         		float old_val = s1[idx];
-        		
+
         		s1[idx] = r1[idx - halfSize] // links
 				        + r1[idx] // oben
 				        + r1[idx + halfSizePlus1] // rechts
@@ -967,31 +967,31 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 				s1[idx] *= 0.25;
 			diff += fabsf(s1[idx] - old_val);
         	}
-        	
+
         	if (j+1 < size - 1) {
 			for (i = 1; i < size - 7; i += 8) { // TODO: This is massive code duplication
 				const int idxWhole = CO(i,j+1);
 				const int idx = idxWhole / 2;
 				__m128 vec_old = _mm_loadu_ps((float const*) &s1[idx]);
-				
+
 				__m128 vec_left = _mm_loadu_ps((float const*) &r1[idx - halfSize]);
 		    		__m128 vec_up = _mm_loadu_ps((float const*) &r1[idx]);
 		    		__m128 vec_right = _mm_loadu_ps((float const*) &r1[idx + halfSizePlus1]);
 		    		__m128 vec_down = _mm_loadu_ps((float const*) &r1[idx + 1]);
-		    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4], 
+		    		__m128 vec_ft = _mm_set_ps(functionTable[idxWhole + 6], functionTable[idxWhole + 4],
 		    				functionTable[idxWhole + 2], functionTable[idxWhole]);
-		    				
+
 		    		__m128 vec_s1 = _mm_add_ps(vec_left, vec_up);
 		    		vec_s1 = _mm_add_ps(vec_s1, vec_right);
 		    		vec_s1 = _mm_add_ps(vec_s1, vec_down);
 		    		vec_s1 = _mm_add_ps(vec_s1, vec_ft);
 		    		vec_s1 = _mm_mul_ps(vec_s1, vec_0_25);
 		    		_mm_storeu_ps(&s1[idx], vec_s1);
-		    		
+
 		    		__m128 vec_diff = abs_ps(_mm_sub_ps(vec_s1, vec_old));
 	    			diff += sse_sum(vec_diff);
 			}
-			
+
 			for (; i < size - 1; i += 2) { // do the remainder sequentially
 				const int idxWhole = CO(i,j+1);
 				const int idx = idxWhole / 2;
@@ -1006,7 +1006,7 @@ void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float
 			}
         	}
         }
-        
+
         if (diff / (size * size) < TOL) break;
     }
 
@@ -1164,7 +1164,7 @@ int main(int argc, char *argv[])
                 val = 16 * x * (1 - x) * y * (1 - y);
             }
             analyticalResult[CO(i,j)] = val;
-            
+
             if (i != 0 && j != 0 && i != size - 1 && j != size - 1)
             {
                 val = (float) rand() / RAND_MAX;
@@ -1174,7 +1174,7 @@ int main(int argc, char *argv[])
     }
 
     double start, end;
-    
+
     int repeats = 1;
 
     // Call Jacobi Sequential
@@ -1200,7 +1200,7 @@ int main(int argc, char *argv[])
     printf("Execution time Jacobi: %.3f seconds\n", (end - start) / repeats);
     correct=compare(jacobiResult, analyticalResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
-    
+
     // Call Jacobi SSE
     float* jacobiSSEResult = malloc(size * size * sizeof(float));
     start = omp_get_wtime();
@@ -1245,7 +1245,7 @@ int main(int argc, char *argv[])
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzResult, analyticalResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
-    
+
     // Call Gauss-Seidel Rot-Schwarz SSE
     float* gaussSeidelRotSchwarzSSEResult = malloc(size * size * sizeof(float));
     start = omp_get_wtime();
@@ -1364,7 +1364,7 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
                                       + a0[index+1]
                                       + a0[index+size]
                                       +  functionTable[index]);
-                                      
+
                 diff += fabsf(a1[index] - a0[index]);
       /*          printf("(%i)",index);
                 printf("(%i %i %i %i)",index-1,index-size,index+1,index+size);
@@ -1402,7 +1402,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     int border = 0;
     int durchlauf;
     //kopieren
-      #pragma omp parallel for firstprivate(border,currentEle)private(i)
+      #pragma omp parallel for firstprivate(border,currentEle)private(i,durchlauf)
     for (durchlauf = 0; durchlauf<newsize ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
@@ -1425,13 +1425,14 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
             // printf("%i %i %i \n" ,durchlauf,border,i);
             a0[indexZu]= startVector[indexVon];
             a1[indexZu]= startVector[indexVon];
+
             //printf("%f ",a1[durchlauf*size+i]);
-        //    printf("%i<-%i ",indexZu,indexVon);
+         //  printf("%i<-%i ",indexZu,indexVon);
             // printf(" %i ",indexZu);
             /* printf("%i ",i);
              printf("%i ",durchlauf); */
         }
-    //    printf("\n");
+       // printf("\n");
     }
 
 
@@ -1440,11 +1441,13 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
 
 //arbeiten
 
+
+//todo abbruchbedingung Max itera wieder ienführen
     int k = 0;
 
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
-	float diff = 0;
+        float diff=0;
         float* temp = a0;
         a0 = a1;
         a1 = temp;
@@ -1452,62 +1455,77 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
         currentEle = 0;
         border = 0;
       //  printf("arbeiten..:\n");
-        for (durchlauf = 0; durchlauf<newsize-4 ; durchlauf++) //-1 weil diagonalen zahl size+size-1, -4 weil 4 diagonalen wegfallen
+
+        for (durchlauf = 2; durchlauf<newsize-2 ; durchlauf++) //-1 weil diagonalen zahl size+size-1, -4 weil 4 diagonalen wegfallen
         {
-            int switchIt=0;
-            int switchA1=0;
-            if (durchlauf > (size -1-2))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
+
+
+            if (durchlauf > (size -1))//-1 weil fängt bei 0 an -2 weil ersten 2 diagonalen rand sind
             {
-            switchIt=1;
 
                 currentEle--;
-
                 border++;
             }
-            else if(durchlauf<size-1-2){
 
-
-                currentEle++;
-            }
             else
             {
-
-            switchA1=2;
                 currentEle++;
             }
             int i = 0;
-                 #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k) reduction(+:diff)
-            for (i = 0; i < currentEle; i++)
+                 #pragma omp parallel for firstprivate(durchlauf,border,currentEle,k)reduction(+:diff)
+            for (i = 1; i < currentEle+1; i++)
             {
-                /*int indexZu=durchlauf*(size+size-1)+i;
+                /* int indexZu=durchlauf*newsize+i;
+            int indexVon=(durchlauf - border - i)* (size) +( i + border);
+                int indexZu=durchlauf*(size+size-1)+i;
                 int indexVon=(durchlauf - border - i)* (size) +( i + border);
+                   int index= (durchlauf - border - i+1)* size +( i + border+1);
+                a1[index] = 0.25   * (a1[index-1]
+                                      + a1[index-size]
+                                      + a0[index+1]
+                                      + a0[index+size]
+                                      +  functionTable[index]);
                 */
-                int indexVon=(durchlauf - border - i+1)* (size) +( i + border+1);
+           /*     int indexVon=(durchlauf - border - i+1)* (size) +( i + border+1);
                 int index= (durchlauf+2 )* newsize +( i +1);//+2 wegen erste 2 diagonalen müll +1 weil die zahlen 1 drinne stehen
                 int a11=index-1-newsize+switchIt;
                 int a12 = index-newsize+switchIt;
                 int a01=index+newsize-border;
-                int a02=index+1+newsize-border-switchA1;
+                int a02=index+1+newsize-border-switchA1; */
+             int hack2=0;
+        int hack=0;
+                int indexZu=durchlauf*newsize+i;
+                 hack=(int)(durchlauf/(size-1));
+                 hack2=(int)(durchlauf/(size));
 
-                a1[index] = 0.25 * (a1[a11]
+                int index=(durchlauf - border - i+1)* size +( i + border+1);
+
+                int a11=(durchlauf-1)*newsize+i-1+hack2;//+(border);//;+hack2;
+                int a12=(durchlauf-1)*newsize+i+hack2;// +(border);//;+hack2;
+
+                int a01=(durchlauf+1)*newsize+i+1-hack;
+                int a02=(durchlauf+1)*newsize+i-hack;
+                int indexVon=(durchlauf - border - i)* (size) +( i + border);
+
+                a1[indexZu] = 0.25 * (a1[a11]
                                     + a1[a12]
                                     + a0[a01]
                                     + a0[a02]
                                     +  functionTable[indexVon]);
-                                    
-                diff += fabsf(a1[index] - a0[index]);
+                                     diff += fabsf(a1[index] - a0[index]);
                 //  printf("%i ",index);
                 //  printf("(%i asdf %i %i %i)",indexVon,durchlauf,border,i);
-          /*      printf("(%i<- %i)",indexVon,index);
-                printf("(durchlauf %i border  %i switch %i )\n",durchlauf,border,switchIt);
-                printf("(%i %i %i %i)",a11,a12,a01,a02);
-                printf("(%f %f %f %f %f %f) \n",a1[index],a1[a11],a1[a12],a0[a02],a0[a01],functionTable[indexVon]); */
+         //       printf("(a1 %i F %i Index %i)",indexZu,indexVon,index);
+           //     printf("(durchlauf %i border  %i hack %i cuele %i size %i)",durchlauf,border,hack,currentEle,size);
+             //   printf("(%i %i %i %i) \n",a11,a12,a01,a02);
+              //  printf("(%f %f %f %f %f %f) \n",a1[indexVon],a1[a11],a1[a12],a0[a02],a0[a01],functionTable[indexVon]);
 
             }
 
-        }
 
-	if (diff / (size * size) < TOL) break;
+        }
+if (diff / (size * size) < TOL) break;
+
     }
     //zurückopieren
 
@@ -1516,7 +1534,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     border = 0;
  //   printf("zurückopieren..:\n");
     //kopieren
-    #pragma omp parallel for firstprivate(border,currentEle) private(i)
+    #pragma omp parallel for firstprivate(border,currentEle) private(i,durchlauf)
     for (durchlauf = 0; durchlauf<newsize ; durchlauf++) //-1 weil diagonalen zahl size+size-1
     {
 
@@ -1549,6 +1567,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
 
 
 }
+
 
 void gaussSeidelNaiv(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
