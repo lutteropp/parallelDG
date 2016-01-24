@@ -10,31 +10,40 @@
 Compile with: gcc -O2 -fopenmp -march=native main.c -o main
 */
 
-float f1(float x, float y);
-void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult);
+/* Jacobi */
+void jacobiSequential(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobiSSE(const float* startVector, float h, const float* functionTable, float* jacobiResult);
+
+/* Gauss Seidel */
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+/* Naive parallelization */
+void gaussSeidelNaiv(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+/* RotSchwarz parallelization */
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzOdd(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzEvenSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzOddSSE(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
-void gaussSeidelNaiv(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+/* Wavefront parallelization */
+void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidelWavefrontCache(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+
+/* Helper functions */
+float f1(float x, float y);
 void computeFunctionTable(float h, float* functionTable);
 void printResultMatrix(const float* matrix);
 void printAnalyticalResult(float h);
-void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
-void gaussSeidelWavefrontCache(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
-bool compare(float* m1,float* m2);
+bool compare(float* m1, float* m2);
+
 
 int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
 const static int MAX_ITERATIONS = 10000;
-const static float EPSILON = 0.00000001;
+const static float EPSILON = 0.001;
 
 double get_wall_time()   // returns wall time in seconds
 {
@@ -1018,31 +1027,31 @@ int main(int argc, char *argv[])
     
     int repeats = 1;
 
-    // Call JacobiSerial
-    float* jacobiSerialResult = malloc(size * size * sizeof(float));
+    // Call Jacobi Sequential
+    float* jacobiSequentialResult = malloc(size * size * sizeof(float));
     start = get_wall_time();
     for (i = 0; i < repeats; ++i) {
-    	jacobiSerial(startVector, h, precomputedF, jacobiSerialResult);
+    	jacobiSerial(startVector, h, precomputedF, jacobiSequentialResult);
     }
     end = get_wall_time();
     printf("Execution time JacobiSerial: %.3f seconds\n", (end - start) / repeats);
 
     // Call Jacobi
     float* jacobiResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	jacobi(startVector, h, precomputedF, jacobiResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Jacobi: %.3f seconds\n", (end - start) / repeats);
     
     // Call Jacobi SSE
     float* jacobiSSEResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	jacobiSSE(startVector, h, precomputedF, jacobiResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Jacobi SSE: %.3f seconds\n", (end - start) / repeats);
     bool correct=true;
     correct=compare(jacobiSSEResult,jacobiResult);
@@ -1057,13 +1066,13 @@ int main(int argc, char *argv[])
     end = get_wall_time();
     printf("Execution time Gauss-Seidel: %.3f seconds\n", (end - start) / repeats);
 
-    // Call Gauss-Seidel
+    // Call Gauss-Seidel Naiv
     float* gaussSeidelNaivResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	gaussSeidelNaiv(startVector, h, precomputedF, gaussSeidelNaivResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Naiv: %.3f seconds\n", (end - start) / repeats);
     correct=true;
     correct=compare(gaussSeidelNaivResult,gaussSeidelResult);
@@ -1071,44 +1080,44 @@ int main(int argc, char *argv[])
 
     // Call Gauss-Seidel Rot-Schwarz
     float* gaussSeidelRotSchwarzResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	gaussSeidelRotSchwarz(startVector, h, precomputedF, gaussSeidelRotSchwarzResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
     
     // Call Gauss-Seidel Rot-Schwarz SSE
     float* gaussSeidelRotSchwarzSSEResult = malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	gaussSeidelRotSchwarzSSE(startVector, h, precomputedF, gaussSeidelRotSchwarzSSEResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Rot-Schwarz SSE: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzSSEResult,gaussSeidelResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
 
     //Call Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel Wavefront: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
     printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     //Call Gaus Seidel Wavefront Cache
     float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
-    start = get_wall_time();
+    start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
     	gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
     }
-    end = get_wall_time();
+    end = omp_get_wtime();
     printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelWavefrontCacheResult,gaussSeidelResult);
     printf("  is it correct: %s \n" ,(correct)?"true":"false");
