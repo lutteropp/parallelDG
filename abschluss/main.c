@@ -13,6 +13,7 @@ Compile with: gcc -O2 -fopenmp -march=native main.c -o main
 float f1(float x, float y);
 void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void jacobi(const float* startVector, float h, const float* functionTable, float* jacobiResult);
+void jacobiSSE(const float* startVector, float h, const float* functionTable, float* jacobiResult);
 void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarz(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
 void gaussSeidelRotSchwarzEven(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
@@ -120,6 +121,72 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
+            {
+                a1[CO(i,j)] = a0[CO(i, j - 1)]
+                              + a0[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+            }
+        }
+    }
+
+    #pragma omp parallel for private(i)
+    for (i = 0; i < size * size; ++i)
+    {
+        jacobiResult[i] = a1[i];
+    }
+
+    free(a0);
+    free(a1);
+}
+
+void jacobiSSE(const float* startVector, float h, const float* functionTable, float* jacobiResult)
+{
+    const __m128 vec_0_25 = _mm_set_ps1(0.25);
+    int i, j, k;
+    float* array0 = (float*) malloc(size * size * sizeof(float));
+    float* array1 = (float*) malloc(size * size * sizeof(float));
+
+    float* a0 = array0; // last iteration
+    float* a1 = array1; // current iteration
+
+    #pragma omp parallel for private(i)
+    for (i = 0; i < size * size; ++i)
+    {
+        a0[i] = startVector[i];
+        a1[i] = startVector[i];
+    }
+
+    //todo abbruchbedingung
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+        // swap a0 and a1
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+        #pragma omp parallel for private(j, i)
+        for (j = 1; j < size - 1; j++)
+        {
+            for (i = 1; i < size - 4; i += 4)
+            {
+    		__m128 vec_left = _mm_loadu_ps((float const*) &a0[CO(i, j - 1)]);
+    		__m128 vec_up = _mm_loadu_ps((float const*) &a0[CO(i - 1, j)]);
+    		__m128 vec_right = _mm_loadu_ps((float const*) &a0[CO(i, j + 1)]);
+    		__m128 vec_down = _mm_loadu_ps((float const*) &a0[CO(i + 1, j)]);
+    		__m128 vec_ft = _mm_set_ps(functionTable[CO(i+3, j)], functionTable[CO(i+2, j)], 
+    				functionTable[CO(i+1, j)], functionTable[CO(i, j)]);
+    				
+    		__m128 vec_a1 = _mm_add_ps(vec_left, vec_up);
+    		vec_a1 = _mm_add_ps(vec_a1, vec_right);
+    		vec_a1 = _mm_add_ps(vec_a1, vec_down);
+    		vec_a1 = _mm_add_ps(vec_a1, vec_ft);
+    		vec_a1 = _mm_mul_ps(vec_a1, vec_0_25);
+    		_mm_storeu_ps(&a1[CO(i,j)], vec_a1);
+            }
+            
+            for (; i < size - 1; i++) // do the rest sequentially
             {
                 a1[CO(i,j)] = a0[CO(i, j - 1)]
                               + a0[CO(i - 1, j)]
@@ -968,6 +1035,18 @@ int main(int argc, char *argv[])
     }
     end = get_wall_time();
     printf("Execution time Jacobi: %.3f seconds\n", (end - start) / repeats);
+    
+    // Call Jacobi SSE
+    float* jacobiSSEResult = malloc(size * size * sizeof(float));
+    start = get_wall_time();
+    for (i = 0; i < repeats; ++i) {
+    	jacobiSSE(startVector, h, precomputedF, jacobiResult);
+    }
+    end = get_wall_time();
+    printf("Execution time Jacobi SSE: %.3f seconds\n", (end - start) / repeats);
+    bool correct=true;
+    correct=compare(jacobiSSEResult,jacobiResult);
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
 
     // Call Gauss-Seidel
     float* gaussSeidelResult = malloc(size * size * sizeof(float));
@@ -985,10 +1064,10 @@ int main(int argc, char *argv[])
     	gaussSeidelNaiv(startVector, h, precomputedF, gaussSeidelNaivResult);
     }
     end = get_wall_time();
-    printf("Execution time Gauss-Seidel Naiv: %.3f seconds", (end - start) / repeats);
-    bool correct=true;
+    printf("Execution time Gauss-Seidel Naiv: %.3f seconds\n", (end - start) / repeats);
+    correct=true;
     correct=compare(gaussSeidelNaivResult,gaussSeidelResult);
-    printf("is it correct: %s  \n" ,(correct)?"true":"false");
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
 
     // Call Gauss-Seidel Rot-Schwarz
     float* gaussSeidelRotSchwarzResult = malloc(size * size * sizeof(float));
@@ -997,9 +1076,9 @@ int main(int argc, char *argv[])
     	gaussSeidelRotSchwarz(startVector, h, precomputedF, gaussSeidelRotSchwarzResult);
     }
     end = get_wall_time();
-    printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds", (end - start) / repeats);
+    printf("Execution time Gauss-Seidel Rot-Schwarz: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzResult,gaussSeidelResult);
-    printf("is it correct: %s  \n" ,(correct)?"true":"false");
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
     
     // Call Gauss-Seidel Rot-Schwarz SSE
     float* gaussSeidelRotSchwarzSSEResult = malloc(size * size * sizeof(float));
@@ -1008,9 +1087,9 @@ int main(int argc, char *argv[])
     	gaussSeidelRotSchwarzSSE(startVector, h, precomputedF, gaussSeidelRotSchwarzSSEResult);
     }
     end = get_wall_time();
-    printf("Execution time Gauss-Seidel Rot-Schwarz SSE: %.3f seconds", (end - start) / repeats);
+    printf("Execution time Gauss-Seidel Rot-Schwarz SSE: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelRotSchwarzSSEResult,gaussSeidelResult);
-    printf("is it correct: %s  \n" ,(correct)?"true":"false");
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
 
     //Call Gaus Seidel Wavefront
     float* gaussSeidelWavefrontResult= malloc(size * size * sizeof(float));
@@ -1019,9 +1098,9 @@ int main(int argc, char *argv[])
     	gaussSeidelWavefront(startVector, h, precomputedF, gaussSeidelWavefrontResult);
     }
     end = get_wall_time();
-    printf("Execution time Gauss-Seidel Wavefront: %.3f seconds ", (end - start) / repeats);
+    printf("Execution time Gauss-Seidel Wavefront: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelWavefrontResult,gaussSeidelResult);
-    printf("is it correct: %s \n" ,(correct)?"true":"false");
+    printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     //Call Gaus Seidel Wavefront Cache
     float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
@@ -1030,9 +1109,9 @@ int main(int argc, char *argv[])
     	gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
     }
     end = get_wall_time();
-    printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds ", (end - start) / repeats);
+    printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelWavefrontCacheResult,gaussSeidelResult);
-    printf("is it correct: %s \n" ,(correct)?"true":"false");
+    printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
@@ -1041,6 +1120,8 @@ int main(int argc, char *argv[])
     printResultMatrix(startVector);
     printf("\nErgebnis Jacobi-Verfahren:\n");
     printResultMatrix(jacobiResult);
+    printf("\nErgebnis Jacobi-Verfahren SSE:\n");
+    printResultMatrix(jacobiSSEResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
     printResultMatrix(gaussSeidelResult);
     printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
@@ -1057,6 +1138,7 @@ int main(int argc, char *argv[])
     free(gaussSeidelWavefrontResult);
     free(gaussSeidelWavefrontCacheResult);
     free(jacobiResult);
+    free(jacobiSSEResult);
     free(gaussSeidelResult);
     free(gaussSeidelRotSchwarzResult);
     free(gaussSeidelRotSchwarzSSEResult);
