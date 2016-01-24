@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1453633687 source:/home/ich/Dropbox/Uni/openmp praktikum/Abschluss/abschluss/main.c
+1453634189 source:/home/ich/Dropbox/Uni/openmp praktikum/Abschluss/abschluss/main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
