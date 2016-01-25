@@ -45,7 +45,7 @@ Blabla
 Blabla
 \subsubsection{Herleitung}
 Blabla
-\subsubsection{Abbruchkriterium}
+\subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Blabla
 
 \subsection{Gauß-Seidel-Verfahren}
@@ -53,13 +53,17 @@ Blabla
 \subsubsection{Herleitung}
 Blabla
 \subsubsection{Abbruchkriterium}
-Blabla
+Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. (TODO: Begründung)
 
-\subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}
+\subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}\label{konvergenz}
 Blabla
 
 \section{Serielle Implementierung}
-Blabla
+
+Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen.
+
+ Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\frac{1}{h}$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne Gleitkommaungenauigkeiten angeben kann.
+
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Blabla
 \subsection{Approximationsfehler}
@@ -67,18 +71,45 @@ Blabla
 
 \section{Parallelisierung}
 Blabla
-\subsection{Jacobi-Verfahren}
-Blabla
+\subsection{Jacobi-Verfahren} \label{parallel:jacobi}
+Da innerhalb der Iterationsschritte des Jacobi-Verfahrens keinerlei Datenabhängigkeiten bei der Berechnung der Matrixeinträge bestehen, haben wir mittels OpenMP (\texttt{\#pragma omp parallel for}) die äußere Schleife parallelisiert.
+
+Hierbei haben wir folgenden Speedup bei verschiedenen Problemgrößen $h$ und sowie verschiedenen Prozessorzahlen $p$ gemessen: TODO
+
 \subsection{Gauß-Seidel-Verfahren}
-Blabla
-\subsubsection{Naiver Parallelisierungsansatz}
-Blabla
+
+Innerhalb der Iterationsschritte des Gauß-Seidel-Verfahrens bestehen Datenabhängigkeiten, da die Berechnung der Matrixeinträge in einer Iteration von den vorher berechneten Einträgen der selben Iteration abhängt. Das Gauß-Seidel-Verfahren ist daher inhärent sequentiell. Daher ist eine Parallelisierung des Gauß-Seidel-Verfahrens mit mehr Aufwand verbunden als beim ``embarassingly parallel'' Jacobi-Verfahren.
+
+Wir haben sowohl den naiven, falschen Parallelisierungsansatz als auch zwei verschiedene funktionierende Parallelisierungsansätze implementiert.
+
+\subsubsection{Naiver Parallelisierungsansatz}\label{gs:naiv}
+Der naive Parallelisierungsansatz ist, wie in Abschnitt~\ref{parallel:jacobi} die äußerste Schleife mittels \texttt{\#pragma omp parallel for} zu parallelisieren. Da eine parallele Ausführung der Schleifeniterationen mittels OpenMP nicht die Iterationsreihenfolge garantiert, kann es hierbei zu Wettlaufsituationen (``Race Conditions'') kommen.
+
+Im Fall des Gauß-Seidel-Verfahrens tritt dies in folgendem Beispiel auf (TODO: Beispiel):
+
+
+Der im Praktikum vorgestellte Intel Thread Sanitizer erkennt die auftretende Wettlaufsituation nicht.
+
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
-Blabla, TODO: Sarah(!!!)
+
+Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hieraus ergibt sich ein Schachbrettmuster, wie in Abbildung TODO gezeigt.
+
+Da die Matrixeinträge gleicher Farbe nicht voneinander abhängen, können wir diese parallel berechnen. Dies führt zu folgendem Ansatz: (TODO: Pseudocode)
+
+Hierbei ist zu beachten, dass die einzelnen Iterationen des sequentiellen Gauß-Seidel-Verfahrens und dessen Rot-Schwarz-Parallelisierung nicht genau dasselbe Ergebnis liefern. Dies liegt darin begründet, dass durch die Rot-Schwarz-Aufteilung eine Umordnung der Matrixeinträge geschieht.
+
+Um die Indexberechnung zu vereinfachen und die Cachelokalität zu verbessern, haben wir die roten und die schwarzen Einträge jeweils in eigenen, neuen Matrizen gespeichert. Dadurch liegen Einträge gleicher Farbe zusammenhängend im Speicher. Dies hat es uns auch ermöglicht, unsere Implementierung mittels SSE-Vektorinstruktionen zu beschleunigen.
+
+Bei den Indexberechnungen haben wir zwischen $size \times size$-Matrizen gerader und ungerader $size$ unterschieden. Abbildung TODO zeigt die Berechnung der Nachbarindizes roter und schwarzer Einträge für gerade bzw. ungerade Werte von $size$.
+
+
+\paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}
+TODO
+
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
 Blabla, TODO: Johannes
 
 \section{Methodenwahl}
-Blabla
+Da das Gauß-Seidel-Verfahren schneller konvergiert als das Jacobi-Verfahren (siehe Abschnitt~\ref{konvergenz}) und zudem unsere parallele Implementierung des Gauß-Seidel-Verfahrens mittels Rot-Schwarz-Verfahren TODO
 
 \end{document}
