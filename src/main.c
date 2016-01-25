@@ -1280,7 +1280,7 @@ int main(int argc, char *argv[])
     printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     // TODO: The following is just debug code. Remove afterwards.
-    printf("\nFunctionTable:\n");
+    /*printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
     printf("\nStartvektor:\n");
     printResultMatrix(startVector);
@@ -1299,7 +1299,7 @@ int main(int argc, char *argv[])
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
     printResultMatrix(gaussSeidelWavefrontCacheResult);
     printf("\nErgebnis analytisch:\n");
-    printAnalyticalResult(h);
+    printAnalyticalResult(h);*/
 
     free(gaussSeidelWavefrontResult);
     free(gaussSeidelWavefrontCacheResult);
