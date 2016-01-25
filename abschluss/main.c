@@ -205,10 +205,10 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
         a0 = a1;
         a1 = temp;
 
-        #pragma omp parallel for private(j, i) reduction(+:diff)
+        #pragma omp parallel for private(i) reduction(+:diff)
         for (j = 1; j < size - 1; j++)
         {
-            for (i = 1; i < size - 4; i += 4)
+            for (i = 1; i < size - 5; i += 4)
             {
     		__m128 vec_left = _mm_loadu_ps((float const*) &a0[CO(i, j - 1)]);
     		__m128 vec_up = _mm_loadu_ps((float const*) &a0[CO(i - 1, j)]);
@@ -230,7 +230,7 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
     		diff += sse_sum(vec_diff);
             }
 
-            for (; i < size - 1; i++) // do the rest sequentially
+            for (; i < size - 1; i++)
             {
                 a1[CO(i,j)] = a0[CO(i, j - 1)]
                               + a0[CO(i - 1, j)]
@@ -1205,7 +1205,7 @@ int main(int argc, char *argv[])
     float* jacobiSSEResult = malloc(size * size * sizeof(float));
     start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
-    	jacobiSSE(startVector, h, precomputedF, jacobiResult);
+    	jacobiSSE(startVector, h, precomputedF, jacobiSSEResult);
     }
     end = omp_get_wtime();
     printf("Execution time Jacobi SSE: %.3f seconds\n", (end - start) / repeats);
@@ -1272,7 +1272,7 @@ int main(int argc, char *argv[])
     float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
     start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
-    	gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
+    	//gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
     }
     end = omp_get_wtime();
     printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds\n", (end - start) / repeats);
@@ -1280,7 +1280,7 @@ int main(int argc, char *argv[])
     printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     // TODO: The following is just debug code. Remove afterwards.
-    /*printf("\nFunctionTable:\n");
+    printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
     printf("\nStartvektor:\n");
     printResultMatrix(startVector);
@@ -1299,7 +1299,7 @@ int main(int argc, char *argv[])
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
     printResultMatrix(gaussSeidelWavefrontCacheResult);
     printf("\nErgebnis analytisch:\n");
-    printAnalyticalResult(h);*/
+    printAnalyticalResult(h);
 
     free(gaussSeidelWavefrontResult);
     free(gaussSeidelWavefrontCacheResult);
