@@ -247,24 +247,19 @@ void calcAnalyticalResult(float h,float * result)
             else
             {
                 val = 16 * x * (1 - x) * y * (1 - y);
-                printf("%f\n",val);
+                  printf("%i i\n",i);
+                    printf("%fh\n",h);
+                printf("%fx\n",x);
+                printf("%fy\n",y);
+                printf("%fval\n",val);
             }
 
-            if (j == 0)
-            {
 
-                result[CO(i, j)]=val;
-            }
-            else if (j < size - 1)
-            {
 
                 result[CO(i, j)]=val;
-            }
-            else
-            {
 
-                result[CO(i, j)]=val;
-            }
+
+
         }
     }
 }
