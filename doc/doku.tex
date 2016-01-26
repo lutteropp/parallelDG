@@ -5,7 +5,10 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{a4wide}
+\usepackage{color}
 \usepackage{colortbl}
+
+\definecolor{rose}{rgb}{1, 0.57, 0.69}		      
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
 \author{Gruppe 3: Sarah Lutteropp und Johannes Sailer}
@@ -150,20 +153,21 @@ Der im Praktikum vorgestellte Intel Thread Sanitizer erkennt die auftretende Wet
 %\newpage
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
 
-Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hieraus ergibt sich ein Schachbrettmuster, wie in Abbildung~\ref{fig:matrix} gezeigt.
+Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hierbei ergibt sich ein Schachbrettmuster, wie in Abbildung~\ref{fig:matrix} gezeigt.
 
 \begin{figure}[h!]
 \centering
 $$U = 
-\begin{tabular}{ccccc}
-  \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
- \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45}\\
- \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
- \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45}\\
-  \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
+\begin{tabular}{cccccc}
+  \cellcolor{rose} & \cellcolor[gray]{0.7} & \cellcolor{rose} & \cellcolor[gray]{0.7} & \cellcolor{rose} & \cellcolor[gray]{0.7}\\
+ \cellcolor[gray]{0.7} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{rose}\\
+  \cellcolor{rose} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.7}\\
+ \cellcolor[gray]{0.7} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{rose} \\
+ \cellcolor{rose} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.7}\\
+ \cellcolor[gray]{0.7} & \cellcolor{rose} & \cellcolor[gray]{0.7} & \cellcolor{rose} & \cellcolor[gray]{0.7} & \cellcolor{rose}\\
 \end{tabular}
 $$
-\caption{Aufteilung der Lösungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabhängigkeiten bestehen.}
+\caption{Aufteilung der Lösungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabhängigkeiten bestehen. Die Randzellen, deren Einträge per Annahme immer den Wert $0$ enthalten, sind in blasseren Farben markiert.}
 \label{fig:matrix}
 \end{figure}
 
