@@ -208,7 +208,7 @@ void jacobiSSE(const float* startVector, float h, const float* functionTable, fl
         #pragma omp parallel for private(j, i) reduction(+:diff)
         for (j = 1; j < size - 1; j++)
         {
-            for (i = 1; i < size - 4; i += 4)
+            for (i = 1; i < size - 5; i += 4)
             {
     		__m128 vec_left = _mm_loadu_ps((float const*) &a0[CO(i, j - 1)]);
     		__m128 vec_up = _mm_loadu_ps((float const*) &a0[CO(i - 1, j)]);
@@ -1205,7 +1205,7 @@ int main(int argc, char *argv[])
     float* jacobiSSEResult = malloc(size * size * sizeof(float));
     start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
-    	jacobiSSE(startVector, h, precomputedF, jacobiResult);
+    	jacobiSSE(startVector, h, precomputedF, jacobiSSEResult);
     }
     end = omp_get_wtime();
     printf("Execution time Jacobi SSE: %.3f seconds\n", (end - start) / repeats);
