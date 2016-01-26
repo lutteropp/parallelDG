@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{a4wide}
-		     
+\usepackage{colortbl}
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
 \author{Gruppe 3: Sarah Lutteropp und Johannes Sailer}
@@ -91,6 +91,8 @@ $$
 
 Man könnte dieses lineare Gleichungssystem natürlich auch mit direkten Verfahren wie dem Gaußschen-Eliminationsverfahren lösen. Dieses ist jedoch nur sehr schlecht parallelisierbar. Außerdem ist das Gaußsche-Eliminationsverfahren sehr anfällig für numerische Störungen. Das ist bei iterativen Verfahren normalerweise nicht der Fall.
 
+TODO: Überführung auf zweidimensionales Problem, den Lösungsvektor $u$ als Lösungsmatrix $U$ uminterpretieren.
+
 
 \subsection{Jacobi-Verfahren}
 Blabla
@@ -145,9 +147,25 @@ Im Fall des Gauß-Seidel-Verfahrens tritt dies in folgendem Beispiel auf (TODO: 
 
 Der im Praktikum vorgestellte Intel Thread Sanitizer erkennt die auftretende Wettlaufsituation nicht.
 
+%\newpage
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
 
-Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hieraus ergibt sich ein Schachbrettmuster, wie in Abbildung TODO gezeigt.
+Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hieraus ergibt sich ein Schachbrettmuster, wie in Abbildung~\ref{fig:matrix} gezeigt.
+
+\begin{figure}[h!]
+\centering
+$$U = 
+\begin{tabular}{ccccc}
+  \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
+ \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45}\\
+ \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
+ \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45}\\
+  \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red} & \cellcolor[gray]{0.45} & \cellcolor{red}\\
+\end{tabular}
+$$
+\caption{Aufteilung der Lösungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabhängigkeiten bestehen.}
+\label{fig:matrix}
+\end{figure}
 
 Da die Matrixeinträge gleicher Farbe nicht voneinander abhängen, können wir diese parallel berechnen. Dies führt zu folgendem Ansatz: (TODO: Pseudocode)
 
