@@ -1272,7 +1272,7 @@ int main(int argc, char *argv[])
     float* gaussSeidelWavefrontCacheResult= malloc(size * size * sizeof(float));
     start = omp_get_wtime();
     for (i = 0; i < repeats; ++i) {
-    	//gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
+    	gaussSeidelWavefrontCache(startVector, h, precomputedF, gaussSeidelWavefrontCacheResult);
     }
     end = omp_get_wtime();
     printf("Execution time Gauss-Seidel WavefrontCache: %.3f seconds\n", (end - start) / repeats);
@@ -1280,7 +1280,7 @@ int main(int argc, char *argv[])
     printf("  is it correct: %s \n" ,(correct)?"true":"false");
 
     // TODO: The following is just debug code. Remove afterwards.
-    printf("\nFunctionTable:\n");
+    /*printf("\nFunctionTable:\n");
     printResultMatrix(precomputedF);
     printf("\nStartvektor:\n");
     printResultMatrix(startVector);
@@ -1299,7 +1299,7 @@ int main(int argc, char *argv[])
     printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
     printResultMatrix(gaussSeidelWavefrontCacheResult);
     printf("\nErgebnis analytisch:\n");
-    printAnalyticalResult(h);
+    printAnalyticalResult(h);*/
 
     free(gaussSeidelWavefrontResult);
     free(gaussSeidelWavefrontCacheResult);
@@ -1512,7 +1512,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
                                     + a0[a01]
                                     + a0[a02]
                                     +  functionTable[indexVon]);
-                                     diff += fabsf(a1[index] - a0[index]);
+                 diff += fabsf(a1[indexZu] - a0[indexZu]);
                 //  printf("%i ",index);
                 //  printf("(%i asdf %i %i %i)",indexVon,durchlauf,border,i);
          //       printf("(a1 %i F %i Index %i)",indexZu,indexVon,index);
