@@ -11,18 +11,18 @@
 Compile with: gcc -O2 -fopenmp -march=native main.c -o main
 */
 
+float h=0;
 
-
-void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult);
+void jacobiSerial(const float* startVector,  const float* functionTable, float* jacobiResult);
 /* Gauss Seidel */
-void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult);
+void gaussSeidel(const float * startVector,  const float* functionTable, float* gaussSeidelResult);
 
 
 /* Helper functions */
 float f1(float x, float y);
-void computeFunctionTable(float h, float* functionTable);
+void computeFunctionTable(float* functionTable);
 void printResultMatrix(const float* matrix);
-void printAnalyticalResult(float h);
+void printAnalyticalResult();
 bool compare(float* m1, float* m2);
 
 
@@ -47,7 +47,7 @@ double get_wall_time()   // returns wall time in seconds
     double wtime = (double)time.tv_sec + (double)time.tv_usec * 0.000001;
     return wtime;
 }
-void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult)
+void jacobiSerial(const float* startVector,  const float* functionTable, float* jacobiResult)
 {     printf("%fhjacobi\n",h);
     int i, j, k;
     float* array0 = (float*) malloc(size * size * sizeof(float));
@@ -109,7 +109,7 @@ void jacobiSerial(const float* startVector, float h, const float* functionTable,
 }
 
 
-void gaussSeidel(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
+void gaussSeidel(const float * startVector,  const float* functionTable, float* gaussSeidelResult)
 {
     int i, j, k;
     float* analytisch = (float*) malloc(size * size * sizeof(float));
@@ -185,7 +185,7 @@ bool compare(float* m1,float* m2)
     }
     return equals;
 }
-void computeFunctionTable(float h, float* functionTable)
+void computeFunctionTable( float* functionTable)
 {
     int i, j;
     float hSquared = h * h;
@@ -229,7 +229,7 @@ void printResultMatrix(const float* matrix)
         }
     }
 }
-void calcAnalyticalResult(float h,float * result)
+void calcAnalyticalResult(float * result)
 {
   printf("%fh calc\n",h);
     int i, j;
@@ -264,7 +264,7 @@ void calcAnalyticalResult(float h,float * result)
         }
     }
 }
-void printAnalyticalResult(float h)
+void printAnalyticalResult()
 {
     printf("%f h analytisch \n",h);
     int i, j;
@@ -314,10 +314,10 @@ int main(int argc, char *argv[])
         printf("Error! Size must be greater than 1.\n");
         return -1;
     }
-    float h = 1 / (float) (size - 1);
+     h = 1 / (float) (size - 1);
     // Precompute function f
     float* precomputedF = malloc(size * size * sizeof(float));
-    computeFunctionTable(h, precomputedF);
+    computeFunctionTable( precomputedF);
     // Analytical result
     float* analyticalResult = (float*) malloc(size * size * sizeof(float));
     // Create random start vector with zeroes at the proper positions (at the border)
@@ -360,7 +360,7 @@ int main(int argc, char *argv[])
     start = get_wall_time();
     for (i = 0; i < repeats; ++i)
     {
-        jacobiSerial(startVector, h, precomputedF, jacobiSequentialResult);
+        jacobiSerial(startVector, precomputedF, jacobiSequentialResult);
     }
     end = get_wall_time();
     printf("Execution time Jacobi Sequential: %.3f seconds\n", (end - start) / repeats);
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
     start = get_wall_time();
     for (i = 0; i < repeats; ++i)
     {
-        gaussSeidel(startVector, h, precomputedF, gaussSeidelResult);
+        gaussSeidel(startVector,  precomputedF, gaussSeidelResult);
     }
     end = get_wall_time();
     printf("Execution time Gauss-Seidel: %.3f seconds\n", (end - start) / repeats);

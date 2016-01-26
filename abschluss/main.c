@@ -9,6 +9,8 @@
 
 /*
 Compile with: gcc -O2 -fopenmp -march=native main.c -o main
+                icc -O2 -march=native -g -openmp -o icc main.c
+
 */
 
 /* Jacobi */
