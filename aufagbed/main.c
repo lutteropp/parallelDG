@@ -48,11 +48,12 @@ double get_wall_time()   // returns wall time in seconds
     return wtime;
 }
 void jacobiSerial(const float* startVector, float h, const float* functionTable, float* jacobiResult)
-{
+{     printf("%fhjacobi\n",h);
     int i, j, k;
     float* array0 = (float*) malloc(size * size * sizeof(float));
     float* array1 = (float*) malloc(size * size * sizeof(float));
     float* analytisch = (float*) malloc(size * size * sizeof(float));
+      printf("%fh\n",h);
     calcAnalyticalResult(h,analytisch);
     printf("analytisch\n");
     printResultMatrix(analytisch);
@@ -230,7 +231,7 @@ void printResultMatrix(const float* matrix)
 }
 void calcAnalyticalResult(float h,float * result)
 {
-
+  printf("%fh calc\n",h);
     int i, j;
     for (i = 0; i < size; ++i)
     {
@@ -247,10 +248,10 @@ void calcAnalyticalResult(float h,float * result)
             else
             {
                 val = 16 * x * (1 - x) * y * (1 - y);
-                  printf("%i i\n",i);
+                //  printf("%i i\n",i);
                     printf("%fh\n",h);
-                printf("%fx\n",x);
-                printf("%fy\n",y);
+                //printf("%fx\n",x);
+                //printf("%fy\n",y);
                 printf("%fval\n",val);
             }
 
@@ -265,6 +266,7 @@ void calcAnalyticalResult(float h,float * result)
 }
 void printAnalyticalResult(float h)
 {
+    printf("%f h analytisch \n",h);
     int i, j;
     for (i = 0; i < size; ++i)
     {

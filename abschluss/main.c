@@ -1512,7 +1512,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
                                     + a0[a01]
                                     + a0[a02]
                                     +  functionTable[indexVon]);
-                                     diff += fabsf(a1[index] - a0[index]);
+                                     diff += fabsf(a1[indexZu] - a0[indexZu]);
                 //  printf("%i ",index);
                 //  printf("(%i asdf %i %i %i)",indexVon,durchlauf,border,i);
          //       printf("(a1 %i F %i Index %i)",indexZu,indexVon,index);
