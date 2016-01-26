@@ -177,8 +177,71 @@ Hierbei ist zu beachten, dass die einzelnen Iterationen des sequentiellen Gauß-
 
 Um die Indexberechnung zu vereinfachen und die Cachelokalität zu verbessern, haben wir die roten und die schwarzen Einträge jeweils in eigenen, neuen Matrizen gespeichert. Dadurch liegen Einträge gleicher Farbe zusammenhängend im Speicher. Dies hat es uns auch ermöglicht, unsere Implementierung mittels SSE-Vektorinstruktionen zu beschleunigen. Die Vektorisierung mittels SIMD-Instruktionen haben wir explizit implementiert. Zwar ist mit OpenMP 4.0 eine Vektorisierung von Code auch mittels \texttt{\#pragma omp simd} möglich, aber unser händisch vektorisierter Code war schneller als der von OpenMP generierte.
 
-Bei den Indexberechnungen haben wir zwischen $size \times size$-Matrizen gerader und ungerader $size$ unterschieden. Abbildung TODO zeigt die Berechnung der Nachbarindizes roter und schwarzer Einträge für gerade bzw. ungerade Werte von $size$.
+Bei den Indexberechnungen haben wir zwischen $size \times size$-Matrizen gerader und ungerader $size$ unterschieden.
 
+\paragraph{Berechnung der Nachbarindizes für gerade Werte von $size$}~\\
+Für rote $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die roten Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \frac{size}{2}$ in der Schwarz-Matrix. Der obere Nachbar ist an Stelle $idx - (1-(j \mod 2))$ in der Schwarz-Matrix. Der rechte Nachbar ist an Stelle $idx + \frac{size}{2}$ in der Schwarz-Matrix. Der untere Nachbar ist an Stelle $idx + (j \mod 2)$ in der Schwarz-Matrix.
+
+
+
+Für schwarze $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die schwarzen Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \frac{size}{2}$ in der Rot-Matrix. Der obere Nachbar ist an Stelle $idx - (j \mod 2)$ in der Rot-Matrix. Der rechte Nachbar ist an Stelle $idx + \frac{size}{2}$ in der Rot-Matrix. Der untere Nachbar ist an Stelle $idx + (1- (j \mod 2))$ in der Rot-Matrix.
+
+Abbildung~\ref{fig:matrix:even} zeigt die Berechnung der Nachbarindizes am Beispiel $size=6$.
+
+\begin{figure}[h!]
+\centering
+$$U = 
+\begin{tabular}{cccccc}
+  \cellcolor{rose}0 & \cellcolor[gray]{0.7}3 & \cellcolor{rose}6 & \cellcolor[gray]{0.7}9 & \cellcolor{rose}12 & \cellcolor[gray]{0.7}15\\
+  
+ \cellcolor[gray]{0.7}0 & \cellcolor{red}3 & \cellcolor[gray]{0.45}6 & \cellcolor{red}9 & \cellcolor[gray]{0.45}12 & \cellcolor{rose}15\\
+ 
+  \cellcolor{rose}1 & \cellcolor[gray]{0.45}4 & \cellcolor{red}7 & \cellcolor[gray]{0.45}10 & \cellcolor{red}13 & \cellcolor[gray]{0.7}16\\
+  
+ \cellcolor[gray]{0.7}1 & \cellcolor{red}4 & \cellcolor[gray]{0.45}7 & \cellcolor{red}10 & \cellcolor[gray]{0.45}13 & \cellcolor{rose}16 \\
+ 
+ \cellcolor{rose}2 & \cellcolor[gray]{0.45}5 & \cellcolor{red}8 & \cellcolor[gray]{0.45}11 & \cellcolor{red}14 & \cellcolor[gray]{0.7}17\\
+ 
+ \cellcolor[gray]{0.7}2 & \cellcolor{rose}5 & \cellcolor[gray]{0.7}8 & \cellcolor{rose}11 & \cellcolor[gray]{0.7}14 & \cellcolor{rose}17\\
+\end{tabular} \quad
+$$
+\caption{Berechnung der Nachbarindizes für gerade Werte von $size$ am Beispiel $size=6$}
+\label{fig:matrix:even}
+\end{figure}
+
+\paragraph{Berechnung der Nachbarindizes für ungerade Werte von $size$}~\\
+Für rote $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die roten Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \lceil\frac{size}{2}\rceil$ in der Schwarz-Matrix. Der obere Nachbar ist an Stelle $idx - 1$ in der Schwarz-Matrix. Der rechte Nachbar ist an Stelle $idx + \lfloor\frac{size}{2}\rfloor$ in der Schwarz-Matrix. Der untere Nachbar ist an Stelle $idx$ in der Schwarz-Matrix.
+
+
+
+Für schwarze $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die schwarzen Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \lfloor\frac{size}{2}\rfloor$ in der Rot-Matrix. Der obere Nachbar ist an Stelle $idx$ in der Rot-Matrix. Der rechte Nachbar ist an Stelle $idx + \lceil\frac{size}{2}\rceil$ in der Rot-Matrix. Der untere Nachbar ist an Stelle $idx + 1$ in der Rot-Matrix.
+
+Abbildung~\ref{fig:matrix:odd} zeigt die Berechnung der Nachbarindizes am Beispiel $size=7$.
+
+\begin{figure}[h!]
+\centering
+$$U = 
+\begin{tabular}{ccccccc}
+  \cellcolor{rose}0 & \cellcolor[gray]{0.7}3 & \cellcolor{rose}7 & \cellcolor[gray]{0.7}10 & \cellcolor{rose}14 & \cellcolor[gray]{0.7}17 & \cellcolor{rose}21 \\
+  
+ \cellcolor[gray]{0.7}0 & \cellcolor{red}4 & \cellcolor[gray]{0.45}7 & \cellcolor{red}11 & \cellcolor[gray]{0.45}14 & \cellcolor{red}18 & \cellcolor[gray]{0.7}21\\
+ 
+  \cellcolor{rose}1 & \cellcolor[gray]{0.45}4 & \cellcolor{red}8 & \cellcolor[gray]{0.45}11 & \cellcolor{red}15 & \cellcolor[gray]{0.45}18 & \cellcolor{rose}22\\
+  
+ \cellcolor[gray]{0.7}1 & \cellcolor{red}5 & \cellcolor[gray]{0.45}8 & \cellcolor{red}12 & \cellcolor[gray]{0.45}15 & \cellcolor{red}19 & \cellcolor[gray]{0.7}22\\
+ 
+ \cellcolor{rose}2 & \cellcolor[gray]{0.45}5 & \cellcolor{red}9 & \cellcolor[gray]{0.45}12 & \cellcolor{red}16 & \cellcolor[gray]{0.45}19 & \cellcolor{rose}23\\
+ 
+ \cellcolor[gray]{0.7}2 & \cellcolor{red}6 & \cellcolor[gray]{0.45}9 & \cellcolor{red}13 & \cellcolor[gray]{0.45}16 & \cellcolor{red}20 & \cellcolor[gray]{0.7}23\\
+ 
+ \cellcolor{rose}3 & \cellcolor[gray]{0.7}6 & \cellcolor{rose}10 & \cellcolor[gray]{0.7}13 & \cellcolor{rose}17 & \cellcolor[gray]{0.7}20 & \cellcolor{rose}24 \\
+\end{tabular} \quad
+$$
+\caption{Berechnung der Nachbarindizes für ungerade Werte von $size$ am Beispiel $size=7$}
+\label{fig:matrix:odd}
+\end{figure}
+
+\newpage
 
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}
 TODO
