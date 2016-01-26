@@ -164,6 +164,8 @@ TODO
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
 Blabla, TODO: Johannes
 
+Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern.
+
 \section{Methodenwahl}
 Da das Gauß-Seidel-Verfahren schneller konvergiert als das Jacobi-Verfahren (siehe Abschnitt~\ref{konvergenz}) und zudem unsere parallele Implementierung des Gauß-Seidel-Verfahrens mittels Rot-Schwarz-Verfahren TODO
 
