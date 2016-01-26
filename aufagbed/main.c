@@ -31,7 +31,7 @@ int size;
 
 #define CO(i,j) ( (j) * (size) + (i) )
 
-const static int MAX_ITERATIONS = 1;
+const static int MAX_ITERATIONS = 1000000;
 const static float EPSILON = 0.01;
 const static float TOL = 0.00000001;
 
@@ -48,15 +48,14 @@ double get_wall_time()   // returns wall time in seconds
     return wtime;
 }
 void jacobiSerial(const float* startVector,  const float* functionTable, float* jacobiResult)
-{     printf("%fhjacobi\n",h);
+{
     int i, j, k;
     float* array0 = (float*) malloc(size * size * sizeof(float));
     float* array1 = (float*) malloc(size * size * sizeof(float));
     float* analytisch = (float*) malloc(size * size * sizeof(float));
-      printf("%fh\n",h);
+
     calcAnalyticalResult(h,analytisch);
-    printf("analytisch\n");
-    printResultMatrix(analytisch);
+
 
     float* a0 = array0; // last iteration
     float* a1 = array1; // current iteration
@@ -93,7 +92,7 @@ void jacobiSerial(const float* startVector,  const float* functionTable, float* 
             }
         }
         euklid=sqrt(euklid);
-        printf("%.3f ",euklid);
+        printf("%.3f,",euklid);
         if (diff / (size * size) < TOL) break;
     }
 
@@ -151,7 +150,7 @@ void gaussSeidel(const float * startVector,  const float* functionTable, float* 
             }
         }
         euklid=sqrt(euklid);
-        printf("%.3f ",euklid);
+        printf("%.3f,",euklid);
         if (diff / (size * size) < TOL) break;
     }
 
@@ -231,7 +230,7 @@ void printResultMatrix(const float* matrix)
 }
 void calcAnalyticalResult(float * result)
 {
-  printf("%fh calc\n",h);
+
     int i, j;
     for (i = 0; i < size; ++i)
     {
@@ -249,10 +248,10 @@ void calcAnalyticalResult(float * result)
             {
                 val = 16 * x * (1 - x) * y * (1 - y);
                 //  printf("%i i\n",i);
-                    printf("%fh\n",h);
+
                 //printf("%fx\n",x);
                 //printf("%fy\n",y);
-                printf("%fval\n",val);
+
             }
 
 
@@ -266,7 +265,7 @@ void calcAnalyticalResult(float * result)
 }
 void printAnalyticalResult()
 {
-    printf("%f h analytisch \n",h);
+
     int i, j;
     for (i = 0; i < size; ++i)
     {
@@ -384,13 +383,13 @@ int main(int argc, char *argv[])
     printf("Execution time Gauss-Seidel: %.3f seconds\n", (end - start) / repeats);
     correct=compare(gaussSeidelResult, analyticalResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
-
+/*
 printf("analytisch\n");
 printAnalyticalResult(h);
 printf("jacobi\n");
 printResultMatrix(jacobiSequentialResult);
 printf("gaus\n");
-printResultMatrix(gaussSeidelResult);
+printResultMatrix(gaussSeidelResult); */
 
     // TODO: The following is just debug code. Remove afterwards.
     /*printf("\nFunctionTable:\n");
