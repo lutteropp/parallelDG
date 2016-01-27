@@ -88,7 +88,7 @@ void jacobiSerial(const float* startVector,  const float* functionTable, float* 
                 a1[CO(i,j)] *= 0.25;
 
                 diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
-                euklid+=fabsf(pow(a1[CO(i,j)],2)-pow(analytisch[CO(i,j)],2));
+                euklid+=fabsf(pow(a1[CO(i,j)]-analytisch[CO(i,j)],2));
             }
         }
         euklid=sqrt(euklid);
