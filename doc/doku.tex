@@ -102,8 +102,10 @@ Blabla
 \subsubsection{Herleitung}
 Blabla
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
-Blabla
-
+Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
+Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
+Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
+Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
 \subsection{Gauß-Seidel-Verfahren}
 Blabla
 \subsubsection{Herleitung}
@@ -112,7 +114,12 @@ Blabla
 Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. (TODO: Begründung)
 
 \subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}\label{konvergenz}
-Blabla
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
+  \caption{Beide Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium true wurde.}
+  \label{fig:Bild1}
+\end{figure}
 
 \section{Sequentielle Implementierung}
 
@@ -125,8 +132,32 @@ Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, h
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Blabla
 \subsection{Approximationsfehler}
-Blabla
+Wir haben den Approximationsfehler nur für h=4 und h=32 dargestellt, weil Open Office nicht genug Punkte verarbeiten kann.
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1\textwidth]{bilder/dj4.png}
+  \caption{Jacobi Approximationsfehler für h=4}
+  \label{fig:Bild1}
+\end{figure}
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1\textwidth]{bilder/dj32.png}
+  \caption{Jacobi Approximationsfehler für h=32}
+  \label{fig:Bild1}
+\end{figure}
 
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1\textwidth]{bilder/dgs4.png}
+  \caption{Gaus-Seidel Approximationsfehler für h=4}
+  \label{fig:Bild1}
+\end{figure}
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1\textwidth]{bilder/dgs32.png}
+  \caption{Gaus-SeidelApproximationsfehler für h=32}
+  \label{fig:Bild1}
+\end{figure}
 \section{Parallelisierung}
 Blabla
 \subsection{Jacobi-Verfahren} \label{parallel:jacobi}

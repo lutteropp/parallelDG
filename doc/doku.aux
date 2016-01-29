@@ -9,27 +9,37 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}Abbruchkriterium}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Vergleich der Konvergenz und Stabilit\IeC {\"a}t beider Verfahren}{2}}
 \newlabel{konvergenz}{{1.3}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Beide Verfahren f\IeC {\"u}r verschiedene Verfeinerungen, bis das Abbruchkriterium true wurde.}}{2}}
+\newlabel{fig:Bild1}{{1}{2}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Sequentielle Implementierung}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Laufzeiten bei verschiedenen Verfeinerungen}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Approximationsfehler}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Parallelisierung}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Approximationsfehler}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Jacobi Approximationsfehler f\IeC {\"u}r h=4}}{3}}
+\newlabel{fig:Bild1}{{2}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Parallelisierung}{3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Jacobi-Verfahren}{3}}
 \newlabel{parallel:jacobi}{{3.1}{3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Gau\IeC {\ss }-Seidel-Verfahren}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Naiver Parallelisierungsansatz}{3}}
-\newlabel{gs:naiv}{{3.2.1}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Erweiterter Parallelisierungsansatz: Rot-Schwarz}{3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Aufteilung der L\IeC {\"o}sungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabh\IeC {\"a}ngigkeiten bestehen. Die Randzellen, deren Eintr\IeC {\"a}ge per Annahme immer den Wert $0$ enthalten, sind in blasseren Farben markiert.}}{3}}
-\newlabel{fig:matrix}{{1}{3}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$ am Beispiel $size=6$}}{4}}
-\newlabel{fig:matrix:even}{{2}{4}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$ am Beispiel $size=7$}}{5}}
-\newlabel{fig:matrix:odd}{{3}{5}}
-\@writefile{toc}{\contentsline {paragraph}{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}{5}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Erweiterter Parallelisierungsansatz: Wavefront}{5}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Indexe}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Methodenwahl}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indexe anhand eines Beispiels. hack ist dabei blau und hack2 rot.}}{6}}
-\newlabel{fig:Bild1}{{4}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Jacobi Approximationsfehler f\IeC {\"u}r h=32}}{4}}
+\newlabel{fig:Bild1}{{3}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Gaus-Seidel Approximationsfehler f\IeC {\"u}r h=4}}{4}}
+\newlabel{fig:Bild1}{{4}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Gaus-SeidelApproximationsfehler f\IeC {\"u}r h=32}}{5}}
+\newlabel{fig:Bild1}{{5}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Naiver Parallelisierungsansatz}{5}}
+\newlabel{gs:naiv}{{3.2.1}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Erweiterter Parallelisierungsansatz: Rot-Schwarz}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Aufteilung der L\IeC {\"o}sungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabh\IeC {\"a}ngigkeiten bestehen. Die Randzellen, deren Eintr\IeC {\"a}ge per Annahme immer den Wert $0$ enthalten, sind in blasseren Farben markiert.}}{6}}
+\newlabel{fig:matrix}{{6}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$ am Beispiel $size=6$}}{6}}
+\newlabel{fig:matrix:even}{{7}{6}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$ am Beispiel $size=7$}}{7}}
+\newlabel{fig:matrix:odd}{{8}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Erweiterter Parallelisierungsansatz: Wavefront}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Indexe}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Methodenwahl}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indexe anhand eines Beispiels. hack ist dabei blau und hack2 rot.}}{8}}
+\newlabel{fig:Bild1}{{9}{8}}

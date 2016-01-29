@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  29 JAN 2016 12:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  29 JAN 2016 14:47
 entering extended mode
 **doku.tex
 (doku.tex
@@ -376,7 +376,23 @@ Package graphics Info: Driver file: pdftex.def on input line 94.
 \Gin@req@height=\dimen115
 \Gin@req@width=\dimen116
 )
-(doku.aux)
+(doku.aux
+
+LaTeX Warning: Label `fig:Bild1' multiply defined.
+
+
+LaTeX Warning: Label `fig:Bild1' multiply defined.
+
+
+LaTeX Warning: Label `fig:Bild1' multiply defined.
+
+
+LaTeX Warning: Label `fig:Bild1' multiply defined.
+
+
+LaTeX Warning: Label `fig:Bild1' multiply defined.
+
+)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
@@ -425,59 +441,96 @@ Underfull \hbox (badness 10000) in paragraph at lines 71--72
 [1
 
 {C:/Users/GrilledSheep/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 133.
+<bilder/convergenz.png, id=20, 246.1697pt x 42.1575pt>
+File: bilder/convergenz.png Graphic file (type png)
+
+<use bilder/convergenz.png>
+Package pdftex.def Info: bilder/convergenz.png used on input line 119.
+(pdftex.def)             Requested size: 297.20906pt x 50.90071pt.
+ <bilder/dj4.png, id=21, 371.88937pt x 226.59656pt>
+File: bilder/dj4.png Graphic file (type png)
+
+<use bilder/dj4.png>
+Package pdftex.def Info: bilder/dj4.png used on input line 138.
+(pdftex.def)             Requested size: 424.58624pt x 258.71346pt.
+ <bilder/dj32.png, id=22, 368.87813pt x 223.58531pt>
+File: bilder/dj32.png Graphic file (type png)
+
+<use bilder/dj32.png>
+Package pdftex.def Info: bilder/dj32.png used on input line 144.
+(pdftex.def)             Requested size: 424.58624pt x 257.34967pt.
+ [2 <./bilder/convergenz.png>]
+<bilder/dgs4.png, id=27, 372.64218pt x 228.855pt>
+File: bilder/dgs4.png Graphic file (type png)
+ <use bilder/dgs4.png>
+Package pdftex.def Info: bilder/dgs4.png used on input line 151.
+(pdftex.def)             Requested size: 424.58624pt x 260.7647pt.
+
+<bilder/dgs32.png, id=28, 368.1253pt x 228.855pt>
+File: bilder/dgs32.png Graphic file (type png)
+ <use bilder/dgs32.png>
+Package pdftex.def Info: bilder/dgs32.png used on input line 157.
+(pdftex.def)             Requested size: 424.58624pt x 263.97737pt.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 164.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-) [2] [3]
+) [3 <./bilder/dj4.png>] [4 <./bilder/dj32.png> <./bilder/dgs4.png>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[4]
-Overfull \hbox (2.36871pt too wide) in paragraph at lines 252--253
+[5 <./bilder/dgs32.png>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[6]
+Overfull \hbox (2.36871pt too wide) in paragraph at lines 283--284
 []\T1/cmr/m/n/10 Vermutlicher Grund wie-so un-se-re Wavefront-Implementierung l
 ang-sa-mer als se-quen-ti-el-les Gauÿ-
  []
 
-<bilder/hack.png, id=31, 420.82219pt x 115.93312pt>
+<bilder/hack.png, id=42, 420.82219pt x 115.93312pt>
 File: bilder/hack.png Graphic file (type png)
  <use bilder/hack.png>
-Package pdftex.def Info: bilder/hack.png used on input line 265.
+Package pdftex.def Info: bilder/hack.png used on input line 296.
 (pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
 
-[5] [6 <./bilder/hack.png>] (doku.aux) ) 
+[7] [8 <./bilder/hack.png>] (doku.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2616 strings out of 493673
- 31732 string characters out of 3141509
- 104023 words of memory out of 3000000
- 5914 multiletter control sequences out of 15000+200000
+ 2641 strings out of 493673
+ 32197 string characters out of 3141509
+ 106062 words of memory out of 3000000
+ 5934 multiletter control sequences out of 15000+200000
  18762 words of font info for 52 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 34i,11n,24p,645b,236s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\GrilledSheep\AppData\Local\M
-iKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1000.pk> <C:\Users\GrilledShee
-p\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\
-Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
-ecbx1200.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jk
-nappen\ec\dpi600\ecrm1000.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\f
-onts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\GrilledSheep\AppData\L
-ocal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0900.pk> <C:\Users\Grill
-edSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx0900.pk
-> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\d
-pi600\ecrm1200.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
-our\jknappen\ec\dpi600\ecrm1728.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/
-symbols/msbm10.pfb>
-Output written on doku.pdf (6 pages, 196496 bytes).
+ 34i,11n,24p,645b,240s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\
+dpi600\ectt1000.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\lj
+four\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTe
+X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1200.pk> <C:\Users\GrilledSheep\Ap
+pData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\User
+s\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx
+1440.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknapp
+en\ec\dpi600\ecrm0900.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts
+\pk\ljfour\jknappen\ec\dpi600\ecbx0900.pk> <C:\Users\GrilledSheep\AppData\Local
+\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\GrilledSh
+eep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:
+/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
+iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (
+x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on doku.pdf (8 pages, 219484 bytes).
 PDF statistics:
- 387 PDF objects out of 1000 (max. 8388607)
+ 402 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
