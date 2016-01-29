@@ -7,7 +7,7 @@
 \usepackage{a4wide}
 \usepackage{color}
 \usepackage{colortbl}
-
+\usepackage{graphicx}
 \definecolor{rose}{rgb}{1, 0.57, 0.69}		      
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
@@ -247,9 +247,25 @@ $$
 TODO
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
-Blabla, TODO: Johannes
+Beim Wavefront Algorithmus wird anstatt über die  Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gaus-Seidel Verfahren in serieller Form.
 
-Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern.
+Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonal Elemente. D.h. es lohnt sich erst bei großen Diagonalen.
+
+Bei der Wavefront Cache Lösung, wurden die Matrix zu erst in einen anderen Array kopiert, indem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
+In beiden Wavefront Lösungen hätte man sicher noch einiges optimieren können(z.B. Cuda für große Diagonalen), jedoch erschien uns Rot-Schwarz so viel schneller, dass es sich nicht lohnen würde.
+
+\paragraph{Berechnung der Indexe}
+Für die Implementierung wurden drei Schleifen verwendet. die Äußere ist zwischen den Schritten des Gaus-Seidel verfahren, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
+In der Mittleren schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weg lassen kann, weil sie nicht mehr in der Matrix sind.\\
+Bei der Wavefront Cache Lösung muss bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei möchte ich auf die grandios  benannten Variablen hack und hack2 eingehen. Diese werden benutzt um die Elemente um das zu berechnende Element zu addressieren. hack wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für hack2 ab der mittleren Diagonalen. \\
+Da der ansatz nciht so viel schneller wurde, dass man Rot schwarz hätte schlagen können, wurde der Algorithmus nicht platz effizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrix Größe zu verwenden.
+
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1\textwidth]{bilder/hack.png}
+  \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der indexe anhand eines Beispiels. hack ist dabei blau und hack2 rot.}
+  \label{fig:Bild1}
+\end{figure}
 
 \section{Methodenwahl}
 Da das Gauß-Seidel-Verfahren schneller konvergiert als das Jacobi-Verfahren (siehe Abschnitt~\ref{konvergenz}) und zudem unsere parallele Implementierung des Gauß-Seidel-Verfahrens mittels Rot-Schwarz-Verfahren TODO
