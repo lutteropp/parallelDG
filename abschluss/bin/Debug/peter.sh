@@ -181,48 +181,48 @@ echo "Thread zahl=16" >>icc128.txt
 ./icc 128 >> icc128.txt
 ./icc 128 >> icc128.txt
 
-echo "start1024"
-#1024
+echo "start256"
+#256
 export OMP_NUM_THREADS=1
-echo "Thread zahl=1" >gcc1024.txt
-echo "Thread zahl=1" >icc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
+echo "Thread zahl=1" >gcc256.txt
+echo "Thread zahl=1" >icc256.txt
+./gcc 256 >> gcc256.txt
+./gcc 256 >> gcc256.txt
 
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
+
+./icc 256 >> icc256.txt
+./icc 256 >> icc256.txt
+
 
 export OMP_NUM_THREADS=4
-echo "Thread zahl=4" >>gcc1024.txt
-echo "Thread zahl=4" >>icc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
+echo "Thread zahl=4" >>gcc256.txt
+echo "Thread zahl=4" >>icc256.txt
+./gcc 256 >> gcc256.txt
+./gcc 256 >> gcc256.txt
 
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
+
+./icc 256 >> icc256.txt
+./icc 256 >> icc256.txt
+
 
 export OMP_NUM_THREADS=8
-echo "Thread zahl=8" >>gcc1024.txt
-echo "Thread zahl=8" >>icc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
+echo "Thread zahl=8" >>gcc256.txt
+echo "Thread zahl=8" >>icc256.txt
+./gcc 256 >> gcc256.txt
+./gcc 256 >> gcc256.txt
 
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
+
+./icc 256 >> icc256.txt
+./icc 256 >> icc256.txt
+
 
 export OMP_NUM_THREADS=16
-echo "Thread zahl=16" >>gcc2.txt
-echo "Thread zahl=16" >>icc2.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
-./gcc 1024 >> gcc1024.txt
+echo "Thread zahl=16" >>gcc256.txt
+echo "Thread zahl=16" >>icc256.txt
+./gcc 256 >> gcc256.txt
+./gcc 256 >> gcc256.txt
 
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
-./icc 1024 >> icc1024.txt
+
+./icc 256 >> icc256.txt
+./icc 256 >> icc256.txt
+

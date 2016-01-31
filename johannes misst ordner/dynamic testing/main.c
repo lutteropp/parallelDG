@@ -152,7 +152,60 @@ void jacobi(const float* startVector, float h, const float* functionTable, float
         a0 = a1;
         a1 = temp;
 
-        #pragma omp parallel for private(j, i)  reduction(+:diff) collapse(2) //schedule(dynamic,8)
+        #pragma omp parallel for private(j, i) collapse(2) reduction(+:diff) //schedule(dynamic,8)
+        for (j = 1; j < size - 1; j++)
+        {
+            for (i = 1; i < size - 1; i++)
+            {
+                a1[CO(i,j)] = a0[CO(i, j - 1)]
+                              + a0[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+
+                diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
+            }
+        }
+
+        if (diff / (size * size) < TOL) break;
+    }
+
+    #pragma omp parallel for private(i)
+    for (i = 0; i < size * size; ++i)
+    {
+        jacobiResult[i] = a1[i];
+    }
+
+    free(a0);
+    free(a1);
+}
+void jacobid(const float* startVector, float h, const float* functionTable, float* jacobiResult)
+{
+    int i, j, k;
+    float* array0 = (float*) malloc(size * size * sizeof(float));
+    float* array1 = (float*) malloc(size * size * sizeof(float));
+
+    float* a0 = array0; // last iteration
+    float* a1 = array1; // current iteration
+
+    #pragma omp parallel for private(i)
+    for (i = 0; i < size * size; ++i)
+    {
+        a0[i] = startVector[i];
+        a1[i] = startVector[i];
+    }
+
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+    	float diff = 0;
+
+        // swap a0 and a1
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+
+        #pragma omp parallel for private(j, i) collapse(2) reduction(+:diff) schedule(dynamic,8)
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
@@ -1177,7 +1230,7 @@ int main(int argc, char *argv[])
 
     double start, end;
     double start2, end2;
-    int repeats = 1;
+    int repeats = 5;
 
     // Call Jacobi Sequential
     float* jacobiSequentialResult = malloc(size * size * sizeof(float));
@@ -1204,6 +1257,18 @@ int main(int argc, char *argv[])
     end = omp_get_wtime();
     printf("Execution time Jacobi: %.3f seconds\n", (end - start) / repeats);
     correct=compare(jacobiResult, analyticalResult);
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
+	
+	
+    // Call Jacobid
+    float* jacobiResultd = malloc(size * size * sizeof(float));
+    start = omp_get_wtime();
+    for (i = 0; i < repeats; ++i) {
+    	jacobid(startVector, h, precomputedF, jacobiResultd);
+    }
+    end = omp_get_wtime();
+    printf("Execution time Jacobid: %.3f seconds\n", (end - start) / repeats);
+    correct=compare(jacobiResultd, analyticalResult);
     printf("  is it correct: %s  \n" ,(correct)?"true":"false");
 
     // Call Jacobi SSE

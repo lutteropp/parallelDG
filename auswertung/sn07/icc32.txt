@@ -1,0 +1,116 @@
+Thread zahl=1
+Execution time Jacobi Sequential: 0.013 seconds
+Execution time Jacobi Sequential: 0.013 seconds
+  is it correct: true  
+Execution time Jacobi: 0.049 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.048 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.015 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.032 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.043 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.043 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.223 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 1.396 seconds
+  is it correct: true 
+Execution time Jacobi Sequential: 0.012 seconds
+Execution time Jacobi Sequential: 0.012 seconds
+  is it correct: true  
+Execution time Jacobi: 0.045 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.044 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.015 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.030 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.040 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.042 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.249 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 1.425 seconds
+  is it correct: true 
+Execution time Jacobi Sequential: 0.020 seconds
+Execution time Jacobi Sequential: 0.020 seconds
+  is it correct: true  
+Execution time Jacobi: 0.049 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.047 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.020 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.033 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.048 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.043 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.256 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 1.416 seconds
+  is it correct: true 
+Thread zahl=16
+Execution time Jacobi Sequential: 0.011 seconds
+Execution time Jacobi Sequential: 0.011 seconds
+  is it correct: true  
+Execution time Jacobi: 0.088 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.072 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.024 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.050 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.063 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.064 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.911 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 2.197 seconds
+  is it correct: true 
+Execution time Jacobi Sequential: 0.011 seconds
+Execution time Jacobi Sequential: 0.011 seconds
+  is it correct: true  
+Execution time Jacobi: 0.075 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.069 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.014 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.048 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.058 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.059 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.846 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 2.063 seconds
+  is it correct: true 
+Execution time Jacobi Sequential: 0.018 seconds
+Execution time Jacobi Sequential: 0.018 seconds
+  is it correct: true  
+Execution time Jacobi: 0.059 seconds
+  is it correct: true  
+Execution time Jacobi SSE: 0.068 seconds
+  is it correct: true  
+Execution time Gauss-Seidel: 0.015 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Naiv: 0.050 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz: 0.059 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Rot-Schwarz SSE: 0.063 seconds
+  is it correct: true  
+Execution time Gauss-Seidel Wavefront: 1.910 seconds
+  is it correct: true 
+Execution time Gauss-Seidel WavefrontCache: 2.213 seconds
+  is it correct: true 
