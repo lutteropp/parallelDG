@@ -1,4 +1,4 @@
-Thread zahl=1
+Thread Zahl=1
 Execution time Jacobi Sequential: 0.008 seconds
 Execution time Jacobi Sequential: 0.008 seconds
   is it correct: true  
