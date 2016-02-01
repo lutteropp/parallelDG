@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  29 JAN 2016 14:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  1 FEB 2016 17:19
 entering extended mode
 **doku.tex
 (doku.tex
@@ -445,33 +445,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 71--72
 File: bilder/convergenz.png Graphic file (type png)
 
 <use bilder/convergenz.png>
-Package pdftex.def Info: bilder/convergenz.png used on input line 119.
+Package pdftex.def Info: bilder/convergenz.png used on input line 120.
 (pdftex.def)             Requested size: 297.20906pt x 50.90071pt.
  <bilder/dj4.png, id=21, 371.88937pt x 226.59656pt>
 File: bilder/dj4.png Graphic file (type png)
 
 <use bilder/dj4.png>
-Package pdftex.def Info: bilder/dj4.png used on input line 138.
+Package pdftex.def Info: bilder/dj4.png used on input line 139.
 (pdftex.def)             Requested size: 424.58624pt x 258.71346pt.
  <bilder/dj32.png, id=22, 368.87813pt x 223.58531pt>
 File: bilder/dj32.png Graphic file (type png)
 
 <use bilder/dj32.png>
-Package pdftex.def Info: bilder/dj32.png used on input line 144.
+Package pdftex.def Info: bilder/dj32.png used on input line 145.
 (pdftex.def)             Requested size: 424.58624pt x 257.34967pt.
  [2 <./bilder/convergenz.png>]
 <bilder/dgs4.png, id=27, 372.64218pt x 228.855pt>
 File: bilder/dgs4.png Graphic file (type png)
  <use bilder/dgs4.png>
-Package pdftex.def Info: bilder/dgs4.png used on input line 151.
+Package pdftex.def Info: bilder/dgs4.png used on input line 152.
 (pdftex.def)             Requested size: 424.58624pt x 260.7647pt.
 
 <bilder/dgs32.png, id=28, 368.1253pt x 228.855pt>
 File: bilder/dgs32.png Graphic file (type png)
  <use bilder/dgs32.png>
-Package pdftex.def Info: bilder/dgs32.png used on input line 157.
+Package pdftex.def Info: bilder/dgs32.png used on input line 158.
 (pdftex.def)             Requested size: 424.58624pt x 263.97737pt.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 164.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 165.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
@@ -484,28 +484,60 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6]
-Overfull \hbox (2.36871pt too wide) in paragraph at lines 283--284
+[6] <bilder/sn0232.png, id=42, 777.65532pt x 283.0575pt>
+File: bilder/sn0232.png Graphic file (type png)
+
+<use bilder/sn0232.png>
+Package pdftex.def Info: bilder/sn0232.png used on input line 281.
+(pdftex.def)             Requested size: 424.58624pt x 154.54617pt.
+ <bilder/sn02128.png, id=44, 777.65532pt x 281.55188pt>
+File: bilder/sn02128.png Graphic file (type png)
+
+<use bilder/sn02128.png>
+Package pdftex.def Info: bilder/sn02128.png used on input line 287.
+(pdftex.def)             Requested size: 424.58624pt x 153.72412pt.
+
+<bilder/sn02256.png, id=45, 640.64343pt x 286.82156pt>
+File: bilder/sn02256.png Graphic file (type png)
+
+<use bilder/sn02256.png>
+Package pdftex.def Info: bilder/sn02256.png used on input line 293.
+(pdftex.def)             Requested size: 424.58624pt x 190.09496pt.
+ <bilder/sn0732.png, id=46, 822.82407pt x 280.79906pt>
+File: bilder/sn0732.png Graphic file (type png)
+
+<use bilder/sn0732.png>
+Package pdftex.def Info: bilder/sn0732.png used on input line 300.
+(pdftex.def)             Requested size: 424.58624pt x 144.89377pt.
+ <bilder/sn07128.png, id=47, 828.09375pt x 283.0575pt>
+File: bilder/sn07128.png Graphic file (type png)
+
+<use bilder/sn07128.png>
+Package pdftex.def Info: bilder/sn07128.png used on input line 307.
+(pdftex.def)             Requested size: 424.58624pt x 145.13484pt.
+
+Overfull \hbox (2.36871pt too wide) in paragraph at lines 315--316
 []\T1/cmr/m/n/10 Vermutlicher Grund wie-so un-se-re Wavefront-Implementierung l
 ang-sa-mer als se-quen-ti-el-les Gauÿ-
  []
 
-<bilder/hack.png, id=42, 420.82219pt x 115.93312pt>
+[7 <./bilder/sn0232.png>] [8 <./bilder/sn02128.png> <./bilder/sn02256.png> <./b
+ilder/sn0732.png>] <bilder/hack.png, id=56, 420.82219pt x 115.93312pt>
 File: bilder/hack.png Graphic file (type png)
- <use bilder/hack.png>
-Package pdftex.def Info: bilder/hack.png used on input line 296.
-(pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
 
-[7] [8 <./bilder/hack.png>] (doku.aux)
+<use bilder/hack.png>
+Package pdftex.def Info: bilder/hack.png used on input line 328.
+(pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
+ [9 <./bilder/sn07128.png> <./bilder/hack.png>] (doku.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2641 strings out of 493673
- 32197 string characters out of 3141509
+ 2666 strings out of 493673
+ 32697 string characters out of 3141509
  106062 words of memory out of 3000000
- 5934 multiletter control sequences out of 15000+200000
+ 5954 multiletter control sequences out of 15000+200000
  18762 words of font info for 52 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  34i,11n,24p,645b,240s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -528,9 +560,9 @@ iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (
 x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86
 )/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on doku.pdf (8 pages, 219484 bytes).
+Output written on doku.pdf (9 pages, 293206 bytes).
 PDF statistics:
- 402 PDF objects out of 1000 (max. 8388607)
+ 414 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 

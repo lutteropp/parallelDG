@@ -276,7 +276,38 @@ $$
 \newpage
 
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}
-TODO
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn0232.png}
+  \caption{Performance für H=32 auf sn02(8 Kerne).}
+ 
+\end{figure}
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn02128.png}
+  \caption{Performance für H=128 auf sn02(8 Kerne).}
+ 
+\end{figure}
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn02256.png}
+  \caption{Performance für H=256 auf sn02(8 Kerne).}
+ 
+\end{figure}
+
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
+  \caption{Performance für H=32 auf sn07(12 Kerne).}
+ 
+\end{figure}
+
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
+  \caption{Performance für H=128 auf sn07(12 Kerne).}
+ 
+\end{figure}
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
 Beim Wavefront Algorithmus wird anstatt über die  Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gaus-Seidel Verfahren in serieller Form.
