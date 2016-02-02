@@ -136,7 +136,7 @@ $$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
 $$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}})$$
+$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}}) \quad \forall i = 1, \ldots, size$$
 
 Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
 
