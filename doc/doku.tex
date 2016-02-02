@@ -134,11 +134,11 @@ $$\Leftrightarrow u = - D^{-1}(L+R)u + D^{-1}b$$
 
 Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
 
-$$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
-$$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
+$$u^{(m)} = -D^{-1}(L+R)  u^{(m-1)} + D^{-1}b$$
+$$\Leftrightarrow u^{(m)} = D^{-1}  \left(b -(L+R)  u^{(m-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}}) \quad \forall i = 1, \ldots, size$$
+$$u_i^{(m)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(m-1)}}) \quad \forall i = 1, \ldots, size$$
 
 Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
 
@@ -152,7 +152,26 @@ Wie im Jacobi-Verfahren wird auch im Gauß-Seidel-Verfahren die Matrix $A$ in ei
 
 Für die Bestimmung der Iterationsvorschrift wird $A$ diesmal in die Teile $R$ und $L+D$ zerteilt.
 \subsubsection{Herleitung}
-Blabla
+
+Es gilt
+$$Au = b$$
+$$\Leftrightarrow (D+L+R)u = b$$
+$$\Leftrightarrow (L+D)u = b - Ru$$
+$$\Leftrightarrow u = (L+D)^{-1} (b - Ru)$$
+
+TODO: ...
+
+Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
+
+$$u^{(m)} = -D^{-1} \left(b - Lu^{(m)} - Ru^{(m-1)}\right)$$
+
+Oder elementweise:
+$$u_i^{(m)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(m)}} - \sum_{j=i+1}^{size}{a_{i,j}*u_i^{(m-1)}}\right) \quad \forall i = 1, \ldots, size$$
+
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $(L+D)$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da TODO
+
+
+
 \subsubsection{Abbruchkriterium}
 Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. (TODO: Begründung)
 
@@ -344,76 +363,34 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn023.png}
-  \caption{Performance für size=3 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn025.png}
-  \caption{Performance für size=5 auf sn02(8 Kerne).}
- 
-\end{figure}
-
-\begin{figure}[htbp] 
-  \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn0232.png}
-  \caption{Performance für size=32 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0265.png}
-  \caption{Performance für size=65 auf sn02(8 Kerne).}
+  \caption{Performance für H=32 auf sn02(8 Kerne).}
  
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn02128.png}
-  \caption{Performance für size=128 auf sn02(8 Kerne).}
+  \caption{Performance für H=128 auf sn02(8 Kerne).}
  
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn02256.png}
-  \caption{Performance für size=256 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn073.png}
-  \caption{Performance für size=3 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn075.png}
-  \caption{Performance für size=5 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
-  \caption{Performance für size=32 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0765.png}
-  \caption{Performance für size=65 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
-  \caption{Performance für size=128 auf sn07(12 Kerne).}
+  \caption{Performance für H=256 auf sn02(8 Kerne).}
  
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn021024.png}
-  \caption{Performance für size=1024 auf sn02(8 Kerne). Ab hier macht Wavefront zumindest etwas sinvolles. Der lauf lief nur bis 10000 Iterationen und nicht bis zum Abbruchkriterium, weil sonst zu lange dauert(alles nicht nur wavefront).}
+     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
+  \caption{Performance für H=32 auf sn07(12 Kerne).}
+ 
+\end{figure}
+
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
+  \caption{Performance für H=128 auf sn07(12 Kerne).}
  
 \end{figure}
 
@@ -439,6 +416,6 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich Gaus-Seidel, weil es im allgemeinen schneller konvergiert als Jacobi. Bis zu einer Problemgröße von 31 lohnt sich das parallelisieren nicht. Ab da macht die Rot-Schwarz SSE Implementierung am meisten Zeit gut.
+Da das Gauß-Seidel-Verfahren schneller konvergiert als das Jacobi-Verfahren (siehe Abschnitt~\ref{konvergenz}) und zudem unsere parallele Implementierung des Gauß-Seidel-Verfahrens mittels Rot-Schwarz-Verfahren TODO
 
 \end{document}
