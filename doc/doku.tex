@@ -122,7 +122,7 @@ Für die Bestimmung der Iterationsvorschrift wird $A$ in die Teile $D$ und $L+R$
 
 Das Jacobi-Verfahren ist ein Gesamtschrittverfahren, da alle Einträge von $u$ in einer Iteration aus der vorhergehenden Iteration berechnet werden.
 
-TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf} und hier: \url{https://books.google.de/books?id=BKgYCgAAQBAJ&pg=PA695&lpg=PA695&dq=herleitung+gau%C3%9F+seidel&source=bl&ots=4-3T7SASSw&sig=ughbw5AuuQ9kWTTH-I8nfopnNso&hl=de&sa=X&ved=0ahUKEwiO6LiI4tnKAhWJ1xoKHSANAyk4ChDoAQhFMAc#v=onepage&q=herleitung%20gau%C3%9F%20seidel&f=false}
+%TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf} und hier: \url{https://books.google.de/books?id=BKgYCgAAQBAJ&pg=PA695&lpg=PA695&dq=herleitung+gau%C3%9F+seidel&source=bl&ots=4-3T7SASSw&sig=ughbw5AuuQ9kWTTH-I8nfopnNso&hl=de&sa=X&ved=0ahUKEwiO6LiI4tnKAhWJ1xoKHSANAyk4ChDoAQhFMAc#v=onepage&q=herleitung%20gau%C3%9F%20seidel&f=false}
 
 \subsubsection{Herleitung}
 Es gilt
@@ -145,10 +145,22 @@ $$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \q
 Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
 
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
-Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
-Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
-Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
-Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
+Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Heterogene Parallele Rechensysteme'' übernommen. Hierbei wird der mittlere Abstand der Einträge der Lösungsmatrix $U^{(k)}$ der aktuellen Iteration zu der Lösungsmatrix $U^{(k-1)}$ aus der vorherigen Iteration betrachtet.
+
+%Unser Abbruchkriterium nimmt von allen Matrixeinträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht performant zu sein und wird auch in der Vorlesung ``Heterogene Parallele Rechensysteme'' verwendet. 
+
+Wir brechen in Iteration $k$ ab, falls
+$$\frac{\sum_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}}{size * size} \leq \texttt{TOL}$$
+gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,00000001$} verwendet.
+
+Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark.
+
+Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
+
+%Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
+%Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
+%Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
+%Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
 \subsection{Gauß-Seidel-Verfahren}
 Wie im Jacobi-Verfahren wird auch im Gauß-Seidel-Verfahren die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$ zerlegt.
 
