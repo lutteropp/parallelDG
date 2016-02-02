@@ -8,6 +8,7 @@
 \usepackage{color}
 \usepackage{colortbl}
 \usepackage{graphicx}
+\usepackage{url}
 \definecolor{rose}{rgb}{1, 0.57, 0.69}		      
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
@@ -115,7 +116,10 @@ $$
 Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2) \times (n+2)$, was dasselbe ist wie $(\frac{1}{h}+1) \times (\frac{1}{h}+1)$.
 
 \subsection{Jacobi-Verfahren}
-Blabla
+Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$, sodass $A= D+L+R$ gilt. Hierbei enthält $D$ alle Elemente von $A$ auf der Diagonalen, $L$ alle Elemente von $A$ unterhalb der Diagonalen und $R$ alle Elemente von $A$ oberhalb der Diagonalen.
+
+TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}
+
 \subsubsection{Herleitung}
 Blabla
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
