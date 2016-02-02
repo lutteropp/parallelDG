@@ -136,8 +136,9 @@ $$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
 $$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(n)} = \frac{1}{a_{ii}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}})$$
+$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}})$$
 
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
 
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
