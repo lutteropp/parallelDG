@@ -121,7 +121,24 @@ Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine str
 TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}
 
 \subsubsection{Herleitung}
-Blabla
+Es gilt
+$$Au = b$$
+$$\Leftrightarrow (D+L+R)u = b$$
+$$\Leftrightarrow (L+R)u = b - Du$$
+$$\Leftrightarrow D^{-1}(L+R)u = D^{-1}b - u$$
+$$\Leftrightarrow u + D^{-1}(L+R)u = D^{-1}b$$
+$$\Leftrightarrow u = D^{-1}b - D^{-1}(L+R)u$$
+$$\Leftrightarrow u = - D^{-1}(L+R)u + D^{-1}b$$
+
+Dies führt zu folgendem iterativen Verfahren:
+
+$$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
+$$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
+
+Oder elementweise:
+$$u_i^{(n)} = \frac{1}{a_{ii}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}})$$
+
+
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
 Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
