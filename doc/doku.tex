@@ -192,8 +192,19 @@ Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Absch
 Beide Verfahren sind uneingeschränkt stabil.
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
-  \caption{Beide Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium true wurde.}
+
+  \begin{tabular}{|c|c|c|c|}
+    \hline 
+     & size=4 & size=32 & size=128 \\ 
+    \hline 
+    Jacobi & 13 & 1067 & 13425 \\ 
+    \hline 
+    Gauß-Seidel & 24 & 2280 & 29230 \\ 
+    \hline 
+    \end{tabular}   
+  
+     %\includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
+  \caption{Beide Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium \texttt{true} wurde.}
   \label{fig:Bild1}
 \end{figure}
 
