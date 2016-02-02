@@ -429,6 +429,6 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h = \frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
+Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h = \frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
 
 \end{document}
