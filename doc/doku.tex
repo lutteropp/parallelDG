@@ -130,7 +130,7 @@ $$\Leftrightarrow u + D^{-1}(L+R)u = D^{-1}b$$
 $$\Leftrightarrow u = D^{-1}b - D^{-1}(L+R)u$$
 $$\Leftrightarrow u = - D^{-1}(L+R)u + D^{-1}b$$
 
-Dies führt zu folgendem iterativen Verfahren:
+Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
 
 $$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
 $$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
