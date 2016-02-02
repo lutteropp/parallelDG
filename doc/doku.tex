@@ -254,6 +254,17 @@ $$U =
  \cellcolor[gray]{0.7}2 & \cellcolor{rose}5 & \cellcolor[gray]{0.7}8 & \cellcolor{rose}11 & \cellcolor[gray]{0.7}14 & \cellcolor{rose}17\\
 \end{tabular} \quad
 $$
+
+$\textcolor{red}{\leftarrow: idx - \frac{size}{2}} \quad$
+$\textcolor{red}{\rightarrow: idx + \frac{size}{2}} \quad$
+$\textcolor{red}{\uparrow: idx - (1-(j \mod 2))} \quad$
+$\textcolor{red}{\downarrow: idx + (j \mod 2)} \quad$
+
+$\textcolor{black}{\leftarrow: idx - \frac{size}{2}} \quad$
+$\textcolor{black}{\rightarrow: idx + \frac{size}{2}} \quad$
+$\textcolor{black}{\uparrow: idx - (j \mod 2)} \quad$
+$\textcolor{black}{\downarrow: idx + (1- (j \mod 2))} \quad$
+
 \caption{Berechnung der Nachbarindizes für gerade Werte von $size$ am Beispiel $size=6$}
 \label{fig:matrix:even}
 \end{figure}
@@ -286,6 +297,18 @@ $$U =
  \cellcolor{rose}3 & \cellcolor[gray]{0.7}6 & \cellcolor{rose}10 & \cellcolor[gray]{0.7}13 & \cellcolor{rose}17 & \cellcolor[gray]{0.7}20 & \cellcolor{rose}24 \\
 \end{tabular} \quad
 $$
+
+
+$\textcolor{red}{\leftarrow: idx - \lceil\frac{size}{2}\rceil} \quad$
+$\textcolor{red}{\rightarrow: idx + \lfloor\frac{size}{2}\rfloor} \quad$
+$\textcolor{red}{\uparrow: idx - 1} \quad$
+$\textcolor{red}{\downarrow: idx} \quad$
+
+$\textcolor{black}{\leftarrow: idx - \lfloor\frac{size}{2}\rfloor} \quad$
+$\textcolor{black}{\rightarrow: idx + \lceil\frac{size}{2}\rceil} \quad$
+$\textcolor{black}{\uparrow: idx} \quad$
+$\textcolor{black}{\downarrow: idx + 1} \quad$
+
 \caption{Berechnung der Nachbarindizes für ungerade Werte von $size$ am Beispiel $size=7$}
 \label{fig:matrix:odd}
 \end{figure}
