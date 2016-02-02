@@ -8,7 +8,6 @@
 \usepackage{color}
 \usepackage{colortbl}
 \usepackage{graphicx}
-\usepackage{url}
 \definecolor{rose}{rgb}{1, 0.57, 0.69}		      
 		      
 \title{Praktikum Multicore-Programmierung \\ Abschlussprojekt 1}
@@ -95,51 +94,13 @@ $$
 
 Man könnte dieses lineare Gleichungssystem natürlich auch mit direkten Verfahren wie dem Gaußschen-Eliminationsverfahren lösen. Dieses ist jedoch nur sehr schlecht parallelisierbar. Außerdem ist das Gaußsche-Eliminationsverfahren sehr anfällig für numerische Störungen. Das ist bei iterativen Verfahren normalerweise nicht der Fall.
 
-\paragraph{Unsere Interpretation des Lösungsvektors $u$}
-In unserer Bearbeitung der Aufgabenstellung haben wir die Lösungsvektor $u$ als Lösungsmatrix $U$ uminterpretiert. Hierbei haben wir ausgenutzt, dass in der Aufgabenstellung die Randbedingungen $u_{i,j} = 0$ für $i \in \{0, n+1\}$ oder $j \in \{0, n+1\}$ gelten. Die Lösungsmatrix $U$ ergibt sich so beispielsweise für $h=\frac{1}{3}$ als:
+TODO: Überführung auf zweidimensionales Problem, den Lösungsvektor $u$ als Lösungsmatrix $U$ uminterpretieren.
 
-$$
-U=
-\begin{tabular}{|c|c|c|c|}
-\hline 
-\cellcolor[gray]{0.8}$u_{0,0}$ & \cellcolor[gray]{0.8}$u_{0,1}$ & \cellcolor[gray]{0.8}$u_{0,2}$ & \cellcolor[gray]{0.8}$u_{0,3}$ \\ 
-\hline 
-\cellcolor[gray]{0.8}$u_{1,0}$ & $u_{1,1}$ & $u_{1,2}$ & \cellcolor[gray]{0.8}$u_{1,3}$ \\ 
-\hline 
-\cellcolor[gray]{0.8}$u_{2,0}$ & $u_{2,1}$ & $u_{2,2}$ & \cellcolor[gray]{0.8}$u_{2,3}$ \\ 
-\hline 
-\cellcolor[gray]{0.8}$u_{3,0}$ & \cellcolor[gray]{0.8}$u_{3,1}$ & \cellcolor[gray]{0.8}$u_{3,2}$ & \cellcolor[gray]{0.8}$u_{3,3}$ \\ 
-\hline 
-\end{tabular} 
-$$
-
-Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2) \times (n+2)$, was dasselbe ist wie $(\frac{1}{h}+1) \times (\frac{1}{h}+1)$.
 
 \subsection{Jacobi-Verfahren}
-Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$, sodass $A= D+L+R$ gilt. Hierbei enthält $D$ alle Elemente von $A$ auf der Diagonalen, $L$ alle Elemente von $A$ unterhalb der Diagonalen und $R$ alle Elemente von $A$ oberhalb der Diagonalen.
-
-TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}
-
+Blabla
 \subsubsection{Herleitung}
-Es gilt
-$$Au = b$$
-$$\Leftrightarrow (D+L+R)u = b$$
-$$\Leftrightarrow (L+R)u = b - Du$$
-$$\Leftrightarrow D^{-1}(L+R)u = D^{-1}b - u$$
-$$\Leftrightarrow u + D^{-1}(L+R)u = D^{-1}b$$
-$$\Leftrightarrow u = D^{-1}b - D^{-1}(L+R)u$$
-$$\Leftrightarrow u = - D^{-1}(L+R)u + D^{-1}b$$
-
-Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
-
-$$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
-$$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
-
-Oder elementweise:
-$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}}) \quad \forall i = 1, \ldots, size$$
-
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
-
+Blabla
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
 Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
@@ -163,7 +124,7 @@ Beide Verfahren sind uneingeschränkt stabil.
 
 \section{Sequentielle Implementierung}
 
-Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen. Dies bedeutet, dass wir statt $U$ eigentlich $U^T$ speichern.
+Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen.
 
 Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\frac{1}{h}+1$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne Gleitkommaungenauigkeiten angeben kann und $U$ eine $size \times size$-Matrix ist.
  
@@ -177,26 +138,26 @@ Wir haben den Approximationsfehler nur für h=4 und h=32 dargestellt, weil Open 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj4.png}
   \caption{Jacobi Approximationsfehler für h=4}
-  \label{fig:Bild2}
+  \label{fig:Bild1}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj32.png}
   \caption{Jacobi Approximationsfehler für h=32}
-  \label{fig:Bild3}
+  \label{fig:Bild1}
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs4.png}
   \caption{Gaus-Seidel Approximationsfehler für h=4}
-  \label{fig:Bild4}
+  \label{fig:Bild1}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs32.png}
   \caption{Gaus-SeidelApproximationsfehler für h=32}
-  \label{fig:Bild5}
+  \label{fig:Bild1}
 \end{figure}
 \section{Parallelisierung}
 Blabla
@@ -276,17 +237,6 @@ $$U =
  \cellcolor[gray]{0.7}2 & \cellcolor{rose}5 & \cellcolor[gray]{0.7}8 & \cellcolor{rose}11 & \cellcolor[gray]{0.7}14 & \cellcolor{rose}17\\
 \end{tabular} \quad
 $$
-
-$\textcolor{red}{\leftarrow: idx - \frac{size}{2}} \quad$
-$\textcolor{red}{\rightarrow: idx + \frac{size}{2}} \quad$
-$\textcolor{red}{\uparrow: idx - (1-(j \mod 2))} \quad$
-$\textcolor{red}{\downarrow: idx + (j \mod 2)} \quad$
-
-$\textcolor{black}{\leftarrow: idx - \frac{size}{2}} \quad$
-$\textcolor{black}{\rightarrow: idx + \frac{size}{2}} \quad$
-$\textcolor{black}{\uparrow: idx - (j \mod 2)} \quad$
-$\textcolor{black}{\downarrow: idx + (1- (j \mod 2))} \quad$
-
 \caption{Berechnung der Nachbarindizes für gerade Werte von $size$ am Beispiel $size=6$}
 \label{fig:matrix:even}
 \end{figure}
@@ -319,18 +269,6 @@ $$U =
  \cellcolor{rose}3 & \cellcolor[gray]{0.7}6 & \cellcolor{rose}10 & \cellcolor[gray]{0.7}13 & \cellcolor{rose}17 & \cellcolor[gray]{0.7}20 & \cellcolor{rose}24 \\
 \end{tabular} \quad
 $$
-
-
-$\textcolor{red}{\leftarrow: idx - \lceil\frac{size}{2}\rceil} \quad$
-$\textcolor{red}{\rightarrow: idx + \lfloor\frac{size}{2}\rfloor} \quad$
-$\textcolor{red}{\uparrow: idx - 1} \quad$
-$\textcolor{red}{\downarrow: idx} \quad$
-
-$\textcolor{black}{\leftarrow: idx - \lfloor\frac{size}{2}\rfloor} \quad$
-$\textcolor{black}{\rightarrow: idx + \lceil\frac{size}{2}\rceil} \quad$
-$\textcolor{black}{\uparrow: idx} \quad$
-$\textcolor{black}{\downarrow: idx + 1} \quad$
-
 \caption{Berechnung der Nachbarindizes für ungerade Werte von $size$ am Beispiel $size=7$}
 \label{fig:matrix:odd}
 \end{figure}
@@ -414,27 +352,27 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \end{figure}
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
-Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
+Beim Wavefront Algorithmus wird anstatt über die  Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gaus-Seidel Verfahren in serieller Form.
 
-Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonalelemente. D.h. es lohnt sich erst bei großen Diagonalen.
+Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonal Elemente. D.h. es lohnt sich erst bei großen Diagonalen.
 
-Bei der Wavefront Cache Lösung wurden die Matrix zuerst in ein anderes Array kopiert, in dem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
+Bei der Wavefront Cache Lösung, wurden die Matrix zu erst in einen anderen Array kopiert, indem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
 In beiden Wavefront Lösungen hätte man sicher noch einiges optimieren können(z.B. Cuda für große Diagonalen), jedoch erschien uns Rot-Schwarz so viel schneller, dass es sich nicht lohnen würde.
 
-\paragraph{Berechnung der Indizes}
-Für die Implementierung wurden drei Schleifen verwendet. Die äußere Schleife ist zwischen den Schritten des Gauß-Seidel Verfahrens, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
-In der mittleren Schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weglassen kann, weil sie nicht mehr in der Matrix sind.\\
-Bei der Wavefront Cache Lösung muss man bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei verwenden wir die Hilfsvariablen \texttt{hack} und \texttt{hack2}. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. Die Variable \texttt{hack} wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für \texttt{hack2} ab der mittleren Diagonalen. \\
-Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlagen können, wurde der Algorithmus nicht platzeffizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrixgröße zu verwenden.
+\paragraph{Berechnung der Indexe}
+Für die Implementierung wurden drei Schleifen verwendet. die Äußere ist zwischen den Schritten des Gaus-Seidel verfahren, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
+In der Mittleren schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weg lassen kann, weil sie nicht mehr in der Matrix sind.\\
+Bei der Wavefront Cache Lösung muss bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei möchte ich auf die grandios  benannten Variablen hack und hack2 eingehen. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. hack wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für hack2 ab der mittleren Diagonalen. \\
+Da der Ansatz nicht so viel schneller wurde, dass man Rot schwarz hätte schlagen können, wurde der Algorithmus nicht platz effizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrix Größe zu verwenden.
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/hack.png}
-  \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indizes anhand eines Beispiels. Die Variable \texttt{hack} ist dabei blau und \texttt{hack2} rot.}
-  \label{fig:Bild6}
+  \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indexe anhand eines Beispiels. hack ist dabei blau und hack2 rot.}
+  \label{fig:Bild1}
 \end{figure}
 
 \section{Methodenwahl}
-Da das Gauß-Seidel-Verfahren schneller konvergiert als das Jacobi-Verfahren (siehe Abschnitt~\ref{konvergenz}) und zudem unsere parallele Implementierung des Gauß-Seidel-Verfahrens mittels Rot-Schwarz-Verfahren TODO
+Es empfiehlt sich Gaus-Seidel, weil es im allgemeinen schneller konvergiert als Jacobi. Bis zu einer Problemgröße von 31 lohnt sich das parallelisieren nicht. Ab da macht die Rot-Schwarz SSE Implementierung am meisten Zeit gut.
 
 \end{document}
