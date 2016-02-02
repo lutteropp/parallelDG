@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  1 FEB 2016 17:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  2 FEB 2016 18:08
 entering extended mode
 **doku.tex
 (doku.tex
@@ -484,60 +484,105 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6] <bilder/sn0232.png, id=42, 777.65532pt x 283.0575pt>
+[6] <bilder/sn023.png, id=42, 776.14969pt x 285.31593pt>
+File: bilder/sn023.png Graphic file (type png)
+
+<use bilder/sn023.png>
+Package pdftex.def Info: bilder/sn023.png used on input line 281.
+(pdftex.def)             Requested size: 424.58624pt x 156.084pt.
+ <bilder/sn025.png, id=43, 775.39688pt x 282.30469pt>
+File: bilder/sn025.png Graphic file (type png)
+
+<use bilder/sn025.png>
+Package pdftex.def Info: bilder/sn025.png used on input line 287.
+(pdftex.def)             Requested size: 424.58624pt x 154.58313pt.
+ <bilder/sn0232.png, id=44, 777.65532pt x 282.30469pt>
 File: bilder/sn0232.png Graphic file (type png)
 
 <use bilder/sn0232.png>
-Package pdftex.def Info: bilder/sn0232.png used on input line 281.
-(pdftex.def)             Requested size: 424.58624pt x 154.54617pt.
- <bilder/sn02128.png, id=44, 777.65532pt x 281.55188pt>
+Package pdftex.def Info: bilder/sn0232.png used on input line 294.
+(pdftex.def)             Requested size: 424.58624pt x 154.13515pt.
+ <bilder/sn0265.png, id=45, 778.40813pt x 283.0575pt>
+File: bilder/sn0265.png Graphic file (type png)
+
+<use bilder/sn0265.png>
+Package pdftex.def Info: bilder/sn0265.png used on input line 300.
+(pdftex.def)             Requested size: 424.58624pt x 154.39932pt.
+ <bilder/sn02128.png, id=46, 777.65532pt x 280.79906pt>
 File: bilder/sn02128.png Graphic file (type png)
 
 <use bilder/sn02128.png>
-Package pdftex.def Info: bilder/sn02128.png used on input line 287.
-(pdftex.def)             Requested size: 424.58624pt x 153.72412pt.
-
-<bilder/sn02256.png, id=45, 640.64343pt x 286.82156pt>
+Package pdftex.def Info: bilder/sn02128.png used on input line 306.
+(pdftex.def)             Requested size: 424.58624pt x 153.3131pt.
+ <bilder/sn02256.png, id=47, 776.9025pt x 283.0575pt>
 File: bilder/sn02256.png Graphic file (type png)
 
 <use bilder/sn02256.png>
-Package pdftex.def Info: bilder/sn02256.png used on input line 293.
-(pdftex.def)             Requested size: 424.58624pt x 190.09496pt.
- <bilder/sn0732.png, id=46, 822.82407pt x 280.79906pt>
+Package pdftex.def Info: bilder/sn02256.png used on input line 312.
+(pdftex.def)             Requested size: 424.58624pt x 154.69734pt.
+ <bilder/sn073.png, id=48, 804.75656pt x 295.1025pt>
+File: bilder/sn073.png Graphic file (type png)
+
+<use bilder/sn073.png>
+Package pdftex.def Info: bilder/sn073.png used on input line 318.
+(pdftex.def)             Requested size: 424.58624pt x 155.69211pt.
+ <bilder/sn075.png, id=49, 805.50937pt x 294.34969pt>
+File: bilder/sn075.png Graphic file (type png)
+
+<use bilder/sn075.png>
+Package pdftex.def Info: bilder/sn075.png used on input line 324.
+(pdftex.def)             Requested size: 424.58624pt x 155.15121pt.
+ <bilder/sn0732.png, id=50, 807.015pt x 293.59688pt>
 File: bilder/sn0732.png Graphic file (type png)
 
 <use bilder/sn0732.png>
-Package pdftex.def Info: bilder/sn0732.png used on input line 300.
-(pdftex.def)             Requested size: 424.58624pt x 144.89377pt.
- <bilder/sn07128.png, id=47, 828.09375pt x 283.0575pt>
+Package pdftex.def Info: bilder/sn0732.png used on input line 330.
+(pdftex.def)             Requested size: 424.58624pt x 154.4677pt.
+ <bilder/sn0765.png, id=51, 807.015pt x 295.85532pt>
+File: bilder/sn0765.png Graphic file (type png)
+
+<use bilder/sn0765.png>
+Package pdftex.def Info: bilder/sn0765.png used on input line 336.
+(pdftex.def)             Requested size: 424.58624pt x 155.65591pt.
+ <bilder/sn07128.png, id=52, 804.75656pt x 294.34969pt>
 File: bilder/sn07128.png Graphic file (type png)
 
 <use bilder/sn07128.png>
-Package pdftex.def Info: bilder/sn07128.png used on input line 307.
-(pdftex.def)             Requested size: 424.58624pt x 145.13484pt.
+Package pdftex.def Info: bilder/sn07128.png used on input line 342.
+(pdftex.def)             Requested size: 424.58624pt x 155.29494pt.
 
-Overfull \hbox (2.36871pt too wide) in paragraph at lines 315--316
+<bilder/sn021024.png, id=53, 429.85594pt x 269.50688pt>
+File: bilder/sn021024.png Graphic file (type png)
+
+<use bilder/sn021024.png>
+Package pdftex.def Info: bilder/sn021024.png used on input line 349.
+(pdftex.def)             Requested size: 424.58624pt x 266.20811pt.
+
+Overfull \hbox (2.36871pt too wide) in paragraph at lines 357--358
 []\T1/cmr/m/n/10 Vermutlicher Grund wie-so un-se-re Wavefront-Implementierung l
 ang-sa-mer als se-quen-ti-el-les Gauÿ-
  []
 
-[7 <./bilder/sn0232.png>] [8 <./bilder/sn02128.png> <./bilder/sn02256.png> <./b
-ilder/sn0732.png>] <bilder/hack.png, id=56, 420.82219pt x 115.93312pt>
+[7 <./bilder/sn023.png>] [8 <./bilder/sn025.png> <./bilder/sn0232.png> <./bilde
+r/sn0265.png>] [9 <./bilder/sn02128.png> <./bilder/sn02256.png> <./bilder/sn073
+.png>] [10 <./bilder/sn075.png> <./bilder/sn0732.png> <./bilder/sn0765.png>]
+[11 <./bilder/sn07128.png> <./bilder/sn021024.png>]
+<bilder/hack.png, id=70, 420.82219pt x 115.93312pt>
 File: bilder/hack.png Graphic file (type png)
-
-<use bilder/hack.png>
-Package pdftex.def Info: bilder/hack.png used on input line 328.
+ <use bilder/hack.png>
+Package pdftex.def Info: bilder/hack.png used on input line 370.
 (pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
- [9 <./bilder/sn07128.png> <./bilder/hack.png>] (doku.aux)
+
+[12 <./bilder/hack.png>] (doku.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2666 strings out of 493673
- 32697 string characters out of 3141509
- 106062 words of memory out of 3000000
- 5954 multiletter control sequences out of 15000+200000
+ 2701 strings out of 493673
+ 33366 string characters out of 3141509
+ 106064 words of memory out of 3000000
+ 5982 multiletter control sequences out of 15000+200000
  18762 words of font info for 52 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  34i,11n,24p,645b,240s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -560,9 +605,9 @@ iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (
 x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86
 )/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on doku.pdf (9 pages, 293206 bytes).
+Output written on doku.pdf (12 pages, 386526 bytes).
 PDF statistics:
- 414 PDF objects out of 1000 (max. 8388607)
+ 428 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 91 words of extra memory for PDF output out of 10000 (max. 10000000)
 
