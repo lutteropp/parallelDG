@@ -118,6 +118,8 @@ Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausge
 \subsection{Jacobi-Verfahren}
 Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$, sodass $A= D+L+R$ gilt. Hierbei enthält $D$ alle Elemente von $A$ auf der Diagonalen, $L$ alle Elemente von $A$ unterhalb der Diagonalen und $R$ alle Elemente von $A$ oberhalb der Diagonalen.
 
+Für die Bestimmung der Iterationsvorschrift wird $A$ in die Teile $D$ und $L+R$ zerteilt.
+
 TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}
 
 \subsubsection{Herleitung}
@@ -146,7 +148,9 @@ Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu ber
 Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
 Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
 \subsection{Gauß-Seidel-Verfahren}
-Blabla
+Wie im Jacobi-Verfahren wird auch im Gauß-Seidel-Verfahren die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$ zerlegt.
+
+Für die Bestimmung der Iterationsvorschrift wird $A$ diesmal in die Teile $R$ und $L+D$ zerteilt.
 \subsubsection{Herleitung}
 Blabla
 \subsubsection{Abbruchkriterium}
