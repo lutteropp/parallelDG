@@ -155,26 +155,26 @@ Wir haben den Approximationsfehler nur für h=4 und h=32 dargestellt, weil Open 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj4.png}
   \caption{Jacobi Approximationsfehler für h=4}
-  \label{fig:Bild1}
+  \label{fig:Bild2}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj32.png}
   \caption{Jacobi Approximationsfehler für h=32}
-  \label{fig:Bild1}
+  \label{fig:Bild3}
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs4.png}
   \caption{Gaus-Seidel Approximationsfehler für h=4}
-  \label{fig:Bild1}
+  \label{fig:Bild4}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs32.png}
   \caption{Gaus-SeidelApproximationsfehler für h=32}
-  \label{fig:Bild1}
+  \label{fig:Bild5}
 \end{figure}
 \section{Parallelisierung}
 Blabla
@@ -350,24 +350,24 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \end{figure}
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
-Beim Wavefront Algorithmus wird anstatt über die  Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gaus-Seidel Verfahren in serieller Form.
+Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
 
-Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonal Elemente. D.h. es lohnt sich erst bei großen Diagonalen.
+Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonalelemente. D.h. es lohnt sich erst bei großen Diagonalen.
 
-Bei der Wavefront Cache Lösung, wurden die Matrix zu erst in einen anderen Array kopiert, indem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
+Bei der Wavefront Cache Lösung wurden die Matrix zuerst in ein anderes Array kopiert, in dem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
 In beiden Wavefront Lösungen hätte man sicher noch einiges optimieren können(z.B. Cuda für große Diagonalen), jedoch erschien uns Rot-Schwarz so viel schneller, dass es sich nicht lohnen würde.
 
-\paragraph{Berechnung der Indexe}
-Für die Implementierung wurden drei Schleifen verwendet. die Äußere ist zwischen den Schritten des Gaus-Seidel verfahren, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
-In der Mittleren schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weg lassen kann, weil sie nicht mehr in der Matrix sind.\\
-Bei der Wavefront Cache Lösung muss bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei möchte ich auf die grandios  benannten Variablen hack und hack2 eingehen. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. hack wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für hack2 ab der mittleren Diagonalen. \\
-Da der Ansatz nicht so viel schneller wurde, dass man Rot schwarz hätte schlagen können, wurde der Algorithmus nicht platz effizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrix Größe zu verwenden.
+\paragraph{Berechnung der Indizes}
+Für die Implementierung wurden drei Schleifen verwendet. Die äußere Schleife ist zwischen den Schritten des Gauß-Seidel Verfahrens, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
+In der mittleren Schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weglassen kann, weil sie nicht mehr in der Matrix sind.\\
+Bei der Wavefront Cache Lösung muss man bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei verwenden wir die Hilfsvariablen \texttt{hack} und \texttt{hack2}. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. Die Variable \texttt{hack} wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für \texttt{hack2} ab der mittleren Diagonalen. \\
+Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlagen können, wurde der Algorithmus nicht platzeffizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrixgröße zu verwenden.
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/hack.png}
-  \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indexe anhand eines Beispiels. hack ist dabei blau und hack2 rot.}
-  \label{fig:Bild1}
+  \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indizes anhand eines Beispiels. Die Variable \texttt{hack} ist dabei blau und \texttt{hack2} rot.}
+  \label{fig:Bild6}
 \end{figure}
 
 \section{Methodenwahl}
