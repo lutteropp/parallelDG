@@ -113,7 +113,7 @@ U=
 \end{tabular} 
 $$
 
-Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2)^2 \times (n+2)^2$, was dasselbe ist wie $(\frac{1}{h}+1)^2 \times (\frac{1}{h}+1)^2$. Das $+2$ kommt daher, dass wir die Einträge am Rand hinzunehmen.
+Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2) \times (n+2)$, was dasselbe ist wie $(\frac{1}{h}+1) \times (\frac{1}{h}+1)$. Das $+2$ kommt daher, dass wir die Einträge am Rand hinzunehmen.
 
 \subsection{Jacobi-Verfahren}
 Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$, sodass $A= D+L+R$ gilt. Hierbei enthält $D$ alle Elemente von $A$ auf der Diagonalen, $L$ alle Elemente von $A$ unterhalb der Diagonalen und $R$ alle Elemente von $A$ oberhalb der Diagonalen.
@@ -212,12 +212,11 @@ Beide Verfahren sind uneingeschränkt stabil.
 
 Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen. Dies bedeutet, dass wir statt $U$ eigentlich $U^T$ speichern.
 
-Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $(\frac{1}{h}+1)^2$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne viele Nachkommastellen angeben kann und $U$ eine $size \times size$-Matrix ist.
+Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\left(\frac{1}{h}+1\right)$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne viele Nachkommastellen angeben kann und $U$ eine $size \times size$-Matrix ist.
 Um von $size$ auf $h$ zurückzurechnen, gilt:
-$$size = \left(\frac{1}{h} + 1\right)^2$$
-$$\Leftrightarrow \sqrt{size} = \frac{1}{h} + 1$$
-$$\Leftrightarrow \frac{1}{h} = \sqrt{size} - 1$$
-$$\Leftrightarrow h = \frac{1}{\sqrt{size} - 1}$$
+$$size = \left(\frac{1}{h} + 1\right)$$
+$$\Leftrightarrow \frac{1}{h} = size - 1$$
+$$\Leftrightarrow h = \frac{1}{size - 1}$$
  
 Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, haben wir $b$ vorberechnet.
 
@@ -447,6 +446,6 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h \approx 0.22$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < 0.22$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
+Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h=\frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
 
 \end{document}
