@@ -151,9 +151,9 @@ Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Hete
 
 Wir brechen in Iteration $k$ ab, falls
 $$\frac{\sum_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}}{size * size} \leq \texttt{TOL}$$
-gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,00000001$} verwendet.
+gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,000001$} verwendet.
 
-Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark.
+Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark. Hierfür ist es wichtig, mit einen Zufallsvektor als Startvektor zu wählen und nicht z.B. mit dem Nullvektor zu starten, da dieser bei einem Ergebnis mit vielen Nulleinträgen zu einem zu frühen Abbruch führen würde.
 
 Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Außerdem ist es mit OpenMP für C nicht möglich, in der \texttt{reduce}-Klausel den Maximumsoperator zu verwenden (bei OpenMP für Fortran geht es). Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
 
