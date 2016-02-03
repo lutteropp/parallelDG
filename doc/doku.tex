@@ -54,20 +54,20 @@ T & -I &  &  &  \\
  &  & -I & T & -I \\ 
  &  &  & -I & T \\ 
 \end{pmatrix} \in \mathbb{Z}^{n^2 \times n^2}, \quad$
-$T \in \mathbb{Z}^{TODO \times TODO}$ 
+$T \in \mathbb{Z}^{n \times n}$ 
 
 mit $T_{i,j} = \begin{cases} 4 & \text{falls } i = j \\ -1 & \text{falls } |i-j| = 1 \\ 0 & \text{sonst}\end{cases}, \quad$ 
 $u = \begin{pmatrix}
 u_{1,1} \\ 
 \vdots \\
 u_{n,n}
-\end{pmatrix} \text{ und } b = h^2 * \begin{pmatrix}
+\end{pmatrix} \in \mathbb{R}^{n^2} \text{ und } b = h^2 * \begin{pmatrix}
 f(x_1, y_1) \\ 
 \vdots \\
 f(x_n, y_n)
-\end{pmatrix}.$
+\end{pmatrix} \in \mathbb{R}^{n^2}.$
 
-Es ist $h \leq 1$, $\frac{1}{h} \in \mathbb{N}$, $n = \frac{1}{h}-1$, $x_i = y_i = h*i$ für $i = 1, \ldots, n$ und $f : \mathbb{R} \to \mathbb{R}$ eine Funktion. Bei $I$ handelt es sich um die $TODO \times TODO$-Einheitsmatrix.
+Es ist $h \leq 1$, $\frac{1}{h} \in \mathbb{N}$, $n = \frac{1}{h}-1$, $x_i = y_i = h*i$ für $i = 1, \ldots, n$ und $f : \mathbb{R} \to \mathbb{R}$ eine Funktion. Bei $I$ handelt es sich um die $n \times n$-Einheitsmatrix.
 
 ~\\
 
@@ -113,7 +113,7 @@ U=
 \end{tabular} 
 $$
 
-Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2)^2 \times (n+2)^2$, was dasselbe ist wie $(\frac{1}{h}+1)^2 \times (\frac{1}{h}+1)^2$. Das $+2$ kommt daher, dass wir die Einträge am Rand hinzunehmen.
+Die Einträge von $U$, die per Randbedingung gleich $0$ sind, sind hierbei ausgegraut. Die Matrix $U$ hat die Größe $size \times size = (n+2) \times (n+2)$, was dasselbe ist wie $(\frac{1}{h}+1) \times (\frac{1}{h}+1)$. Das $+2$ kommt daher, dass wir die Einträge am Rand hinzunehmen.
 
 \subsection{Jacobi-Verfahren}
 Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$, sodass $A= D+L+R$ gilt. Hierbei enthält $D$ alle Elemente von $A$ auf der Diagonalen, $L$ alle Elemente von $A$ unterhalb der Diagonalen und $R$ alle Elemente von $A$ oberhalb der Diagonalen.
@@ -140,9 +140,9 @@ $$u^{(k)} = -D^{-1}(L+R)  u^{(k-1)} + D^{-1}b$$
 $$\Leftrightarrow u^{(k)} = D^{-1}  \left(b -(L+R)  u^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \quad \forall i = 1, \ldots, size$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \quad \forall i = 1, \ldots, n^2$$
 
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, n^2$.
 
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Heterogene Parallele Rechensysteme'' übernommen. Hierbei wird der mittlere Abstand der Einträge der Lösungsmatrix $U^{(k)}$ der aktuellen Iteration zu der Lösungsmatrix $U^{(k-1)}$ aus der vorherigen Iteration betrachtet.
@@ -151,9 +151,9 @@ Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Hete
 
 Wir brechen in Iteration $k$ ab, falls
 $$\frac{\sum_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}}{size * size} \leq \texttt{TOL}$$
-gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,00000001$} verwendet.
+gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,000001$} verwendet.
 
-Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark.
+Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark. Hierfür ist es wichtig, einen Zufallsvektor als Startvektor zu wählen und nicht z.B. mit dem Nullvektor zu starten, da dieser bei einem Ergebnis mit vielen Nulleinträgen zu einem zu frühen Abbruch führen würde.
 
 Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Außerdem ist es mit OpenMP für C nicht möglich, in der \texttt{reduce}-Klausel den Maximumsoperator zu verwenden (bei OpenMP für Fortran geht es). Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
 
@@ -179,14 +179,14 @@ Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in
 $$u^{(k)} = D^{-1} \left(b - Lu^{(k)} - Ru^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{size}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, size$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
 
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, size$.
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, n^2$.
 
 
 
 \subsubsection{Abbruchkriterium}
-Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. (TODO: Begründung)
+Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. Dies erachten wir für sinnvoll, da es sich beim Gauß-Seidel-Verfahren bloß um eine Verbesserung des Jacobi-Verfahrens handelt und nicht um ein vollkommen anderes Konzept. Auch hier ist es bei unserem Abbruchkriterium wieder wichtig, mit einem Zufallsvektor für $u$ zu starten.
 
 \subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}\label{konvergenz}
 Beide Verfahren sind uneingeschränkt stabil.
@@ -195,7 +195,7 @@ Beide Verfahren sind uneingeschränkt stabil.
 
   \begin{tabular}{|c|c|c|c|}
     \hline 
-     & size=4 & size=32 & size=128 \\ 
+     & $h=\frac{1}{3}$ & $h=\frac{1}{31}$ & $h = \frac{1}{127}$ \\ 
     \hline 
     Jacobi & 13 & 1067 & 13425 \\ 
     \hline 
@@ -204,7 +204,7 @@ Beide Verfahren sind uneingeschränkt stabil.
     \end{tabular}   
   
      %\includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
-  \caption{Anzahl Iterationen in beiden Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium \texttt{true} wurde.}
+  \caption{Anzahl Iterationen in beiden Verfahren für verschiedene Verfeinerungen $h$, bis das Abbruchkriterium \texttt{true} wurde.}
   \label{fig:Bild1}
 \end{figure}
 
@@ -212,12 +212,11 @@ Beide Verfahren sind uneingeschränkt stabil.
 
 Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen. Dies bedeutet, dass wir statt $U$ eigentlich $U^T$ speichern.
 
-Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $(\frac{1}{h}+1)^2$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne viele Nachkommastellen angeben kann und $U$ eine $size \times size$-Matrix ist.
+Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\left(\frac{1}{h}+1\right)$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne viele Nachkommastellen angeben kann und $U$ eine $size \times size$-Matrix ist.
 Um von $size$ auf $h$ zurückzurechnen, gilt:
-$$size = \left(\frac{1}{h} + 1\right)^2$$
-$$\Leftrightarrow \sqrt{size} = \frac{1}{h} + 1$$
-$$\Leftrightarrow \frac{1}{h} = \sqrt{size} - 1$$
-$$\Leftrightarrow h = \frac{1}{\sqrt{size} - 1}$$
+$$size = \left(\frac{1}{h} + 1\right)$$
+$$\Leftrightarrow \frac{1}{h} = size - 1$$
+$$\Leftrightarrow h = \frac{1}{size - 1}$$
  
 Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, haben wir $b$ vorberechnet.
 
@@ -226,30 +225,30 @@ Den Startvektor haben wir mit zufälligen Gleitkommazahlen gefüllt.
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Blabla
 \subsection{Approximationsfehler}
-Wir haben den Approximationsfehler nur für h=4 und h=32 dargestellt, weil Open Office nicht genug Punkte verarbeiten kann.
+Wir haben den Approximationsfehler nur für $size=4$ und $size=32$ dargestellt, weil Open Office nicht genug Punkte verarbeiten kann.
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj4.png}
-  \caption{Jacobi Approximationsfehler für h=4}
+  \caption{Jacobi Approximationsfehler für $size=4$}
   \label{fig:Bild2}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj32.png}
-  \caption{Jacobi Approximationsfehler für h=32}
+  \caption{Jacobi Approximationsfehler für $size=32$}
   \label{fig:Bild3}
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs4.png}
-  \caption{Gaus-Seidel Approximationsfehler für h=4}
+  \caption{Gauß-Seidel Approximationsfehler für $size=4$}
   \label{fig:Bild4}
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dgs32.png}
-  \caption{Gaus-SeidelApproximationsfehler für h=32}
+  \caption{Gauß-Seidel Approximationsfehler für $size=32$}
   \label{fig:Bild5}
 \end{figure}
 \section{Parallelisierung}
@@ -447,6 +446,6 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h \approx 0.22$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < 0.22$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
+Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h=\frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
 
 \end{document}
