@@ -25,7 +25,7 @@
 
 
 \begin{abstract}
-Dies ist eine Ausarbeitung für das Abschlussprojekt des Praktikums Multicore-Programmierung im Wintersemester 2015/16. Ziel des Projektes war es, am Beispiel des Jacobi-Verfahrens und des Gauß-Seidel-Verfahrens parallele Lösungsmethoden partieller Differentialgleichungen zu implementieren.
+Dies ist eine Ausarbeitung für das Abschlussprojekt des Praktikums Multicore-Programmierung im Wintersemester 2015/16. Ziel des Projektes war es, am Beispiel des Jacobi-Verfahrens und des Gauß-Seidel-Verfahrens parallele Lösungsmethoden partieller Differentialgleichungen zu implementieren. Wir haben sowohl das Jacobi-Verfahren als auch das Gauß-Seidel-Verfahren mittels OpenMP parallelisiert. Hierbei haben wir für das Gauß-Seidel-Verfahren sowohl einen Parallelisierungsansatz mittels Wavefront als auch einen Parallelisierungsansatz mittels Rot-Schwarz-Unterteilung gewählt. Unsere mit SIMD-Instruktionen beschleunigte Rot-Schwarz-Implementierung des Gauß-Seidel-Verfahrens zeigte die schnellste Laufzeit bei unseren Messungen, gefolgt von der nicht vektorisierten Rot-Schwarz-Implementierung.
 \end{abstract}
 
 \section{Mathematischer Hintergrund}
@@ -120,7 +120,9 @@ Das Jacobi-Verfahren zerlegt die Matrix $A$ in eine Diagonalmatrix $D$, eine str
 
 Für die Bestimmung der Iterationsvorschrift wird $A$ in die Teile $D$ und $L+R$ zerteilt.
 
-TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}
+Das Jacobi-Verfahren ist ein Gesamtschrittverfahren, da alle Einträge von $u$ in einer Iteration aus der vorhergehenden Iteration berechnet werden.
+
+%TODO: Siehe z.B. hier: \url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf} und hier: \url{https://books.google.de/books?id=BKgYCgAAQBAJ&pg=PA695&lpg=PA695&dq=herleitung+gau%C3%9F+seidel&source=bl&ots=4-3T7SASSw&sig=ughbw5AuuQ9kWTTH-I8nfopnNso&hl=de&sa=X&ved=0ahUKEwiO6LiI4tnKAhWJ1xoKHSANAyk4ChDoAQhFMAc#v=onepage&q=herleitung%20gau%C3%9F%20seidel&f=false}
 
 \subsubsection{Herleitung}
 Es gilt
@@ -134,25 +136,55 @@ $$\Leftrightarrow u = - D^{-1}(L+R)u + D^{-1}b$$
 
 Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
 
-$$u^{(n)} = -D^{-1}(L+R)  u^{(n-1)} + D^{-1}b$$
-$$\Leftrightarrow u^{(n)} = D^{-1}  \left(b -(L+R)  u^{(n-1)}\right)$$
+$$u^{(k)} = -D^{-1}(L+R)  u^{(k-1)} + D^{-1}b$$
+$$\Leftrightarrow u^{(k)} = D^{-1}  \left(b -(L+R)  u^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(n)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(n-1)}}) \quad \forall i = 1, \ldots, size$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \quad \forall i = 1, \ldots, size$$
 
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist jedoch bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size$.
 
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
-Unser Abbruchkriterium nimmt von allen Matrix Einträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht Performant zu sein und da es auch in der Vorlesung Heterogene Parallele Rechensysteme Verwendung findet sollte es nicht so schlecht sein. Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
-Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
-Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
-Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
+Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Heterogene Parallele Rechensysteme'' übernommen. Hierbei wird der mittlere Abstand der Einträge der Lösungsmatrix $U^{(k)}$ der aktuellen Iteration zu der Lösungsmatrix $U^{(k-1)}$ aus der vorherigen Iteration betrachtet.
+
+%Unser Abbruchkriterium nimmt von allen Matrixeinträgen die Differenz zum neuen Punkt und summiert die Beträge davon auf. Dies schien uns recht performant zu sein und wird auch in der Vorlesung ``Heterogene Parallele Rechensysteme'' verwendet. 
+
+Wir brechen in Iteration $k$ ab, falls
+$$\frac{\sum_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}}{size * size} \leq \texttt{TOL}$$
+gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung haben wir \texttt{TOL = $0,00000001$} verwendet.
+
+Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark.
+
+Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Außerdem ist es mit OpenMP für C nicht möglich, in der \texttt{reduce}-Klausel den Maximumsoperator zu verwenden (bei OpenMP für Fortran geht es). Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
+
+%Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
+%Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
+%Desweiteren dachten wir an den Vergleich der Veränderung der Hauptdiagonalelemente, was in einem zusätzlichen if geendet hätte.
+%Dann gab es noch eine Version mit Eigenwerten, welche wir nicht haben, was sich dadurch erledigt hatte.
 \subsection{Gauß-Seidel-Verfahren}
 Wie im Jacobi-Verfahren wird auch im Gauß-Seidel-Verfahren die Matrix $A$ in eine Diagonalmatrix $D$, eine strikte untere Dreiecksmatrix $L$ und eine strikte obere Dreiecksmatrix $R$ zerlegt.
 
-Für die Bestimmung der Iterationsvorschrift wird $A$ diesmal in die Teile $R$ und $L+D$ zerteilt.
+Bei dem Gauß-Seidel-Verfahren handelt es sich um ein Einzelschrittverfahren, da in jeder Iteration die bereits  berechneten Einträge von $u$ direkt weiterverwendet werden.
 \subsubsection{Herleitung}
-Blabla
+
+Es gilt
+$$Au = b$$
+$$\Leftrightarrow (D+L+R)u = b$$
+$$\Leftrightarrow Du = b - (L+R)u$$
+$$\Leftrightarrow Du= b - Lu - Ru$$
+$$\Leftrightarrow u = D^{-1} (b - Lu - Ru)$$
+
+Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in Iteration $k$ meint:
+
+$$u^{(k)} = D^{-1} \left(b - Lu^{(k)} - Ru^{(k-1)}\right)$$
+
+Oder elementweise:
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{size}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, size$$
+
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, size$.
+
+
+
 \subsubsection{Abbruchkriterium}
 Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. (TODO: Begründung)
 
@@ -160,8 +192,19 @@ Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Absch
 Beide Verfahren sind uneingeschränkt stabil.
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
-  \caption{Beide Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium true wurde.}
+
+  \begin{tabular}{|c|c|c|c|}
+    \hline 
+     & size=4 & size=32 & size=128 \\ 
+    \hline 
+    Jacobi & 13 & 1067 & 13425 \\ 
+    \hline 
+    Gauß-Seidel & 24 & 2280 & 29230 \\ 
+    \hline 
+    \end{tabular}   
+  
+     %\includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
+  \caption{Anzahl Iterationen in beiden Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium \texttt{true} wurde.}
   \label{fig:Bild1}
 \end{figure}
 
@@ -172,6 +215,8 @@ Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellte
 Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\frac{1}{h}+1$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne Gleitkommaungenauigkeiten angeben kann und $U$ eine $size \times size$-Matrix ist.
  
 Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, haben wir $b$ vorberechnet.
+
+Den Startvektor haben wir mit zufälligen Gleitkommazahlen gefüllt.
 
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Blabla
@@ -344,91 +389,49 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn023.png}
-  \caption{Performance für size=3 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn025.png}
-  \caption{Performance für size=5 auf sn02(8 Kerne).}
- 
-\end{figure}
-
-\begin{figure}[htbp] 
-  \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn0232.png}
-  \caption{Performance für size=32 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0265.png}
-  \caption{Performance für size=65 auf sn02(8 Kerne).}
+  \caption{Performance für H=32 auf sn02(8 Kerne).}
  
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn02128.png}
-  \caption{Performance für size=128 auf sn02(8 Kerne).}
+  \caption{Performance für H=128 auf sn02(8 Kerne).}
  
 \end{figure}
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn02256.png}
-  \caption{Performance für size=256 auf sn02(8 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn073.png}
-  \caption{Performance für size=3 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn075.png}
-  \caption{Performance für size=5 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
-  \caption{Performance für size=32 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn0765.png}
-  \caption{Performance für size=65 auf sn07(12 Kerne).}
- 
-\end{figure}
-\begin{figure}[htbp] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
-  \caption{Performance für size=128 auf sn07(12 Kerne).}
+  \caption{Performance für H=256 auf sn02(8 Kerne).}
  
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn021024.png}
-  \caption{Performance für size=1024 auf sn02(8 Kerne). Ab hier macht Wavefront zumindest etwas sinvolles. Der lauf lief nur bis 10000 Iterationen und nicht bis zum Abbruchkriterium, weil sonst zu lange dauert(alles nicht nur wavefront).}
+     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
+  \caption{Performance für H=32 auf sn07(12 Kerne).}
+ 
+\end{figure}
+
+\begin{figure}[htbp] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
+  \caption{Performance für H=128 auf sn07(12 Kerne).}
  
 \end{figure}
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
-Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Diagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
+Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Antidiagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
 
-Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Diagonalelemente. D.h. es lohnt sich erst bei großen Diagonalen.
+Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Antidiagonalelemente. D.h. es lohnt sich erst bei großen Antidiagonalen.
 
-Bei der Wavefront Cache Lösung wurden die Matrix zuerst in ein anderes Array kopiert, in dem die Diagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
-In beiden Wavefront Lösungen hätte man sicher noch einiges optimieren können(z.B. Cuda für große Diagonalen), jedoch erschien uns Rot-Schwarz so viel schneller, dass es sich nicht lohnen würde.
+Bei der Wavefront Cache Lösung wurden die Matrix zuerst in ein anderes Array kopiert, in dem die Antidiagonalen in den Zeilen stehen. Dadurch haben wir uns erhofft, dass es zu einer höheren Cache Hitrate kommt. \\
+In beiden Wavefront Lösungen hätte man sicher noch einiges optimieren können(z.B. CUDA für große Antidiagonalen), jedoch erschien uns Rot-Schwarz so viel schneller, dass es sich nicht lohnen würde.
 
 \paragraph{Berechnung der Indizes}
-Für die Implementierung wurden drei Schleifen verwendet. Die äußere Schleife ist zwischen den Schritten des Gauß-Seidel Verfahrens, die mittlere geht über die Diagonalen und die innere über die Elemente der Diagonalen. \\
-In der mittleren Schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Diagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weglassen kann, weil sie nicht mehr in der Matrix sind.\\
-Bei der Wavefront Cache Lösung muss man bei jeder Indexberechnung die Eingangspermutation, welche die Diagonalen den Zeilen des Arrays zuweist umkehren um die Indexe zu berechnen. Hierbei verwenden wir die Hilfsvariablen \texttt{hack} und \texttt{hack2}. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. Die Variable \texttt{hack} wird 1 Durchgang vor der Diagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für \texttt{hack2} ab der mittleren Diagonalen. \\
+Für die Implementierung wurden drei Schleifen verwendet. Die äußere Schleife ist zwischen den Schritten des Gauß-Seidel Verfahrens, die mittlere geht über die Antidiagonalen und die innere über die Elemente der Antidiagonalen. \\
+In der mittleren Schleife werden die Variablen für die aktuelle Anzahl an Elementen gesteuert sowie eine Variable die angibt in welchem Durchlauf man nach der Antidiagonalen ist(border). Diese dient dazu anzugeben, wie viele Elemente man am Rand weglassen kann, weil sie nicht mehr in der Matrix sind.\\
+Bei der Wavefront Cache Lösung muss man bei jeder Indexberechnung die Eingangspermutation, welche die Antidiagonalen den Zeilen des Arrays zuweist umkehren um die Indizes zu berechnen. Hierbei verwenden wir die Hilfsvariablen \texttt{hack} und \texttt{hack2}. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. Die Variable \texttt{hack} wird 1 Durchgang vor der Antidiagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für \texttt{hack2} ab der mittleren Antidiagonalen. \\
 Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlagen können, wurde der Algorithmus nicht platzeffizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrixgröße zu verwenden.
 
 \begin{figure}[htbp] 
@@ -439,6 +442,6 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich Gaus-Seidel, weil es im allgemeinen schneller konvergiert als Jacobi. Bis zu einer Problemgröße von 31 lohnt sich das parallelisieren nicht. Ab da macht die Rot-Schwarz SSE Implementierung am meisten Zeit gut.
+Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Matrixgröße von $size \times size$ mit $size = 31$ (was $h = \frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
 
 \end{document}
