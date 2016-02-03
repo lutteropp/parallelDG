@@ -9,3 +9,15 @@
 	<immintrin.h>
 	<math.h>
 
+1454501280 
+
+1454519717 source:/home/ich/Dropbox/Uni/openmp praktikum/Abschluss/abschluss/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+	<sys/time.h>
+	<omp.h>
+	<immintrin.h>
+	<math.h>
+
