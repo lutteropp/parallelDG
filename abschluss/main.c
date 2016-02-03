@@ -264,38 +264,29 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
 {
     int i, j, k;
 
-    float* array0 = (float*) malloc(size * size * sizeof(float));
-    float* array1 = (float*) malloc(size * size * sizeof(float));
-
-    float* a0 = array0; // last iteration
-    float* a1 = array1; // current iteration
+    float* a1 = (float*) malloc(size * size * sizeof(float));
 
     for (i = 0; i < size * size; ++i)
     {
-        a0[i] = startVector[i];
         a1[i] = startVector[i];
     }
 
     for (k = 0; k < MAX_ITERATIONS; ++k)
     {
-        // swap a0 and a1
-        float* temp = a0;
-        a0 = a1;
-        a1 = temp;
-
         float diff = 0;
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
             {
+            	float old = a1[CO(i,j)];
                 a1[CO(i,j)] = a1[CO(i, j - 1)]
                               + a1[CO(i - 1, j)]
-                              + a0[CO(i, j + 1)]
-                              + a0[CO(i + 1, j)]
+                              + a1[CO(i, j + 1)] // weil eh noch der alte Wert drinsteht
+                              + a1[CO(i + 1, j)] // weil eh noch der alte Wert drinsteht
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
 
-                diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
+                diff += fabsf(a1[CO(i,j)] - old);
             }
         }
 
@@ -306,7 +297,6 @@ void gaussSeidel(const float * startVector, float h, const float* functionTable,
     {
         gaussSeidelResult[i] = a1[i];
     }
-    free(a0);
     free(a1);
 }
 
@@ -1347,8 +1337,6 @@ int main(int argc, char *argv[])
 
 void gaussSeidelWavefront(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
-
-    float* a0 = (float*) malloc(size * size * sizeof(float));
     float* a1 = (float*) malloc(size * size * sizeof(float));
 
 
@@ -1356,7 +1344,6 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     #pragma omp parallel for
     for (i = 0; i < size * size; ++i)
     {
-        a0[i] = startVector[i];
         a1[i] = startVector[i];
     }
 
@@ -1365,9 +1352,6 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
         float diff = 0;
-        float* temp = a0;
-        a0 = a1;
-        a1 = temp;
 
         int currentEle = 0;
         int border = 0;
@@ -1390,13 +1374,14 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
 
 
                 int index= (durchlauf - border - i+1)* size +( i + border+1);
+                float old = a1[index];
                 a1[index] = 0.25   * (a1[index-1]
                                       + a1[index-size]
-                                      + a0[index+1]
-                                      + a0[index+size]
+                                      + a1[index+1]
+                                      + a1[index+size]
                                       +  functionTable[index]);
 
-                diff += fabsf(a1[index] - a0[index]);
+                diff += fabsf(a1[index] - old);
 
             }
         }
@@ -1409,15 +1394,11 @@ void gaussSeidelWavefront(const float * startVector, float h, const float* funct
         gaussSeidelResult[i] = a1[i];
 
     }
-    free(a0);
     free(a1);
-
-
 }
 void gaussSeidelWavefrontCache(const float * startVector, float h, const float* functionTable, float* gaussSeidelResult)
 {
     int newsize= (2*size-1);
-    float* a0 = (float*) malloc((2*size-1) * newsize  * sizeof(float));
     float* a1 = (float*) malloc((2*size-1) * newsize  * sizeof(float));
 
     int i;
@@ -1446,7 +1427,6 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
             int indexZu=durchlauf*newsize+i;
             int indexVon=(durchlauf - border - i)* (size) +( i + border);
 
-            a0[indexZu]= startVector[indexVon];
             a1[indexZu]= startVector[indexVon];
         }
 
@@ -1460,9 +1440,6 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
     for (k = 0; k < MAX_ITERATIONS; k++)
     {
         float diff=0;
-        float* temp = a0;
-        a0 = a1;
-        a1 = temp;
 
         currentEle = 0;
         border = 0;
@@ -1503,12 +1480,13 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
                 int a02=(durchlauf+1)*newsize+i-hack;
                 int indexVon=(durchlauf - border - i)* (size) +( i + border);
 
+		float old = a1[indexZu];
                 a1[indexZu] = 0.25 * (a1[a11]
                                       + a1[a12]
-                                      + a0[a01]
-                                      + a0[a02]
+                                      + a1[a01]
+                                      + a1[a02]
                                       +  functionTable[indexVon]);
-                diff += fabsf(a1[indexZu] - a0[indexZu]);
+                diff += fabsf(a1[indexZu] - old);
 
 
             }
@@ -1550,10 +1528,7 @@ void gaussSeidelWavefrontCache(const float * startVector, float h, const float* 
         }
 
     }
-    free(a0);
     free(a1);
-
-
 }
 
 
@@ -1561,15 +1536,11 @@ void gaussSeidelNaiv(const float * startVector, float h, const float* functionTa
 {
     int i, j, k;
 
-    float* array0 = (float*) malloc(size * size * sizeof(float));
-    float* array1 = (float*) malloc(size * size * sizeof(float));
+    float* a1 = (float*) malloc(size * size * sizeof(float));
 
-    float* a0 = array0; // last iteration
-    float* a1 = array1; // current iteration
     #pragma omp parallel for
     for (i = 0; i < size * size; ++i)
     {
-        a0[i] = startVector[i];
         a1[i] = startVector[i];
     }
 
@@ -1577,23 +1548,20 @@ void gaussSeidelNaiv(const float * startVector, float h, const float* functionTa
     for (k = 0; k < MAX_ITERATIONS; ++k)
     {
         float diff = 0;
-        // swap a0 and a1
-        float* temp = a0;
-        a0 = a1;
-        a1 = temp;
         #pragma omp parallel for private(j, i) collapse(2) reduction(+:diff)
         for (j = 1; j < size - 1; j++)
         {
             for (i = 1; i < size - 1; i++)
             {
+            	float old = a1[CO(i,j)];
                 a1[CO(i,j)] = a1[CO(i, j - 1)]
                               + a1[CO(i - 1, j)]
-                              + a0[CO(i, j + 1)]
-                              + a0[CO(i + 1, j)]
+                              + a1[CO(i, j + 1)]
+                              + a1[CO(i + 1, j)]
                               + functionTable[CO(i, j)];
                 a1[CO(i,j)] *= 0.25;
 
-                diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
+                diff += fabsf(a1[CO(i,j)] - old);
             }
         }
         if (diff / (size * size) < TOL) break;
@@ -1603,7 +1571,6 @@ void gaussSeidelNaiv(const float * startVector, float h, const float* functionTa
     {
         gaussSeidelResult[i] = a1[i];
     }
-    free(a0);
     free(a1);
 }
 
