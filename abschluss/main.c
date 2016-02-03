@@ -49,7 +49,7 @@ int size;
 
 const static int MAX_ITERATIONS = 999999999;
 //const static float EPSILON = 0.01;
-const static float TOL = 0.001;
+const static float TOL = 0.000001;
 
 inline float sse_sum(__m128 x)
 {
