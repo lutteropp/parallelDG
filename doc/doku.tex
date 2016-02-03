@@ -204,7 +204,7 @@ Beide Verfahren sind uneingeschränkt stabil.
     \end{tabular}   
   
      %\includegraphics[width=0.7\textwidth]{bilder/convergenz.png}
-  \caption{Beide Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium \texttt{true} wurde.}
+  \caption{Anzahl Iterationen in beiden Verfahren für verschiedene Verfeinerungen, bis das Abbruchkriterium \texttt{true} wurde.}
   \label{fig:Bild1}
 \end{figure}
 
@@ -215,6 +215,8 @@ Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellte
 Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $\frac{1}{h}+1$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne Gleitkommaungenauigkeiten angeben kann und $U$ eine $size \times size$-Matrix ist.
  
 Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, haben wir $b$ vorberechnet.
+
+Den Startvektor haben wir mit zufälligen Gleitkommazahlen gefüllt.
 
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Blabla
