@@ -155,7 +155,7 @@ gilt. Hierbei ist \texttt{TOL} ein kleiner Wert. In unserer Implementierung habe
 
 Dieses Abbruchkriterium ist zielführend, da es sich mit wenig Aufwand parallel bestimmen lässt und die mittlere absolute Differenz der Matrixeinträge misst. Ist diese gering, ändern weitere Iterationsschritte das Ergebnis nicht mehr stark.
 
-Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
+Wir hatten auch überlegt, stattdessen die maximale absolute Differenz $\max_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}$ als Entscheidungsgrundlage zu nehmen. Dies haben wir aber verworfen, da uns die mittlere absolute Differenz bereits gut genug erschien. Außerdem ist es mit OpenMP für C nicht möglich, in der \texttt{reduce}-Klausel den Maximumsoperator zu verwenden (bei OpenMP für Fortran geht es). Denkbar wäre es auch gewesen, stattdessen die relative Abweichung zu betrachten.
 
 %Es werden auch keine Sprünge oder ähnliches verwendet, von demher ist der Overhead konstant.\\
 %Zur Auswahl standen außerdem das selbe wie oben in der euklidischen Norm zu berechnen, jedoch erschien uns oberes schneller.
