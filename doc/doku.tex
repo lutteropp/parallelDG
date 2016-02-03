@@ -140,9 +140,9 @@ $$u^{(k)} = -D^{-1}(L+R)  u^{(k-1)} + D^{-1}b$$
 $$\Leftrightarrow u^{(k)} = D^{-1}  \left(b -(L+R)  u^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \quad \forall i = 1, \ldots, size - 1$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * (b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}) \quad \forall i = 1, \ldots, n^2$$
 
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, size - 1$.
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies ist bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für alle $i = 1, \ldots, n^2$.
 
 \subsubsection{Abbruchkriterium} \label{jacobi:abbruch}
 Wir haben unser Abbruchkriterium aus dem zweiten Foliensatz der Vorlesung ``Heterogene Parallele Rechensysteme'' übernommen. Hierbei wird der mittlere Abstand der Einträge der Lösungsmatrix $U^{(k)}$ der aktuellen Iteration zu der Lösungsmatrix $U^{(k-1)}$ aus der vorherigen Iteration betrachtet.
@@ -179,9 +179,9 @@ Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in
 $$u^{(k)} = D^{-1} \left(b - Lu^{(k)} - Ru^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{size}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, size - 1$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
 
-Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, size - 1$.
+Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, n^2$.
 
 
 
