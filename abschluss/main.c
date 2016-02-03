@@ -1197,13 +1197,13 @@ int main(int argc, char *argv[])
             }
             analyticalResult[CO(i,j)] = val;
             
-            startVector[CO(i, j)] = 0;
+            //startVector[CO(i, j)] = 0;
 
-            /*if (i != 0 && j != 0 && i != size - 1 && j != size - 1)
+            if (i != 0 && j != 0 && i != size - 1 && j != size - 1)
             {
                 val = (float) rand() / RAND_MAX;
             }
-            startVector[CO(i, j)] = val;*/
+            startVector[CO(i, j)] = val;
         }
     }
 
