@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
         printf("Error! Size must be greater than 1.\n");
         return -1;
     }
-     h = 1 / (float) (size - 1);
+     h = 1 / (float) (sqrt(size) - 1);
     // Precompute function f
     float* precomputedF = malloc(size * size * sizeof(float));
     computeFunctionTable( precomputedF);
