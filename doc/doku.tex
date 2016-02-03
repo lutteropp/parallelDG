@@ -213,6 +213,11 @@ Beide Verfahren sind uneingeschränkt stabil.
 Die Matrixeinträge werden in dem auf dem Aufgabenblatt zur Verfügung gestellten Pseudocode spaltenweise durchlaufen. Daher haben wir in unserer Implementierung die Matrizen spaltenweise indiziert, um eine möglichst gute Cache-Lokalität zu erzielen. Dies bedeutet, dass wir statt $U$ eigentlich $U^T$ speichern.
 
 Anstatt des Parameters $h$ übergeben wir einen Parameter $size$, der $(\frac{1}{h}+1)^2$ entspricht. Dies hat den Vorteil, dass der Nutzer den Grad der Verfeinerung exakt ohne viele Nachkommastellen angeben kann und $U$ eine $size \times size$-Matrix ist.
+Um von $size$ auf $h$ zurückzurechnen, gilt:
+$$size = \left(\frac{1}{h} + 1\right)^2$$
+$$\Leftrightarrow \sqrt{size} = \frac{1}{h} + 1$$
+$$\Leftrightarrow \frac{1}{h} = \sqrt{size} - 1$$
+$$\Leftrightarrow h = \frac{1}{\sqrt{size} - 1}$$
  
 Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, haben wir $b$ vorberechnet.
 
