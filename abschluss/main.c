@@ -49,7 +49,7 @@ int size;
 
 const static int MAX_ITERATIONS = 999999999;
 //const static float EPSILON = 0.01;
-const static float TOL = 0.001;
+const static float TOL = 0.00000000001;
 
 inline float sse_sum(__m128 x)
 {
@@ -1168,7 +1168,7 @@ int main(int argc, char *argv[])
         printf("Error! Size must be greater than 1.\n");
         return -1;
     }
-    float h = 1 / (float) (sqrt(size) - 1);
+    float h = 1 / (float) (size - 1);
     // Precompute function f
     float* precomputedF = malloc(size * size * sizeof(float));
     computeFunctionTable(h, precomputedF);
