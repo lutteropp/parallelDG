@@ -269,10 +269,17 @@ Wir haben sowohl den naiven, falschen Parallelisierungsansatz als auch zwei vers
 \subsubsection{Naiver Parallelisierungsansatz}\label{gs:naiv}
 Der naive Parallelisierungsansatz ist, wie in Abschnitt~\ref{parallel:jacobi} die äußerste Schleife mittels \texttt{\#pragma omp parallel for} zu parallelisieren. Da eine parallele Ausführung der Schleifeniterationen mittels OpenMP nicht die Iterationsreihenfolge garantiert, kann es hierbei zu Wettlaufsituationen (``Race Conditions'') kommen.
 
-Im Fall des Gauß-Seidel-Verfahrens tritt dies in folgendem Beispiel auf (TODO: Beispiel):
+Im Fall des Gauß-Seidel-Verfahrens tritt dies in folgendem Beispiel auf :
 
 
 Der im Praktikum vorgestellte Intel Thread Sanitizer erkennt die auftretende Wettlaufsituation nicht.
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/race.png}
+  \caption{Die Racecondition in Gaus-Seidel mit naiver Parallelisierung. Es wird gemeinsam auf a1 gelesen und geschrieben.}
+ 
+\end{figure}
 
 %\newpage
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
@@ -413,14 +420,14 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
-  \caption{Performance für H=32 auf sn07(12 Kerne).}
+  \caption{Performance für H=32 auf sn07(32 Kerne).}
  
 \end{figure}
 
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
-  \caption{Performance für H=128 auf sn07(12 Kerne).}
+  \caption{Performance für H=128 auf sn07(32 Kerne).}
  
 \end{figure}
 
