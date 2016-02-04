@@ -1,0 +1,17 @@
+Thread zahl=1
+Execution time Jacobi Sequential: 24.102 seconds
+Execution time Gauss-Seidel: 21.626 seconds
+Execution time Jacobi SSE: 37.458 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 6.408 seconds
+Execution time Jacobi SSE: 37.923 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 6.437 seconds
+Thread zahl=4
+Execution time Jacobi SSE: 10.412 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 1.687 seconds
+Execution time Jacobi SSE: 9.636 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 1.699 seconds
+Thread zahl=8
+Execution time Jacobi SSE: 5.430 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 1.050 seconds
+Execution time Jacobi SSE: 5.776 seconds
+Execution time Gauss-Seidel Rot-Schwarz SSE: 1.037 seconds
