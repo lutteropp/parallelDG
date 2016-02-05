@@ -226,9 +226,9 @@ Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, h
 Den Startvektor haben wir mit zufälligen Gleitkommazahlen gefüllt.
 
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
-Blabla
+Sind alle in den Tabellen von \ref{ergebnisse}
 \subsection{Approximationsfehler}
-Wir haben den Approximationsfehler nur für $size=4$ und $size=32$ dargestellt, weil Open Office nicht genug Punkte verarbeiten kann.
+Wir haben den Approximationsfehler nur für $size=4$ und $size=32$ dargestellt, weil Open Office nicht genug Punkte verarbeiten kann. Die Aussage sollte aber auch für größere Werte gleich sein.
 \begin{figure}[htbp] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/dj4.png}
@@ -255,13 +255,13 @@ Wir haben den Approximationsfehler nur für $size=4$ und $size=32$ dargestellt, 
   \label{fig:Bild5}
 \end{figure}
 \section{Parallelisierung}
-Blabla
+
 \subsection{Jacobi-Verfahren} \label{parallel:jacobi}
 Da innerhalb der Iterationsschritte des Jacobi-Verfahrens keinerlei Datenabhängigkeiten bei der Berechnung der Matrixeinträge bestehen, haben wir mittels OpenMP (\texttt{\#pragma omp parallel for}) die äußere Schleife parallelisiert.
 
 Zudem haben wir eine weitere Version des Jacobi-Verfahrens implementiert, in der wir zusätzlich zur Parallelisierung der \texttt{for}-Schleife auch den Code innerhalb der \texttt{for}-Schleife mit SSE vektorisiert haben.
 
-Hierbei haben wir folgenden Speedup bei verschiedenen Problemgrößen $h$ und sowie verschiedenen Prozessorzahlen $p$ gemessen: TODO
+Hierbei haben wir folgenden Speedup bei verschiedenen Problemgrößen $h$ und sowie verschiedenen Prozessorzahlen $p$ gemessen: \ref{ergebnisse}
 
 \subsection{Gauß-Seidel-Verfahren}
 
@@ -304,7 +304,12 @@ $$
 \label{fig:matrix}
 \end{figure}
 
-Da die Matrixeinträge gleicher Farbe nicht voneinander abhängen, können wir diese parallel berechnen. Dies führt zu folgendem Ansatz: (TODO: Pseudocode)
+Da die Matrixeinträge gleicher Farbe nicht voneinander abhängen, können wir diese parallel berechnen. Dies führt zu folgendem Ansatz: 
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/rspseudocode.png}
+  \caption{Pseudocode einer Rot-Schwarz Implementierung aus der Vorlesung Heterogene parallele Rechensysteme.}
+\end{figure}
 
 Hierbei ist zu beachten, dass die einzelnen Iterationen des sequentiellen Gauß-Seidel-Verfahrens und dessen Rot-Schwarz-Parallelisierung nicht genau dasselbe Ergebnis liefern. Dies liegt darin begründet, dass durch die Rot-Schwarz-Aufteilung eine Umordnung der Matrixeinträge geschieht.
 
@@ -400,7 +405,7 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \newpage
 
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit} 
-Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Versionen mit SSE beschleunigt wurden und die Seriellen nicht. Die Werte für Größen unter 128 sind sehr Fehleranfällig, weil sie so klein sind, und fast unbrauchbar.
+Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Versionen mit SSE beschleunigt wurden und die Seriellen nicht. Die Werte für Größen unter 128 sind sehr Fehleranfällig, weil sie so klein sind, und fast unbrauchbar. \label{ergebnisse}
 \begin{figure}[h] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn265.png}
@@ -445,17 +450,17 @@ Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Ver
 
 \begin{figure}[h] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn7129.png}
+     \includegraphics[width=1.2\textwidth]{bilder/sn7129.png}
   \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
 \end{figure}
 \begin{figure}[h] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn7513.png}
+     \includegraphics[width=1.2\textwidth]{bilder/sn7513.png}
   \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
 \end{figure}
 \begin{figure}[h] 
   \centering
-     \includegraphics[width=1.0\textwidth]{bilder/sn71025.png}
+     \includegraphics[width=1.2\textwidth]{bilder/sn71025.png}
   \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
 \end{figure}
 
@@ -506,7 +511,7 @@ In der mittleren Schleife werden die Variablen für die aktuelle Anzahl an Eleme
 Bei der Wavefront Cache Lösung muss man bei jeder Indexberechnung die Eingangspermutation, welche die Antidiagonalen den Zeilen des Arrays zuweist umkehren um die Indizes zu berechnen. Hierbei verwenden wir die Hilfsvariablen \texttt{hack} und \texttt{hack2}. Diese werden benutzt um die Elemente um das zu berechnende Element zu adressieren. Die Variable \texttt{hack} wird 1 Durchgang vor der Antidiagonalen zu 1, weil sich ab hier die Abhängigkeit der Elemente um 1 verschiebt. Das selbe gilt für \texttt{hack2} ab der mittleren Antidiagonalen. \\
 Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlagen können, wurde der Algorithmus nicht platzeffizient implementiert und die Matrixgröße ist größer als bei den anderen Algorithmen. Es wäre jedoch auch möglich gewesen dieselbe Matrixgröße zu verwenden.
 
-\begin{figure}[htbp] 
+\begin{figure}[h] 
   \centering
      \includegraphics[width=1\textwidth]{bilder/hack.png}
   \caption{Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indizes anhand eines Beispiels. Die Variable \texttt{hack} ist dabei blau und \texttt{hack2} rot.}
