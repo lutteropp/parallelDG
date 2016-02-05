@@ -250,7 +250,7 @@ $$ \max_{(i,j) \in \{1, \ldots, n\}^2} \sqrt{\left({U_{i,j}^{(k)}} - {U_{i,j}^{(
 
 Sei $x_i=i*h$ und $y_j=j*h$ für $i,j = 0, \ldots, n+1$. Wir haben die analytische Lösung mittels der Funktion $u(x_i,y_j) = \begin{cases} 16x_i(1-x_i)y_i(1-y_i) & \text{, falls } 0 < x_i < 1 \text{ und } 0 < y_j < 1 \\ 0 & \text{, sonst} \end{cases}$ berechnet.
 
-Wir haben die Messungen nur für die Verfeinerungen $h \in \left \{\frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{1}{32} \right\}$ durchgeführt, da für kleinere $h$ die Grafiken zu groß werden und man nichts mehr erkennt. Die Grafiken haben wir mit \texttt{gnuplot} erstellt. Beim Vergleich der Grafiken fällt auf, dass der maximale Approximationsfehler beim Gauß-Seidel-Verfahren schneller sinkt als beim Jacobi-Verfahren. Außerdem kommt es beim Jacobi-Verfahren zu einer geringfügigen Verschlechterung des Approximationsfehlers in den ersten Iterationen.
+Wir haben die Messungen nur für die Verfeinerungen $h \in \left \{\frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{1}{32} \right\}$ durchgeführt, da für kleinere $h$ die Grafiken zu groß werden und man nichts mehr erkennt. Die Grafiken haben wir mit \texttt{gnuplot} erstellt. Beim Vergleich der Grafiken fällt auf, dass der maximale Approximationsfehler beim Gauß-Seidel-Verfahren schneller sinkt als beim Jacobi-Verfahren. Außerdem kommt es beim Jacobi-Verfahren zu einer geringfügigen Verschlechterung des maximalen Approximationsfehlers in den ersten Iterationen.
 
 \begin{center}
 \includegraphics[scale=0.8]{bilder/fehler_jacobi_1_4.png}
