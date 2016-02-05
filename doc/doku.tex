@@ -290,7 +290,7 @@ Da innerhalb der Iterationsschritte des Jacobi-Verfahrens keinerlei Datenabhäng
 
 Zudem haben wir eine weitere Version des Jacobi-Verfahrens implementiert, in der wir zusätzlich zur Parallelisierung der \texttt{for}-Schleife auch den Code innerhalb der \texttt{for}-Schleife mit SSE vektorisiert haben.
 
-Unsere Speedup-Messungen haben wir auf \texttt{i82sn02.itec.kit.edu} durchgeführt. Wir haben den Speedup jeweils relativ zu der Version mit einem Thread ermittelt.
+Unsere Speedup-Messungen haben wir auf \texttt{i82sn02.itec.kit.edu} durchgeführt. Wir haben den Speedup jeweils relativ zu der sequentiellen Version bestimmt.
 
 \begin{table}[h!]
 \small
@@ -299,12 +299,14 @@ Unsere Speedup-Messungen haben wir auf \texttt{i82sn02.itec.kit.edu} durchgefüh
 \hline 
  & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
 \hline 
-OpenMP & • & - & • & • & • & • & • & • \\ 
+Sequentiell & 0.108 & - & 0.097 & - & 0.093 & - & 0.108 & - \\
 \hline
-OpenMP + SSE & • & - & • & • & • & • & • & • \\ 
+OpenMP & 0.217 & • & 0.073 & • & 0.104 & • & 0.647 & • \\ 
+\hline
+OpenMP + SSE & 0.117 & • & 0.048 & • & 0.052 & • & 0.623 & • \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{64}$. Hierbei ist zu beachten, dass die sequentielle Version des Jacobi-Verfahrens nur • Sekunden gebraucht hat.}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{64}$.}
 \end{table}
 
 \begin{table}[h!]
@@ -314,12 +316,14 @@ OpenMP + SSE & • & - & • & • & • & • & • & • \\
 \hline 
  & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
 \hline 
-OpenMP & • & - & • & • & • & • & • & • \\ 
+Sequentiell & 1.493 & - & 1.562 & - & 1.51 & - & 1.311 & - \\
 \hline
-OpenMP + SSE & • & - & • & • & • & • & • & • \\ 
+OpenMP & 2.98 & • & 0.871 & • & 0.854 & • & 2.257 & • \\ 
+\hline
+OpenMP + SSE & 1.565 & • & 0.49 & • & 0.373 & • & 1.95 & • \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{128}$. Hierbei ist zu beachten, dass die sequentielle Version des Jacobi-Verfahrens nur • Sekunden gebraucht hat.}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{128}$.}
 \end{table}
 
 \begin{table}[h!]
@@ -329,42 +333,14 @@ OpenMP + SSE & • & - & • & • & • & • & • & • \\
 \hline 
  & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
 \hline 
-OpenMP & • & - & • & • & • & • & • & • \\ 
+Sequentiell & 25.765 & - & 24.8 & - & 26.605 & - & 25.2 & - \\
 \hline
-OpenMP + SSE & • & - & • & • & • & • & • & • \\ 
+OpenMP & 43.427 & • & 10.714 & • & 6.867 & • & 18.353 & • \\ 
+\hline
+OpenMP + SSE & 22.424 & • & 5.655 & • & 3.593 & • & 14.854 & • \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{256}$. Hierbei ist zu beachten, dass die sequentielle Version des Jacobi-Verfahrens nur • Sekunden gebraucht hat.}
-\end{table}
-
-\begin{table}[h!]
-\small
-\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
- & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c|}{8 Threads} & \multicolumn{2}{|c}{16 Threads} \\ 
-\hline 
- & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
-\hline 
-OpenMP & • & - & • & • & • & • & • & • \\ 
-\hline
-OpenMP + SSE & • & - & • & • & • & • & • & • \\ 
-\hline 
-\end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{512}$. Hierbei ist zu beachten, dass die sequentielle Version des Jacobi-Verfahrens nur • Sekunden gebraucht hat.}
-\end{table}
-
-\begin{table}[h!]
-\small
-\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
- & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c|}{8 Threads} & \multicolumn{2}{|c}{16 Threads} \\ 
-\hline 
- & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
-\hline 
-OpenMP & • & - & • & • & • & • & • & • \\ 
-\hline
-OpenMP + SSE & • & - & • & • & • & • & • & • \\ 
-\hline 
-\end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{1024}$. Hierbei ist zu beachten, dass die sequentielle Version des Jacobi-Verfahrens nur • Sekunden gebraucht hat.}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{256}$.}
 \end{table}
 
 \newpage
@@ -529,7 +505,7 @@ Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen s
 TODO: Laufzeitmessungen
 
 \section{Anhang: Noch mehr Laufzeitmessungen}
-In den folgenden Messungen wurde der Speedup immer relativ zu unseren sequentiellen Implementierungen gemessen.
+In den folgenden Messungen wurde der Speedup immer relativ zu unseren sequentiellen Implementierungen gemessen. %Außerdem hatten wir bei den alten Messungen noch nicht beachtet, dass man mit \texttt{srand(0)} den Zufallsgenerator zurücksetzen sollte, um immer den selben Zufalls-Startvektor für die Messungen zu erhalten.
 \\
 Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Versionen mit SSE beschleunigt wurden und die sequentiellen nicht. Die Werte für $h > \frac{1}{128}$ sind sehr fehleranfällig, weil sie so klein sind, und fast unbrauchbar. \label{ergebnisse}
 \begin{figure}[h] 
