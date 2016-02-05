@@ -528,4 +528,100 @@ Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen s
 
 TODO: Laufzeitmessungen
 
+\section{Anhang: Noch mehr Laufzeitmessungen}
+In den folgenden Messungen wurde der Speedup immer relativ zu unseren sequentiellen Implementierungen gemessen.
+\\
+Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Versionen mit SSE beschleunigt wurden und die Seriellen nicht. Die Werte für Größen unter 128 sind sehr Fehleranfällig, weil sie so klein sind, und fast unbrauchbar. \label{ergebnisse}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn265.png}
+  \caption{Ergebnisse der Messung auf sn02 (8 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn2129.png}
+  \caption{Ergebnisse der Messung auf sn02 (8 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn2513.png}
+  \caption{Ergebnisse der Messung auf sn02 (8 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn21025.png}
+  \caption{Ergebnisse der Messung auf sn02 (8 Kerne)}
+\end{figure}
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn365.png}
+  \caption{Ergebnisse der Messung auf sn03 (4 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn3129.png}
+  \caption{Ergebnisse der Messung auf sn03 (4 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn3513.png}
+  \caption{Ergebnisse der Messung auf sn03 (4 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn31025.png}
+  \caption{Ergebnisse der Messung auf sn03 (4 Kerne)}
+\end{figure}
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.2\textwidth]{bilder/sn7129.png}
+  \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.2\textwidth]{bilder/sn7513.png}
+  \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.2\textwidth]{bilder/sn71025.png}
+  \caption{Ergebnisse der Messung auf sn07 (32 Kerne)}
+\end{figure}
+
+
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn02128.png}
+  \caption{Alte Performance Messung für H=128 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+ 
+\end{figure}
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn02256.png}
+  \caption{Alte Performance Messung für H=256 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+ 
+\end{figure}
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
+  \caption{Alte Performance Messung für H=32 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+\end{figure}
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
+  \caption{Alte Performance Messung für H=128 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+\end{figure}
+
+\begin{figure}[h] 
+  \centering
+     \includegraphics[width=1.0\textwidth]{bilder/sn021024.png}
+  \caption{Alte Performance Messung für H=1024 auf sn02(8 Kerne) mit allen Implementierungen. Der lauf ging nur bis 10000 Iterationen.}
+\end{figure}
+
+
 \end{document}
