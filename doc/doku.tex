@@ -245,7 +245,7 @@ Gauß-Seidel & 0.113 s & 1.4 s & 14.8 s & 115 s & 545 s
 \newpage
 \subsection{Approximationsfehler}
 
-Wir haben den maximalen absoluten Approximationsfehler in der euklidischen Norm in jedem Iterationsschritt für das Jacobi- und das Gauß-Seidel-Verfahren gemessen. Sei $U^{(*)}$ die analytische Lösung für $U$. Der maximale absolute Approximationsfehler in euklidischer Norm in Iteration $k$ ist definiert als
+Wir haben den maximalen absoluten Approximationsfehler in der euklidischen Norm in jedem Iterationsschritt für das Jacobi- und das Gauß-Seidel-Verfahren gemessen. Sei $U^{(*)}$ die analytische Lösung für $U$ und $U^{(k)}$ die Lösungsmatrix im $k$-ten Iterationsschritt. Der maximale absolute Approximationsfehler in euklidischer Norm in Iteration $k$ ist definiert als
 $$ \max_{(i,j) \in \{1, \ldots, n\}^2} \sqrt{\left({U_{i,j}^{(k)}} - {U_{i,j}^{(*)}}\right)^2}$$
 
 Sei $x_i=i*h$ und $y_j=j*h$ für $i,j = 0, \ldots, n+1$. Wir haben die analytische Lösung mittels der Funktion $u(x_i,y_j) = \begin{cases} 16x_i(1-x_i)y_i(1-y_i) & \text{, falls } 0 < x_i < 1 \text{ und } 0 < y_j < 1 \\ 0 & \text{, sonst} \end{cases}$ berechnet.
