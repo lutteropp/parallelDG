@@ -304,11 +304,11 @@ Der naive Parallelisierungsansatz ist, wie in Abschnitt~\ref{parallel:jacobi} di
 
 Der im Praktikum vorgestellte Intel Thread Checker erkennt die auftretende Wettlaufsituation nicht.
 
-\begin{figure}[h] 
-  \centering
-     \includegraphics[width=1.0\textwidth]{bilder/race.png}
-  \caption{Naive Parallelisierung des Gauß-Seidel-Verfahrens. Hierbei kann es zu Wettlaufsituationen kommen, da nicht garantiert ist, in welcher Reihenfolge beispielsweise auf den Eintrag  \texttt{a1[CO(i,j+1)]} zugegriffen wird.}
-\end{figure}
+%\begin{figure}[h] 
+%  \centering
+%     \includegraphics[width=1.0\textwidth]{bilder/race.png}
+%  \caption{Naive Parallelisierung des Gauß-Seidel-Verfahrens. Hierbei kann es zu Wettlaufsituationen kommen, da nicht garantiert ist, in welcher Reihenfolge beispielsweise auf den Eintrag  \texttt{a1[CO(i,j+1)]} zugegriffen wird.}
+%\end{figure}
 
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
 
