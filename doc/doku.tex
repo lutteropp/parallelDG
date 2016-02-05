@@ -310,7 +310,6 @@ Der im Praktikum vorgestellte Intel Thread Checker erkennt die auftretende Wettl
   \caption{Naive Parallelisierung des Gauß-Seidel-Verfahrens. Hierbei kann es zu Wettlaufsituationen kommen, da nicht garantiert ist, in welcher Reihenfolge beispielsweise auf den Eintrag  \texttt{a1[CO(i,j+1)]} zugegriffen wird.}
 \end{figure}
 
-\newpage
 \subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
 
 Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hierbei ergibt sich ein Schachbrettmuster, wie in Abbildung~\ref{fig:matrix} gezeigt.
