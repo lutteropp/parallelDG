@@ -284,22 +284,21 @@ Wir haben die Messungen nur für die Verfeinerungen $h \in \left \{\frac{1}{4}, 
 \includegraphics[scale=0.8]{bilder/fehler_gs_1_32.png}
 \end{center}
 
-\section{Parallelisierung}
+\section{Parallelisierung des Jacobi-Verfahrens} \label{parallel:jacobi}
 
-\subsection{Jacobi-Verfahren} \label{parallel:jacobi}
 Da innerhalb der Iterationsschritte des Jacobi-Verfahrens keinerlei Datenabhängigkeiten bei der Berechnung der Matrixeinträge bestehen, haben wir mittels OpenMP (\texttt{\#pragma omp parallel for}) die äußere Schleife parallelisiert.
 
 Zudem haben wir eine weitere Version des Jacobi-Verfahrens implementiert, in der wir zusätzlich zur Parallelisierung der \texttt{for}-Schleife auch den Code innerhalb der \texttt{for}-Schleife mit SSE vektorisiert haben.
 
 Hierbei haben wir folgenden Speedup bei verschiedenen Problemgrößen $h$ und sowie verschiedenen Prozessorzahlen $p$ gemessen: \ref{ergebnisse}
 
-\subsection{Gauß-Seidel-Verfahren}
+\section{Parallelisierung des Gauß-Seidel-Verfahrens}
 
 Innerhalb der Iterationsschritte des Gauß-Seidel-Verfahrens bestehen Datenabhängigkeiten, da die Berechnung der Matrixeinträge in einer Iteration von den vorher berechneten Einträgen der selben Iteration abhängt. Das Gauß-Seidel-Verfahren ist daher inhärent sequentiell. Daher ist eine Parallelisierung des Gauß-Seidel-Verfahrens mit mehr Aufwand verbunden als beim ``embarassingly parallel'' Jacobi-Verfahren.
 
 Wir haben sowohl den naiven, falschen Parallelisierungsansatz als auch zwei verschiedene funktionierende Parallelisierungsansätze implementiert.
 
-\subsubsection{Naiver Parallelisierungsansatz}\label{gs:naiv}
+\subsection{Naiver Parallelisierungsansatz}\label{gs:naiv}
 Der naive Parallelisierungsansatz ist, wie in Abschnitt~\ref{parallel:jacobi} die äußerste Schleife mittels \texttt{\#pragma omp parallel for} zu parallelisieren. Da eine parallele Ausführung der Schleifeniterationen mittels OpenMP nicht die Iterationsreihenfolge garantiert, kann es hierbei zu Wettlaufsituationen (``Race Conditions'') kommen.
 
 Der im Praktikum vorgestellte Intel Thread Checker erkennt die auftretende Wettlaufsituation nicht.
@@ -310,7 +309,7 @@ Der im Praktikum vorgestellte Intel Thread Checker erkennt die auftretende Wettl
 %  \caption{Naive Parallelisierung des Gauß-Seidel-Verfahrens. Hierbei kann es zu Wettlaufsituationen kommen, da nicht garantiert ist, in welcher Reihenfolge beispielsweise auf den Eintrag  \texttt{a1[CO(i,j+1)]} zugegriffen wird.}
 %\end{figure}
 
-\subsubsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
+\subsection{Erweiterter Parallelisierungsansatz: Rot-Schwarz}
 
 Bei der Rot-Schwarz-Parallelisierung des Gauß-Seidel-Verfahrens wird ausgenutzt, dass jeder Matrixeintrag nur von seinem linken, rechten, oberen und unteren direkten Nachbarn abhängt. Wir färben also die Matrixeinträge in rote und schwarze Felder ein, wobei die Datenabhängigkeiten nur zwischen Einträgen unterschiedlicher Farbe bestehen. Hierbei ergibt sich ein Schachbrettmuster, wie in Abbildung~\ref{fig:matrix} gezeigt.
 
@@ -426,7 +425,7 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \paragraph{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit} 
 TODO
 
-\subsubsection{Erweiterter Parallelisierungsansatz: Wavefront}
+\subsection{Erweiterter Parallelisierungsansatz: Wavefront}
 Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Antidiagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
 
 Vermutlicher Grund wieso unsere Wavefront-Implementierung langsamer als sequentielles Gauß-Seidel: Die Indexberechnung ist sehr aufwändig. Wir berechnen  die Indizes in jeder Iteration neu, anstatt sie einmalig vorzuberechnen und in einer ``Indextabelle'' zu speichern. Außerdem richtet sich die Parallelität nach der Anzahl der Antidiagonalelemente. D.h. es lohnt sich erst bei großen Antidiagonalen.
