@@ -391,7 +391,7 @@ Um die Indexberechnung zu vereinfachen und die Cachelokalität zu verbessern, ha
 
 Bei den Indexberechnungen haben wir zwischen $size \times size$-Matrizen gerader und ungerader $size$ unterschieden.
 
-\paragraph{Berechnung der Nachbarindizes für gerade Werte von $size$}~\\
+\paragraph{Berechnung der Nachbarindizes für gerade Werte von $size$:}~\\
 Für rote $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die roten Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \frac{size}{2}$ in der Schwarz-Matrix. Der obere Nachbar ist an Stelle $idx - (1-(j \mod 2))$ in der Schwarz-Matrix. Der rechte Nachbar ist an Stelle $idx + \frac{size}{2}$ in der Schwarz-Matrix. Der untere Nachbar ist an Stelle $idx + (j \mod 2)$ in der Schwarz-Matrix.
 
 
@@ -432,7 +432,7 @@ $\textcolor{black}{\downarrow: idx + (1- (j \mod 2))} \quad$
 \label{fig:matrix:even}
 \end{figure}
 
-\paragraph{Berechnung der Nachbarindizes für ungerade Werte von $size$}~\\
+\paragraph{Berechnung der Nachbarindizes für ungerade Werte von $size$:}~\\
 Für rote $U_{i,j}$ gilt: Der zugehörige Index in der Matrix für die roten Einträge ist $idx = \lfloor\frac{i+j*size}{2}\rfloor$. Der linke Nachbar ist an Stelle $idx - \lceil\frac{size}{2}\rceil$ in der Schwarz-Matrix. Der obere Nachbar ist an Stelle $idx - 1$ in der Schwarz-Matrix. Der rechte Nachbar ist an Stelle $idx + \lfloor\frac{size}{2}\rfloor$ in der Schwarz-Matrix. Der untere Nachbar ist an Stelle $idx$ in der Schwarz-Matrix.
 
 
@@ -643,13 +643,13 @@ Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Ver
 \begin{figure}[h] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn0732.png}
-  \caption{Alte Performancemessung für $size$=32 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+  \caption{Alte Performancemessung für $size$=32 auf sn07(32 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
 \end{figure}
 
 \begin{figure}[h] 
   \centering
      \includegraphics[width=1.0\textwidth]{bilder/sn07128.png}
-  \caption{Alte Performancemessung für $size$=128 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
+  \caption{Alte Performancemessung für $size$=128 auf sn07(32 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}
 \end{figure}
 
 \begin{figure}[h] 
