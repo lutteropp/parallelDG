@@ -577,7 +577,7 @@ Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen s
 \newpage
 
 \section{Anhang: Noch mehr Laufzeitmessungen}
-In den folgenden Messungen wurde der Speedup immer relativ zu unseren sequentiellen Implementierungen gemessen. Die Messwerte können leicht von den bisher angegebenen abweichen, da sie teils mit anderen Werten für \texttt{TOL} ausgeführt wurden und das Abbruchkriterium dadurch erst später erreicht wurde. %Außerdem hatten wir bei den alten Messungen noch nicht beachtet, dass man mit \texttt{srand(0)} den Zufallsgenerator zurücksetzen sollte, um immer den selben Zufalls-Startvektor für die Messungen zu erhalten.
+In den folgenden Messungen wurde der Speedup immer relativ zu unseren sequentiellen Implementierungen gemessen. Die Messwerte können leicht von den bisher angegebenen abweichen, da sie teils mit anderen Werten für \texttt{TOL} ausgeführt wurden (in den alten Performance-Messungen hatten wir \texttt{TOL} = $0,00000001$ benutzt) und das Abbruchkriterium dadurch erst später erreicht wurde. %Außerdem hatten wir bei den alten Messungen noch nicht beachtet, dass man mit \texttt{srand(0)} den Zufallsgenerator zurücksetzen sollte, um immer den selben Zufalls-Startvektor für die Messungen zu erhalten.
 \\
 Die folgenden Messungen sind vielleicht nicht ganz fair, weil die parallelen Versionen mit SSE beschleunigt wurden und die sequentiellen nicht. Die Werte für $h > \frac{1}{128}$ sind sehr fehleranfällig, weil sie so klein sind, und fast unbrauchbar. \label{ergebnisse}
 \begin{figure}[h] 
