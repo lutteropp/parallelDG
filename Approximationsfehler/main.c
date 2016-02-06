@@ -1,0 +1,459 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+#include <sys/time.h>
+#include <omp.h>
+#include <immintrin.h>
+#include <math.h>
+
+/*
+Compile with: gcc -O2 -fopenmp -march=native main.c -o main
+*/
+
+float h=0;
+
+void jacobiSerial(const float* startVector,  const float* functionTable, float* jacobiResult);
+/* Gauss Seidel */
+void gaussSeidel(const float * startVector,  const float* functionTable, float* gaussSeidelResult);
+
+
+/* Helper functions */
+float f1(float x, float y);
+void computeFunctionTable(float* functionTable);
+void printResultMatrix(const float* matrix);
+void printAnalyticalResult();
+bool compare(float* m1, float* m2);
+
+void calcAnalyticalResult(float h, float * result);
+
+
+
+int size;
+
+#define CO(i,j) ( (j) * (size) + (i) )
+
+const static int MAX_ITERATIONS = 1000000;
+const static float EPSILON = 0.01;
+const static float TOL = 0.000001;
+
+
+
+double get_wall_time()   // returns wall time in seconds
+{
+    struct timeval time;
+    if (gettimeofday(&time,NULL))
+    {
+        return 0;
+    }
+    double wtime = (double)time.tv_sec + (double)time.tv_usec * 0.000001;
+    return wtime;
+}
+void jacobiSerial(const float* startVector,  const float* functionTable, float* jacobiResult)
+{
+    int i, j, k;
+    float* array0 = (float*) malloc(size * size * sizeof(float));
+    float* array1 = (float*) malloc(size * size * sizeof(float));
+    float* analytisch = (float*) malloc(size * size * sizeof(float));
+
+    calcAnalyticalResult(h,analytisch);
+
+
+    float* a0 = array0; // last iteration
+    float* a1 = array1; // current iteration
+
+
+    for (i = 0; i < size * size; ++i)
+    {
+        a0[i] = startVector[i];
+        a1[i] = startVector[i];
+    }
+    
+    //vor den Iterationen:
+    float max = 0.f;
+    float euklid=0;
+    for (j = 1; j < size-1; j++) {
+    	for (i = 1; i < size-1; i++) {
+    		euklid = fabsf(a1[CO(i,j)] - analytisch[CO(i,j)]);
+                
+                if (euklid > max) max = euklid;
+    	}
+    }
+     printf("%.10f\n",euklid);
+
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+        float diff = 0;
+         euklid=0;
+        // swap a0 and a1
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+        
+         max = 0.f;
+
+        for (j = 1; j < size - 1; j++)
+        {
+            for (i = 1; i < size - 1; i++)
+            {
+                a1[CO(i,j)] = a0[CO(i, j - 1)]
+                              + a0[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+
+                diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
+                euklid = fabsf(a1[CO(i,j)] - analytisch[CO(i,j)]);
+                
+                if (euklid > max) max = euklid;
+            }
+        }
+        printf("%.10f\n",euklid);
+        if (diff / (size * size) < TOL) break;
+    }
+
+
+    for (i = 0; i < size * size; ++i)
+    {
+        jacobiResult[i] = a1[i];
+    }
+
+    free(a0);
+    free(a1);
+    free(analytisch);
+}
+
+
+void gaussSeidel(const float * startVector,  const float* functionTable, float* gaussSeidelResult)
+{
+    int i, j, k;
+    float* analytisch = (float*) malloc(size * size * sizeof(float));
+    calcAnalyticalResult(h,analytisch);
+    float* array0 = (float*) malloc(size * size * sizeof(float));
+    float* array1 = (float*) malloc(size * size * sizeof(float));
+
+    float* a0 = array0; // last iteration
+    float* a1 = array1; // current iteration
+
+    for (i = 0; i < size * size; ++i)
+    {
+        a0[i] = startVector[i];
+        a1[i] = startVector[i];
+    }
+    
+    //vor den Iterationen:
+    float max = 0.f;
+    float euklid=0;
+    for (j = 1; j < size-1; j++) {
+    	for (i = 1; i < size-1; i++) {
+    		euklid = fabsf(a1[CO(i,j)] - analytisch[CO(i,j)]);
+                
+                if (euklid > max) max = euklid;
+    	}
+    }
+     printf("%.10f\n",euklid);
+
+    for (k = 0; k < MAX_ITERATIONS; ++k)
+    {
+        // swap a0 and a1
+        float* temp = a0;
+        a0 = a1;
+        a1 = temp;
+         euklid=0;
+         max = 0;
+
+        float diff = 0;
+        for (j = 1; j < size - 1; j++)
+        {
+            for (i = 1; i < size - 1; i++)
+            {
+                a1[CO(i,j)] = a1[CO(i, j - 1)]
+                              + a1[CO(i - 1, j)]
+                              + a0[CO(i, j + 1)]
+                              + a0[CO(i + 1, j)]
+                              + functionTable[CO(i, j)];
+                a1[CO(i,j)] *= 0.25;
+
+                diff += fabsf(a1[CO(i,j)] - a0[CO(i,j)]);
+                
+                euklid = fabsf(a1[CO(i,j)] - analytisch[CO(i,j)]);
+                if (euklid > max) max = euklid;
+            }
+        }
+        printf("%.10f\n",euklid);
+        if (diff / (size * size) < TOL) break;
+    }
+
+    for (i = 0; i < size * size; ++i)
+    {
+        gaussSeidelResult[i] = a1[i];
+    }
+    free(a0);
+    free(a1);
+    free(analytisch);
+}
+
+
+
+bool compare(float* m1,float* m2)
+{
+    bool equals = true;
+    int i =0;
+    int j=0;
+
+    for (i = 0; i < (size*size); i++)
+    {
+        if (fabsf(m1[i]-m2[i]) >= EPSILON)
+        {
+
+            equals=false;
+        }
+        //  printf(" %f ", m1[i*size+j]-m2[i*size+j]);
+
+        //printf("\n");
+    }
+    return equals;
+}
+void computeFunctionTable( float* functionTable)
+{
+    int i, j;
+    float hSquared = h * h;
+    #pragma omp parallel for private(i, j)
+    for (i = 0; i < size; ++i)
+    {
+        for (j = 0; j < size; ++j)
+        {
+            float x1 = i * h;
+            float y1 = j * h;
+            functionTable[CO(i, j)] = hSquared * f1(x1, y1);
+        }
+    }
+}
+
+float f1(float x, float y)
+{
+    return (32 * (x * (1 - x) + y * (1 - y)));
+}
+
+void printResultMatrix(const float* matrix)
+{
+    int i, j;
+    for (i = 0; i < size; ++i)
+    {
+        for (j = 0; j < size; ++j)
+        {
+            float val = matrix[CO(i, j)];
+            if (j == 0)
+            {
+                printf("%.3f", val);
+            }
+            else if (j < size - 1)
+            {
+                printf(" %.3f ", val);
+            }
+            else
+            {
+                printf(" %.3f\n", val);
+            }
+        }
+    }
+}
+void calcAnalyticalResult(float h, float * result)
+{
+
+    int i, j;
+    for (i = 0; i < size; ++i)
+    {
+        float x = i * h;
+        for (j = 0; j < size; ++j)
+        {
+            float y = j * h;
+            float val;
+            if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
+            {
+                val = 0; // Randbedingung
+
+            }
+            else
+            {
+                val = 16 * x * (1 - x) * y * (1 - y);
+                //  printf("%i i\n",i);
+
+                //printf("%fx\n",x);
+                //printf("%fy\n",y);
+
+            }
+
+
+
+                result[CO(i, j)]=val;
+
+
+
+        }
+    }
+}
+void printAnalyticalResult()
+{
+
+    int i, j;
+    for (i = 0; i < size; ++i)
+    {
+        float x = i * h;
+        for (j = 0; j < size; ++j)
+        {
+            float y = j * h;
+            float val;
+            if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
+            {
+                val = 0; // Randbedingung
+            }
+            else
+            {
+                val = 16 * x * (1 - x) * y * (1 - y);
+            }
+
+            if (j == 0)
+            {
+                printf("%.3f", val);
+            }
+            else if (j < size - 1)
+            {
+                printf(" %.3f ", val);
+            }
+            else
+            {
+                printf(" %.3f\n", val);
+            }
+        }
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        printf("Usage: ./parallelDG SIZE\n (SIZE stands for the number of grid points in each dimension)\n");
+        return -1;
+    }
+
+    size = atoi(argv[1]);
+    if (size <= 1)
+    {
+        printf("Error! Size must be greater than 1.\n");
+        return -1;
+    }
+     h = 1 / (float) (size - 1);
+    // Precompute function f
+    float* precomputedF = malloc(size * size * sizeof(float));
+    computeFunctionTable( precomputedF);
+    // Analytical result
+    float* analyticalResult = (float*) malloc(size * size * sizeof(float));
+    // Create random start vector with zeroes at the proper positions (at the border)
+    float* startVector = (float*) malloc(size * size * sizeof(float));
+    //srand(time(NULL));
+    srand(1337);
+    int i, j;
+
+    #pragma omp parallel for private(i, j)
+    for (i = 0; i < size; ++i)
+    {
+        float x = i * h;
+        for (j = 0; j < size; ++j)
+        {
+            float y = j * h;
+            float val;
+            if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
+            {
+                val = 0; // Randbedingung
+            }
+            else
+            {
+                val = 16 * x * (1 - x) * y * (1 - y);
+            }
+            analyticalResult[CO(i,j)] = val;
+
+            if (i != 0 && j != 0 && i != size - 1 && j != size - 1)
+            {
+                val = (float) rand() / RAND_MAX;
+            }
+            startVector[CO(i, j)] = val;
+        }
+    }
+
+    double start, end;
+
+    int repeats = 1;
+
+    // Call Jacobi Sequential
+    float* jacobiSequentialResult = malloc(size * size * sizeof(float));
+    start = get_wall_time();
+    for (i = 0; i < repeats; ++i)
+    {
+        jacobiSerial(startVector, precomputedF, jacobiSequentialResult);
+    }
+    end = get_wall_time();
+    printf("Execution time Jacobi Sequential: %.3f seconds\n", (end - start) / repeats);
+    bool correct=true;
+    correct=compare(jacobiSequentialResult, analyticalResult);
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
+
+
+
+    // Call Jacobi SSE
+
+
+    // Call Gauss-Seidel
+    float* gaussSeidelResult = malloc(size * size * sizeof(float));
+    start = get_wall_time();
+    for (i = 0; i < repeats; ++i)
+    {
+        gaussSeidel(startVector,  precomputedF, gaussSeidelResult);
+    }
+    end = get_wall_time();
+    printf("Execution time Gauss-Seidel: %.3f seconds\n", (end - start) / repeats);
+    correct=compare(gaussSeidelResult, analyticalResult);
+    printf("  is it correct: %s  \n" ,(correct)?"true":"false");
+/*
+printf("analytisch\n");
+printAnalyticalResult(h);
+printf("jacobi\n");
+printResultMatrix(jacobiSequentialResult);
+printf("gaus\n");
+printResultMatrix(gaussSeidelResult); */
+
+    // TODO: The following is just debug code. Remove afterwards.
+    /*printf("\nFunctionTable:\n");
+    printResultMatrix(precomputedF);
+    printf("\nStartvektor:\n");
+    printResultMatrix(startVector);
+    printf("\nErgebnis Jacobi-Verfahren:\n");
+    printResultMatrix(jacobiResult);
+    printf("\nErgebnis Jacobi-Verfahren SSE:\n");
+    printResultMatrix(jacobiSSEResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren:\n");
+    printResultMatrix(gaussSeidelResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz:\n");
+    printResultMatrix(gaussSeidelRotSchwarzResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Rot-Schwarz SSE:\n");
+    printResultMatrix(gaussSeidelRotSchwarzSSEResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront:\n");
+    printResultMatrix(gaussSeidelWavefrontResult);
+    printf("\nErgebnis Gauss-Seidel-Verfahren Wavefront Cache:\n");
+    printResultMatrix(gaussSeidelWavefrontCacheResult);
+    printf("\nErgebnis analytisch:\n");
+    printAnalyticalResult(h);*/
+
+    free(jacobiSequentialResult);
+
+    free(gaussSeidelResult);
+
+    free(startVector);
+    free(precomputedF);
+    free(analyticalResult);
+    return 0;
+}
+
+
+
