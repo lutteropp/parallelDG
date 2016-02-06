@@ -351,6 +351,54 @@ Innerhalb der Iterationsschritte des Gauß-Seidel-Verfahrens bestehen Datenabhä
 
 Wir haben sowohl den naiven, falschen Parallelisierungsansatz als auch zwei verschiedene funktionierende Parallelisierungsansätze implementiert.
 
+Unsere Speedup-Messungen haben wir auf \texttt{i82sn02.itec.kit.edu} durchgeführt. Wir haben den Speedup jeweils relativ zu der sequentiellen Version bestimmt.
+
+\begin{table}[h!]
+\small
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c|}{8 Threads}  \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup  \\ 
+\hline 
+Sequentiell & 0.133 s & - &  0.133 s & - &  0.133 s & -  \\
+\hline
+OpenMP + SSE & 0,034 s & 3,324 & 0,02 s & 5,65 & 0,0322 s & 3,531  \\ 
+\hline 
+\end{tabular}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{64}$.}
+\end{table}
+
+\begin{table}[h!]
+\small
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c|}{8 Threads}  \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup  \\ 
+\hline 
+Sequentiell & 1,4 s & - &  1,4 s & - & 1,4 s & -  \\
+\hline
+OpenMP + SSE & 0,4 s & 3,5 & 0,145 s & 9,655 & 0,135 s & 10,37  \\ 
+\hline 
+\end{tabular}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{128}$.}
+\end{table}
+
+\begin{table}[h!]
+\small
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c|}{8 Threads}  \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup  \\ 
+\hline 
+Sequentiell & 14,8 s & - &  14,8 s & - &  14,8 s & -  \\
+\hline
+OpenMP + SSE & 4,3 s & 3,442 & 1,28 s & 11,563 & 0,75 s & 2,47  \\ 
+\hline 
+\end{tabular}
+\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{256}$.}
+\end{table}
+
+
 \subsection{Naiver Parallelisierungsansatz}\label{gs:naiv}
 Der naive Parallelisierungsansatz ist, wie in Abschnitt~\ref{parallel:jacobi} die äußerste Schleife mittels \texttt{\#pragma omp parallel for} zu parallelisieren. Da eine parallele Ausführung der Schleifeniterationen mittels OpenMP nicht die Iterationsreihenfolge garantiert, kann es hierbei zu Wettlaufsituationen (``Race Conditions'') kommen.
 

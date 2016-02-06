@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  6 FEB 2016 15:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.12.2)  6 FEB 2016 15:37
 entering extended mode
 **doku.tex
 (doku.tex
@@ -434,291 +434,338 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 153.
 
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
+) [3]
 
-LaTeX Warning: Reference `jacobi:abbruch' on page 3 undefined on input line 189
-.
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-[3]
+[4] <bilder/fehler_jacobi_1_4.png, id=33, 481.8pt x 361.35pt>
+File: bilder/fehler_jacobi_1_4.png Graphic file (type png)
 
-LaTeX Warning: Reference `ergebnisse' on page 4 undefined on input line 229.
+<use bilder/fehler_jacobi_1_4.png>
+Package pdftex.def Info: bilder/fehler_jacobi_1_4.png used on input line 256.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
 
-<bilder/dj4.png, id=29, 371.88937pt x 226.59656pt>
-File: bilder/dj4.png Graphic file (type png)
- <use bilder/dj4.png>
-Package pdftex.def Info: bilder/dj4.png used on input line 234.
-(pdftex.def)             Requested size: 424.58624pt x 258.71346pt.
+<bilder/fehler_gs_1_4.png, id=34, 481.8pt x 361.35pt>
+File: bilder/fehler_gs_1_4.png Graphic file (type png)
 
-<bilder/dj32.png, id=30, 368.87813pt x 223.58531pt>
-File: bilder/dj32.png Graphic file (type png)
- <use bilder/dj32.png>
-Package pdftex.def Info: bilder/dj32.png used on input line 240.
-(pdftex.def)             Requested size: 424.58624pt x 257.34967pt.
+<use bilder/fehler_gs_1_4.png>
+Package pdftex.def Info: bilder/fehler_gs_1_4.png used on input line 260.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+ [5 <./bilder/fehler_jacobi_1_4.png>]
+<bilder/fehler_jacobi_1_8.png, id=39, 481.8pt x 361.35pt>
+File: bilder/fehler_jacobi_1_8.png Graphic file (type png)
 
-<bilder/dgs4.png, id=31, 372.64218pt x 228.855pt>
-File: bilder/dgs4.png Graphic file (type png)
- <use bilder/dgs4.png>
-Package pdftex.def Info: bilder/dgs4.png used on input line 247.
-(pdftex.def)             Requested size: 424.58624pt x 260.7647pt.
+<use bilder/fehler_jacobi_1_8.png>
+Package pdftex.def Info: bilder/fehler_jacobi_1_8.png used on input line 264.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
 
-<bilder/dgs32.png, id=32, 368.1253pt x 228.855pt>
-File: bilder/dgs32.png Graphic file (type png)
- <use bilder/dgs32.png>
-Package pdftex.def Info: bilder/dgs32.png used on input line 253.
-(pdftex.def)             Requested size: 424.58624pt x 263.97737pt.
+<bilder/fehler_gs_1_8.png, id=40, 481.8pt x 361.35pt>
+File: bilder/fehler_gs_1_8.png Graphic file (type png)
 
-[4] [5 <./bilder/dj4.png> <./bilder/dj32.png>] [6 <./bilder/dgs4.png> <./bilder
-/dgs32.png>]
+<use bilder/fehler_gs_1_8.png>
+Package pdftex.def Info: bilder/fehler_gs_1_8.png used on input line 268.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+ [6 <./bilder/fehler_gs_1_4.png> <./bilder/fehler_jacobi_1_8.png>] <bilder/fehl
+er_jacobi_1_16.png, id=46, 481.8pt x 361.35pt>
+File: bilder/fehler_jacobi_1_16.png Graphic file (type png)
 
-LaTeX Warning: Reference `ergebnisse' on page 7 undefined on input line 264.
+<use bilder/fehler_jacobi_1_16.png>
+Package pdftex.def Info: bilder/fehler_jacobi_1_16.png used on input line 272.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+
+<bilder/fehler_gs_1_16.png, id=47, 481.8pt x 361.35pt>
+File: bilder/fehler_gs_1_16.png Graphic file (type png)
+
+<use bilder/fehler_gs_1_16.png>
+Package pdftex.def Info: bilder/fehler_gs_1_16.png used on input line 276.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+ [7 <./bilder/fehler_gs_1_8.png> <./bilder/fehler_jacobi_1_16.png>] <bilder/feh
+ler_jacobi_1_32.png, id=54, 481.8pt x 361.35pt>
+File: bilder/fehler_jacobi_1_32.png Graphic file (type png)
+
+<use bilder/fehler_jacobi_1_32.png>
+Package pdftex.def Info: bilder/fehler_jacobi_1_32.png used on input line 280.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+
+<bilder/fehler_gs_1_32.png, id=55, 481.8pt x 361.35pt>
+File: bilder/fehler_gs_1_32.png Graphic file (type png)
+
+<use bilder/fehler_gs_1_32.png>
+Package pdftex.def Info: bilder/fehler_gs_1_32.png used on input line 284.
+(pdftex.def)             Requested size: 385.4405pt x 289.0804pt.
+ [8 <./bilder/fehler_gs_1_16.png> <./bilder/fehler_jacobi_1_32.png>]
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 302--302
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
 
 
-LaTeX Warning: Reference `parallel:jacobi' on page 7 undefined on input line 27
-3.
-
-<bilder/race.png, id=42, 420.82219pt x 194.97844pt>
-File: bilder/race.png Graphic file (type png)
- <use bilder/race.png>
-Package pdftex.def Info: bilder/race.png used on input line 282.
-(pdftex.def)             Requested size: 424.58624pt x 196.72435pt.
+Underfull \hbox (badness 10000) in paragraph at lines 306--306
+[]|\T1/cmr/m/n/9 OpenMP
+ []
 
 
-LaTeX Warning: Reference `fig:matrix' on page 7 undefined on input line 289.
-
-[7 <./bilder/race.png>]
-<bilder/rspseudocode.png, id=47, 599.99156pt x 353.06906pt>
-File: bilder/rspseudocode.png Graphic file (type png)
-
-<use bilder/rspseudocode.png>
-Package pdftex.def Info: bilder/rspseudocode.png used on input line 310.
-(pdftex.def)             Requested size: 424.58624pt x 249.8565pt.
- [8 <./bilder/rspseudocode.png>]
-
-LaTeX Warning: Reference `fig:matrix:even' on page 9 undefined on input line 32
-7.
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 319--319
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
 
 
-LaTeX Warning: Reference `fig:matrix:odd' on page 9 undefined on input line 368
-.
+Underfull \hbox (badness 10000) in paragraph at lines 323--323
+[]|\T1/cmr/m/n/9 OpenMP
+ []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[9] <bilder/sn265.png, id=54, 697.10437pt x 114.4275pt>
+
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 336--336
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
+[]|\T1/cmr/m/n/9 OpenMP
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[9 <./bilder/fehler_gs_1_32.png>]
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 363--363
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 365--365
+[]|\T1/cmr/m/n/9 OpenMP
+ []
+
+
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 378--378
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 380--380
+[]|\T1/cmr/m/n/9 OpenMP
+ []
+
+
+Overfull \hbox (1.00117pt too wide) in paragraph at lines 393--393
+[]|\T1/cmr/m/n/9 Sequentiell| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[]|\T1/cmr/m/n/9 OpenMP
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[10] [11] [12]
+Overfull \hbox (2.36871pt too wide) in paragraph at lines 532--533
+[]\T1/cmr/m/n/10 Vermutlicher Grund wie-so un-se-re Wavefront-Implementierung l
+ang-sa-mer als se-quen-ti-el-les Gauÿ-
+ []
+
+<bilder/hack.png, id=74, 420.82219pt x 115.93312pt>
+File: bilder/hack.png Graphic file (type png)
+ <use bilder/hack.png>
+Package pdftex.def Info: bilder/hack.png used on input line 545.
+(pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
+
+[13 <./bilder/hack.png>] <bilder/sn265.png, id=79, 697.10437pt x 114.4275pt>
 File: bilder/sn265.png Graphic file (type png)
- <use bilder/sn265.png>
-Package pdftex.def Info: bilder/sn265.png used on input line 411.
+
+<use bilder/sn265.png>
+Package pdftex.def Info: bilder/sn265.png used on input line 563.
 (pdftex.def)             Requested size: 424.58624pt x 69.69415pt.
-
-<bilder/sn2129.png, id=56, 696.35156pt x 112.92188pt>
+ <bilder/sn2129.png, id=81, 696.35156pt x 112.92188pt>
 File: bilder/sn2129.png Graphic file (type png)
- <use bilder/sn2129.png>
-Package pdftex.def Info: bilder/sn2129.png used on input line 416.
+
+<use bilder/sn2129.png>
+Package pdftex.def Info: bilder/sn2129.png used on input line 568.
 (pdftex.def)             Requested size: 424.58624pt x 68.85121pt.
-
-<bilder/sn2513.png, id=57, 696.35156pt x 112.16907pt>
+ <bilder/sn2513.png, id=82, 696.35156pt x 112.16907pt>
 File: bilder/sn2513.png Graphic file (type png)
- <use bilder/sn2513.png>
-Package pdftex.def Info: bilder/sn2513.png used on input line 421.
-(pdftex.def)             Requested size: 424.58624pt x 68.39221pt.
 
-<bilder/sn21025.png, id=58, 697.8572pt x 113.67468pt>
+<use bilder/sn2513.png>
+Package pdftex.def Info: bilder/sn2513.png used on input line 573.
+(pdftex.def)             Requested size: 424.58624pt x 68.39221pt.
+ <bilder/sn21025.png, id=83, 697.8572pt x 113.67468pt>
 File: bilder/sn21025.png Graphic file (type png)
- <use bilder/sn21025.png>
-Package pdftex.def Info: bilder/sn21025.png used on input line 426.
+
+<use bilder/sn21025.png>
+Package pdftex.def Info: bilder/sn21025.png used on input line 578.
 (pdftex.def)             Requested size: 424.58624pt x 69.16106pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<bilder/sn365.png, id=59, 697.10437pt x 113.67468pt>
+<bilder/sn365.png, id=84, 697.10437pt x 113.67468pt>
 File: bilder/sn365.png Graphic file (type png)
  <use bilder/sn365.png>
-Package pdftex.def Info: bilder/sn365.png used on input line 432.
+Package pdftex.def Info: bilder/sn365.png used on input line 584.
 (pdftex.def)             Requested size: 424.58624pt x 69.23564pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn3129.png, id=60, 697.10437pt x 113.67468pt>
+<bilder/sn3129.png, id=85, 697.10437pt x 113.67468pt>
 File: bilder/sn3129.png Graphic file (type png)
  <use bilder/sn3129.png>
-Package pdftex.def Info: bilder/sn3129.png used on input line 437.
+Package pdftex.def Info: bilder/sn3129.png used on input line 589.
 (pdftex.def)             Requested size: 424.58624pt x 69.23564pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn3513.png, id=61, 697.8572pt x 113.67468pt>
+<bilder/sn3513.png, id=86, 697.8572pt x 113.67468pt>
 File: bilder/sn3513.png Graphic file (type png)
  <use bilder/sn3513.png>
-Package pdftex.def Info: bilder/sn3513.png used on input line 442.
+Package pdftex.def Info: bilder/sn3513.png used on input line 594.
 (pdftex.def)             Requested size: 424.58624pt x 69.16106pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn31025.png, id=62, 697.10437pt x 113.67468pt>
+<bilder/sn31025.png, id=87, 697.10437pt x 113.67468pt>
 File: bilder/sn31025.png Graphic file (type png)
 
 <use bilder/sn31025.png>
-Package pdftex.def Info: bilder/sn31025.png used on input line 447.
+Package pdftex.def Info: bilder/sn31025.png used on input line 599.
 (pdftex.def)             Requested size: 424.58624pt x 69.23564pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn7129.png, id=63, 1063.72406pt x 112.16907pt>
+<bilder/sn7129.png, id=88, 1063.72406pt x 112.16907pt>
 File: bilder/sn7129.png Graphic file (type png)
  <use bilder/sn7129.png>
-Package pdftex.def Info: bilder/sn7129.png used on input line 453.
+Package pdftex.def Info: bilder/sn7129.png used on input line 605.
 (pdftex.def)             Requested size: 509.50218pt x 53.72585pt.
 
-Overfull \hbox (84.91594pt too wide) in paragraph at lines 453--454
+Overfull \hbox (84.91594pt too wide) in paragraph at lines 605--606
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn7513.png, id=64, 1063.72406pt x 113.67468pt>
+<bilder/sn7513.png, id=89, 1063.72406pt x 113.67468pt>
 File: bilder/sn7513.png Graphic file (type png)
  <use bilder/sn7513.png>
-Package pdftex.def Info: bilder/sn7513.png used on input line 458.
+Package pdftex.def Info: bilder/sn7513.png used on input line 610.
 (pdftex.def)             Requested size: 509.50218pt x 54.447pt.
 
-Overfull \hbox (84.91594pt too wide) in paragraph at lines 458--459
+Overfull \hbox (84.91594pt too wide) in paragraph at lines 610--611
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn71025.png, id=65, 1062.21844pt x 114.4275pt>
+<bilder/sn71025.png, id=90, 1062.21844pt x 114.4275pt>
 File: bilder/sn71025.png Graphic file (type png)
 
 <use bilder/sn71025.png>
-Package pdftex.def Info: bilder/sn71025.png used on input line 463.
+Package pdftex.def Info: bilder/sn71025.png used on input line 615.
 (pdftex.def)             Requested size: 509.50218pt x 54.88615pt.
 
-Overfull \hbox (84.91594pt too wide) in paragraph at lines 463--464
+Overfull \hbox (84.91594pt too wide) in paragraph at lines 615--616
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn02128.png, id=66, 775.39688pt x 279.29344pt>
+<bilder/sn02128.png, id=91, 775.39688pt x 279.29344pt>
 File: bilder/sn02128.png Graphic file (type png)
 
 <use bilder/sn02128.png>
-Package pdftex.def Info: bilder/sn02128.png used on input line 471.
+Package pdftex.def Info: bilder/sn02128.png used on input line 623.
 (pdftex.def)             Requested size: 424.58624pt x 152.93425pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn02256.png, id=67, 775.39688pt x 280.79906pt>
+<bilder/sn02256.png, id=92, 774.64406pt x 280.04625pt>
 File: bilder/sn02256.png Graphic file (type png)
 
 <use bilder/sn02256.png>
-Package pdftex.def Info: bilder/sn02256.png used on input line 477.
-(pdftex.def)             Requested size: 424.58624pt x 153.7587pt.
+Package pdftex.def Info: bilder/sn02256.png used on input line 629.
+(pdftex.def)             Requested size: 424.58624pt x 153.49603pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn0732.png, id=68, 804.00375pt x 280.79906pt>
+<bilder/sn0732.png, id=93, 804.00375pt x 280.79906pt>
 File: bilder/sn0732.png Graphic file (type png)
  <use bilder/sn0732.png>
-Package pdftex.def Info: bilder/sn0732.png used on input line 484.
+Package pdftex.def Info: bilder/sn0732.png used on input line 636.
 (pdftex.def)             Requested size: 424.58624pt x 148.2872pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn07128.png, id=69, 803.25093pt x 292.09125pt>
+<bilder/sn07128.png, id=94, 803.25093pt x 292.09125pt>
 File: bilder/sn07128.png Graphic file (type png)
 
 <use bilder/sn07128.png>
-Package pdftex.def Info: bilder/sn07128.png used on input line 490.
+Package pdftex.def Info: bilder/sn07128.png used on input line 642.
 (pdftex.def)             Requested size: 424.58624pt x 154.39757pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<bilder/sn021024.png, id=70, 428.35031pt x 266.49562pt>
+<bilder/sn021024.png, id=95, 428.35031pt x 266.49562pt>
 File: bilder/sn021024.png Graphic file (type png)
 
 <use bilder/sn021024.png>
-Package pdftex.def Info: bilder/sn021024.png used on input line 496.
+Package pdftex.def Info: bilder/sn021024.png used on input line 648.
 (pdftex.def)             Requested size: 424.58624pt x 264.15678pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Overfull \hbox (2.36871pt too wide) in paragraph at lines 503--504
-[]\T1/cmr/m/n/10 Vermutlicher Grund wie-so un-se-re Wavefront-Implementierung l
-ang-sa-mer als se-quen-ti-el-les Gauÿ-
- []
-
-[10 <./bilder/sn265.png> <./bilder/sn2129.png>]
-<bilder/hack.png, id=76, 420.82219pt x 115.93312pt>
-File: bilder/hack.png Graphic file (type png)
- <use bilder/hack.png>
-Package pdftex.def Info: bilder/hack.png used on input line 516.
-(pdftex.def)             Requested size: 424.58624pt x 116.97122pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[11 <./bilder/sn2513.png> <./bilder/sn21025.png>] [12 <./bilder/sn365.png> <./b
-ilder/sn3129.png> <./bilder/sn3513.png> <./bilder/sn31025.png> <./bilder/sn7129
-.png> <./bilder/sn7513.png>] [13 <./bilder/sn71025.png> <./bilder/sn02128.png> 
-<./bilder/sn02256.png>] [14 <./bilder/sn0732.png> <./bilder/sn07128.png>]
-[15 <./bilder/sn021024.png> <./bilder/hack.png>] (doku.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[14 <./bilder/sn265.png> <./bilder/sn2129.png> <./bilder/sn2513.png>] [15 <./bi
+lder/sn21025.png> <./bilder/sn365.png> <./bilder/sn3129.png> <./bilder/sn3513.p
+ng> <./bilder/sn31025.png> <./bilder/sn7129.png>] [16 <./bilder/sn7513.png> <./
+bilder/sn71025.png> <./bilder/sn02128.png> <./bilder/sn02256.png>] [17 <./bilde
+r/sn0732.png> <./bilder/sn07128.png>] [18 <./bilder/sn021024.png>] (doku.aux) )
+ 
 Here is how much of TeX's memory you used:
- 2807 strings out of 493673
- 34868 string characters out of 3141509
- 105883 words of memory out of 3000000
- 6078 multiletter control sequences out of 15000+200000
- 19388 words of font info for 54 fonts, out of 3000000 for 9000
+ 2825 strings out of 493673
+ 35534 string characters out of 3141509
+ 105985 words of memory out of 3000000
+ 6090 multiletter control sequences out of 15000+200000
+ 20933 words of font info for 60 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 34i,11n,24p,824b,240s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\
-dpi600\ectt1000.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\lj
-four\jknappen\ec\dpi600\ecbx1200.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTe
-X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\GrilledSheep\Ap
-pData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\User
-s\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx
-1440.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknapp
-en\ec\dpi600\ecrm0900.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts
-\pk\ljfour\jknappen\ec\dpi600\ecbx0900.pk> <C:\Users\GrilledSheep\AppData\Local
-\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\GrilledSh
-eep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:
-/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
-iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on doku.pdf (15 pages, 505768 bytes).
+ 34i,11n,24p,824b,238s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dp
+i600\ectt1000.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfo
+ur\jknappen\ec\dpi600\ecbx1200.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\
+2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\GrilledSheep\AppD
+ata\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\
+GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx14
+40.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen
+\ec\dpi600\ecrm0900.pk> <C:\Users\GrilledSheep\AppData\Local\MiKTeX\2.9\fonts\p
+k\ljfour\jknappen\ec\dpi600\ecbx0900.pk> <C:\Users\GrilledSheep\AppData\Local\M
+iKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\GrilledShee
+p\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX 
+2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on doku.pdf (18 pages, 450554 bytes).
 PDF statistics:
- 477 PDF objects out of 1000 (max. 8388607)
+ 530 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 116 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 words of extra memory for PDF output out of 10000 (max. 10000000)
 

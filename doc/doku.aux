@@ -10,56 +10,54 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}Abbruchkriterium}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Vergleich der Konvergenz und Stabilit\IeC {\"a}t beider Verfahren}{4}}
 \newlabel{konvergenz}{{1.3}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Anzahl Iterationen in beiden Verfahren f\IeC {\"u}r verschiedene Verfeinerungen $h$, bis das Abbruchkriterium \texttt  {true} wurde.}}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \IeC {\"U}ber zehn Aufrufe gemittelte Anzahl Iterationen in beiden Verfahren f\IeC {\"u}r verschiedene Verfeinerungen $h$, bis unser Abbruchkriterium \texttt  {true} wurde.}}{4}}
 \newlabel{fig:Bild1}{{1}{4}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Sequentielle Implementierung}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Laufzeiten bei verschiedenen Verfeinerungen}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Approximationsfehler}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Jacobi Approximationsfehler f\IeC {\"u}r $size=4$}}{5}}
-\newlabel{fig:Bild2}{{2}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Jacobi Approximationsfehler f\IeC {\"u}r $size=32$}}{5}}
-\newlabel{fig:Bild3}{{3}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Gau\IeC {\ss }-Seidel Approximationsfehler f\IeC {\"u}r $size=4$}}{6}}
-\newlabel{fig:Bild4}{{4}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Gau\IeC {\ss }-Seidel Approximationsfehler f\IeC {\"u}r $size=32$}}{6}}
-\newlabel{fig:Bild5}{{5}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Parallelisierung}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Jacobi-Verfahren}{7}}
-\newlabel{parallel:jacobi}{{3.1}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Gau\IeC {\ss }-Seidel-Verfahren}{7}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Naiver Parallelisierungsansatz}{7}}
-\newlabel{gs:naiv}{{3.2.1}{7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Die Racecondition in Gaus-Seidel mit naiver Parallelisierung. Es wird gemeinsam auf a1 gelesen und geschrieben.}}{7}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Erweiterter Parallelisierungsansatz: Rot-Schwarz}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Aufteilung der L\IeC {\"o}sungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabh\IeC {\"a}ngigkeiten bestehen. Die Randzellen, deren Eintr\IeC {\"a}ge per Annahme immer den Wert $0$ enthalten, sind in blasseren Farben markiert.}}{8}}
-\newlabel{fig:matrix}{{7}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Pseudocode einer Rot-Schwarz Implementierung aus der Vorlesung Heterogene parallele Rechensysteme.}}{8}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$ am Beispiel $size=6$}}{9}}
-\newlabel{fig:matrix:even}{{9}{9}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$ am Beispiel $size=7$}}{10}}
-\newlabel{fig:matrix:odd}{{10}{10}}
-\@writefile{toc}{\contentsline {paragraph}{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}{10}}
-\newlabel{ergebnisse}{{3.2.2}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{10}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Erweiterter Parallelisierungsansatz: Wavefront}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{11}}
-\@writefile{toc}{\contentsline {paragraph}{Berechnung der Indizes}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Methodenwahl}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Alte Performance Messung f\IeC {\"u}r H=128 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Alte Performance Messung f\IeC {\"u}r H=256 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Alte Performance Messung f\IeC {\"u}r H=32 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Alte Performance Messung f\IeC {\"u}r H=128 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Alte Performance Messung f\IeC {\"u}r H=1024 auf sn02(8 Kerne) mit allen Implementierungen. Der lauf ging nur bis 10000 Iterationen.}}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indizes anhand eines Beispiels. Die Variable \texttt  {hack} ist dabei blau und \texttt  {hack2} rot.}}{15}}
-\newlabel{fig:Bild6}{{27}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Laufzeiten der sequentiellen Implementierungen des Jacobi- und Gau\IeC {\ss }-Seidel-Verfahrens f\IeC {\"u}r verschiedene Verfeinerungen $h$ auf \texttt  {i82sn02.itec.kit.edu}}}{5}}
+\newlabel{fig:seq_sn02}{{2}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Approximationsfehler}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Parallelisierung des Jacobi-Verfahrens}{9}}
+\newlabel{parallel:jacobi}{{3}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{64}$.}}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{128}$.}}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{256}$.}}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Parallelisierung des Gau\IeC {\ss }-Seidel-Verfahrens}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{64}$.}}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{128}$.}}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Naiver Parallelisierungsansatz}{10}}
+\newlabel{gs:naiv}{{4.1}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Speedup-Messungen f\IeC {\"u}r verschiedene Parallelisierungen des Jacobi-Verfahrens f\IeC {\"u}r $h=\frac  {1}{256}$.}}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Erweiterter Parallelisierungsansatz: Rot-Schwarz}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Aufteilung der L\IeC {\"o}sungsmatrix $U$ in rote und schwarze Zellen, sodass zwischen Zellen gleicher Farbe keine Datenabh\IeC {\"a}ngigkeiten bestehen. Die Randzellen, deren Eintr\IeC {\"a}ge per Annahme immer den Wert $0$ enthalten, sind in blasseren Farben markiert.}}{11}}
+\newlabel{fig:matrix}{{3}{11}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r gerade Werte von $size$ am Beispiel $size=6$}}{12}}
+\newlabel{fig:matrix:even}{{4}{12}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Berechnung der Nachbarindizes f\IeC {\"u}r ungerade Werte von $size$ am Beispiel $size=7$}}{12}}
+\newlabel{fig:matrix:odd}{{5}{12}}
+\@writefile{toc}{\contentsline {paragraph}{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen, Skalierbarkeit}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Erweiterter Parallelisierungsansatz: Wavefront}{12}}
+\@writefile{toc}{\contentsline {paragraph}{Berechnung der Indizes}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Veranschaulichung der Permutation, welche verwendet wird sowie der Verschiebung der Indizes anhand eines Beispiels. Die Variable \texttt  {hack} ist dabei blau und \texttt  {hack2} rot.}}{13}}
+\newlabel{fig:Bild6}{{6}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Methodenwahl}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Anhang: Noch mehr Laufzeitmessungen}{14}}
+\newlabel{ergebnisse}{{6}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Ergebnisse der Messung auf sn02 (8 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Ergebnisse der Messung auf sn03 (4 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Ergebnisse der Messung auf sn07 (32 Kerne)}}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Alte Performancemessung f\IeC {\"u}r $size$=128 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Alte Performancemessung f\IeC {\"u}r $size$=256 auf sn02(8 Kerne) mit allen Implementierungen. Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Alte Performancemessung f\IeC {\"u}r $size$=32 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Alte Performancemessung f\IeC {\"u}r $size$=128 auf sn07(32 Kerne) mit allen Implementierungen.Das Abbruchkriterium ist hierbei noch etwas feiner eingestellt.}}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Alte Performancemessung f\IeC {\"u}r $size$=1024 auf sn02(8 Kerne) mit allen Implementierungen. Der Lauf ging nur bis 10000 Iterationen.}}{18}}
