@@ -95,7 +95,7 @@ $$
 
 Man könnte dieses lineare Gleichungssystem natürlich auch mit direkten Verfahren wie dem Gaußschen-Eliminationsverfahren lösen. Dieses ist jedoch nur sehr schlecht parallelisierbar. Außerdem ist das Gaußsche-Eliminationsverfahren sehr anfällig für numerische Störungen. Das ist bei iterativen Verfahren normalerweise nicht der Fall. Hinzu kommt, dass bei großen linearen Gleichungssystemen mit sehr vielen Unbekannten das Gaußsche Eliminationsverfahren viel zu lange dauert.
 
-\paragraph{Unsere Interpretation des Lösungsvektors $u$}
+\paragraph{Unsere Interpretation des Lösungsvektors $u$:}
 In unserer Bearbeitung der Aufgabenstellung haben wir die Lösungsvektor $u$ als Lösungsmatrix $U$ uminterpretiert. Hierbei haben wir ausgenutzt, dass in der Aufgabenstellung die Randbedingungen $u_{i,j} = 0$ für $i \in \{0, n+1\}$ oder $j \in \{0, n+1\}$ gelten. Die Lösungsmatrix $U$ ergibt sich so beispielsweise für $h=\frac{1}{3}$ als:
 
 $$
@@ -307,7 +307,7 @@ OpenMP & 0.217 s & 0.498 & 0.073 s & 1.329 & 0.104 s & 0.894 \\
 OpenMP + SSE & 0.117 s & 0.923 & 0.048 s & 2.02 & 0.052 s & 1.789 \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{64}$.}
+\caption{\small{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{64}$.}}
 \end{table}
 
 \begin{table}[h!]
@@ -325,7 +325,7 @@ OpenMP & 2.98 s & 0.501 & 0.871 s & 1.793 & 0.854 s & 1.768 \\
 OpenMP + SSE & 1.565 s & 0.954 & 0.49 s & 3.188 & 0.373 s & 4.048 \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{128}$.}
+\caption{\small{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{128}$.}}
 \end{table}
 
 \begin{table}[h!]
@@ -343,10 +343,8 @@ OpenMP & 43.427 s & 0.593 & 10.714 s & 2.315 & 6.867 s & 3.874 \\
 OpenMP + SSE & 22.424 s & 1.149 & 5.655 s & 4.385 & 3.593 s & 7.405  \\ 
 \hline 
 \end{tabular}
-\caption{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{256}$.}
+\caption{\small{Speedup-Messungen für verschiedene Parallelisierungen des Jacobi-Verfahrens für $h=\frac{1}{256}$.}}
 \end{table}
-
-\newpage
 
 \section{Parallelisierung des Gauß-Seidel-Verfahrens}
 
@@ -561,9 +559,7 @@ Da der Ansatz nicht so viel schneller wurde, dass man Rot-Schwarz hätte schlage
 \end{figure}
 
 \section{Methodenwahl}
-Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Größe der Lösungsmatrix $U$ von $size \times size$ mit $size = 31$ (was $h=\frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist die Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
-
-TODO: Laufzeitmessungen
+Es empfiehlt sich das Gauß-Seidel-Verfahren zu nutzen, weil es im allgemeinen schneller konvergiert als das Jacobi-Verfahren. Bis zu einer Größe der Lösungsmatrix $U$ von $size \times size$ mit $size = 31$ (was $h=\frac{1}{30}$ entspricht) lohnt sich das Parallelisieren nicht. Bei größeren Matrizen (also $h < \frac{1}{30}$) ist unsere Rot-Schwarz SSE Implementierung des Gauß-Seidel Verfahrens am schnellsten.
 
 \newpage
 
