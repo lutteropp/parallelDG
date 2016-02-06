@@ -225,6 +225,8 @@ Da sich die Einträge des Vektors $b$ innerhalb der Iterationen nicht ändern, h
 
 Den Startvektor haben wir mit zufälligen Gleitkommazahlen gefüllt.
 
+\newpage
+
 \subsection{Laufzeiten bei verschiedenen Verfeinerungen}
 Wir haben die Laufzeiten unser sequentiellen Implementierungen für $h=\frac{1}{2^l}$ mit $l \in \{6, 7, 8, 9, 10\}$ gemessen, da für kleinere Werte von $l$ die Messungen zu stark variierten. Wir haben die Messungen auf \texttt{i82sn02.itec.kit.edu} (Abb.~\ref{fig:seq_sn02}) durchgeführt.
 
@@ -242,7 +244,6 @@ Gauß-Seidel & 0.113 s & 1.4 s & 14.8 s & 115 s & 545 s
 \label{fig:seq_sn02}
 \end{figure}
 
-\newpage
 \subsection{Approximationsfehler}
 
 Wir haben den maximalen absoluten Approximationsfehler in der euklidischen Norm in jedem Iterationsschritt für das Jacobi- und das Gauß-Seidel-Verfahren gemessen. Sei $U^{(*)}$ die analytische Lösung für $U$ und $U^{(k)}$ die Lösungsmatrix im $k$-ten Iterationsschritt. Der maximale absolute Approximationsfehler in euklidischer Norm in Iteration $k$ ist definiert als
@@ -253,31 +254,31 @@ Sei $x_i=i*h$ und $y_j=j*h$ für $i,j = 0, \ldots, n+1$. Wir haben die analytisc
 Wir haben die Messungen nur für die Verfeinerungen $h \in \left \{\frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{1}{32} \right\}$ durchgeführt, da für kleinere $h$ die Grafiken zu groß werden und man nichts mehr erkennt. Die Grafiken haben wir mit \texttt{gnuplot} erstellt. Beim Vergleich der Grafiken fällt auf, dass der maximale Approximationsfehler beim Gauß-Seidel-Verfahren schneller sinkt als beim Jacobi-Verfahren. Außerdem kann es in beiden Verfahren zu einer geringfügigen Verschlechterung des maximalen Approximationsfehlers in den ersten Iterationen kommen.
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_jacobi_1_4.png}
+\includegraphics[scale=0.7]{bilder/fehler_jacobi_1_4.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_gs_1_4.png}
+\includegraphics[scale=0.7]{bilder/fehler_gs_1_4.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_jacobi_1_8.png}
+\includegraphics[scale=0.7]{bilder/fehler_jacobi_1_8.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_gs_1_8.png}
+\includegraphics[scale=0.7]{bilder/fehler_gs_1_8.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_jacobi_1_16.png}
+\includegraphics[scale=0.7]{bilder/fehler_jacobi_1_16.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_gs_1_16.png}
+\includegraphics[scale=0.7]{bilder/fehler_gs_1_16.png}
 \end{center}
 
 \begin{center}
-\includegraphics[scale=0.8]{bilder/fehler_jacobi_1_32.png}
+\includegraphics[scale=0.7]{bilder/fehler_jacobi_1_32.png}
 \end{center}
 
 \begin{center}
@@ -475,6 +476,7 @@ $\textcolor{black}{\downarrow: idx + 1} \quad$
 \caption{Berechnung der Nachbarindizes für ungerade Werte von $size$ am Beispiel $size=7$}
 \label{fig:matrix:odd}
 \end{figure}
+\newpage
 
 \subsubsection*{Messung von Speedup und Effizienz unter verschiedenen Verfeinerungen} 
 
@@ -534,8 +536,19 @@ Rot-Schwarz OpenMP + SSE & 4,303 s & 3,528 & 3,528 & 1,196 s & 12,511 & 3,128 & 
 \caption{Speedup- und Effizienz-Messungen für verschiedene Parallelisierungen des Gauß-Seidel-Verfahrens mit der Rot-Schwarz-Methode für $h=\frac{1}{256}$.}
 \end{table}
 
+\newpage
+
 \subsubsection*{Bewertung der Skalierbarkeit}
-TODO: Bildchen
+Unsere Messungen zeigen, dass bei hinreichend hoher Problemgröße (also kleinem $h$) unsere Implementierung gut mit der Anzahl verfügbarer Threads skaliert. Ist die Problemgröße jedoch zu klein gewählt, führen mehr Threads nur noch zu einer geringen zusätzlichen Beschleunigung.
+
+Um die Skalierbarkeit hinsichtlich der Problemgröße zu bewerten, haben wir unsere Gauß-Seidel Rot-Schwarz SSE Implementierung mit verschiedenen Größen des Lösungsvektors $u$ getestet. In Abbildung~\ref{fig:skalierbarkeit} ist zu sehen, dass der erforderliche Zeitaufwand nahezu linear in der Größe des Lösungsvektors $u$ ist. Zur Bestimmung der Messwerte haben wir verwendet, dass $u$ insgesamt $(size-2)^2$ Elemente enthält.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.7]{bilder/skalierbarkeit_u.png}
+\caption{Laufzeit von Gauß-Seidel Rot-Schwarz SSE mit 8 Threads für verschiedene Größen von $u$ auf \texttt{i82sn02.itec.kit.edu}}
+\label{fig:skalierbarkeit}
+\end{figure}
 
 \subsection{Erweiterter Parallelisierungsansatz: Wavefront}
 Beim Wavefront Algorithmus wird anstatt über die Spalten oder Zeilen zu iterieren über die Antidiagonalen iteriert. Das hat den Vorteil, dass die Daten nicht voneinander abhängig sind und das selbe herauskommt, wie beim eigentlichen Gauß-Seidel Verfahren in serieller Form.
