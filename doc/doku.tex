@@ -189,9 +189,9 @@ Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, das
 Für das Gauß-Seidel-Verfahren haben wir dasselbe Abbruchkriterium wie in Abschnitt~\ref{jacobi:abbruch} verwendet. Dies erachten wir für sinnvoll, da es sich beim Gauß-Seidel-Verfahren bloß um eine Verbesserung des Jacobi-Verfahrens handelt und nicht um ein vollkommen anderes Konzept. Auch hier ist es bei unserem Abbruchkriterium wieder wichtig, mit einem Zufallsvektor für $u$ zu starten.
 
 \subsection{Vergleich der Konvergenz und Stabilität beider Verfahren}\label{konvergenz}
-Beide Verfahren sind uneingeschränkt stabil.
+Beide Verfahren sind uneingeschränkt stabil (\url{http://www.aia.rwth-aachen.de/vlueb/vl/numerische_stroemungsmechanik_ii/material/msl.pdf}, Seite 52f).
 
-Da unsere Matrix $A$ strikt diagonaldominant ist, konvergieren sowohl das Jacobi- als auch das Gauß-Seidel-Verfahren in unserer Anwendung. Hierbei konvergiert das Gauß-Seidel-Verfahren deutlich schneller als das Jacobi-Verfahren, da das Jacobi-Verfahren im Gegensatz zum Gauß-Seidel-Verfahren mit veralteten Näherungen weiterrechnet.
+Da unsere Matrix $A$ strikt diagonaldominant ist, konvergieren sowohl das Jacobi- als auch das Gauß-Seidel-Verfahren in unserer Anwendung (\url{http://www.mathematik.uni-muenchen.de/~lerdos/SS08/Num/9.pdf}, Seite 4 und 8). Hierbei konvergiert das Gauß-Seidel-Verfahren deutlich schneller als das Jacobi-Verfahren, da das Jacobi-Verfahren im Gegensatz zum Gauß-Seidel-Verfahren mit veralteten Näherungen weiterrechnet.
 
 Die Konvergenzgeschwindigkeit unserer Implementierung schwankt je nach Startvektor. Daher haben wir über zehn Aufrufe gemittelt, wobei in jedem Aufruf beide Verfahren mit demselben Startvektor ausgeführt wurden. 
 
