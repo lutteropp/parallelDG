@@ -179,7 +179,7 @@ Dies führt zu folgendem iterativen Verfahren, wobei $u^{(k)}$ den Vektor $u$ in
 $$u^{(k)} = D^{-1} \left(b - Lu^{(k)} - Ru^{(k-1)}\right)$$
 
 Oder elementweise:
-$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{i,j}*u_i^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
+$$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{i,j}*u_j^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
 
 Der Startvektor $u^{(0)}$ kann hierbei beliebig gewählt werden und es gilt, dass $D$ invertierbar sein muss. Dies bei unserer Aufgabenstellung der Fall, da $a_{i,i} = 4$ ist für $i = 1, \ldots, n^2$.
 
