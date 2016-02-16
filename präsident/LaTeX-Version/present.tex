@@ -377,9 +377,37 @@ Loop-Unrolling vermeidet Modulo-Operation!
 
 \begin{frame}
 \frametitle{Auswertung ohne Abbruchkriterium}
+\begin{block}{Für $size=1024$ mit $4$ Threads}
+
 \begin{center}
-\includegraphics[scale=0.65]{images/tabelle_auswertung_ohne.png}
+\small
+\begin{tabular}{p{1.5cm}|c|c||c|c|c}
+ & \multicolumn{2}{c||}{GCC} & \multicolumn{2}{c|}{ICC}  \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup \\ 
+\hline 
+\tiny{Jacobi sequentiell} & 70.5 s & - & 72 s & - \\
+\hline
+\tiny{Jacobi} & 19 s & 3.71 & 125 s & 0.58 \\ 
+\hline
+\tiny{Jacobi SSE} & 10.6 s & 6.65 & 9.4 s & 7.66 \\ 
+\hline 
+\tiny{Gauß-Seidel sequentiell} & 135 s & - & 135 s & - \\
+\hline
+\tiny{Gauß-Seidel naiv} & 32.1 s & 4.21 & 125 s & 1.08 \\ 
+\hline
+\tiny{Gauß-Seidel Rot-Schwarz} & 16.3 s & 8.28 & 13 s & 10.38  \\ 
+\hline 
+\tiny{Gauß-Seidel Rot-Schwarz SSE} & 13.4 s & 10.07 & 12 s & 11.25 \\ 
+\hline 
+\tiny{Gauß-Seidel Wavefront} & 98 s & 1.38 & 116 s & 1.16 \\ 
+\hline 
+\tiny{Gauß-Seidel Wavefront Cache} & 77 s & 1.75 & 94 s & 1.44 \\ 
+\hline 
+\end{tabular}
 \end{center}
+
+\end{block}
 \end{frame}
 
 \begin{frame}
