@@ -477,6 +477,11 @@ INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/helvetic/phvro8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvro8r.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7v.vf
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7y.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
@@ -535,11 +540,6 @@ INPUT images/h_1_drittel_zahl.pdf
 INPUT ./images/h_1_drittel_zahl.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
-INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7v.vf
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
 INPUT images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png

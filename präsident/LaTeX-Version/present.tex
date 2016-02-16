@@ -79,7 +79,9 @@ $$\textcolor{lightblue}{\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\pa
 \includegraphics[scale=0.5]{images/aufgabenstellung.png}
 \\Approximation mit Methode der Finiten Differenzen
 \end{center}
-$$\textcolor{darkblue}{-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)}$$
+$$\textcolor{darkblue}{u_{i,j} = \frac{1}{4} * \left(u_{i,j-1} + u_{i-1,j} + u_{i,j+1} + u_{i+1,j} - h^2 f(x_i, y_j) \right)}$$
+
+$$\textcolor{gray}{-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)}$$
 \end{frame}
 
 \begin{frame}
