@@ -540,6 +540,11 @@ INPUT images/h_1_drittel_zahl.pdf
 INPUT ./images/h_1_drittel_zahl.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvb8t.tfm
+INPUT style/kit_logo_de_4c_positiv-rgb.pdf
+INPUT style/kit_logo_de_4c_positiv-rgb.pdf
+INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/helvetic/phvb8t.vf
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvb8r.tfm
 INPUT images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png
