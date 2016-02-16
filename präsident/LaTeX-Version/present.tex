@@ -128,7 +128,32 @@ TODO: SSE-Bild
 
 \begin{frame}
 \frametitle{Parallele Ansätze -- Gauß-Seidel-Wavefront}
-TODO
+\begin{itemize}
+\item Abhängigkeiten innerhalb einer Iteration:
+$$u_{i,j}^{k+1} = \frac{1}{4} u_{i,j-1}^{k+1} + u_{i-1,j}^{k+1} + u_{i,j+1}^{k} + u_{i+1,j}^{k} + h^2 f(x_i, y_j)$$
+\item 1. Möglichkeit: Wavefront
+\begin{center}
+\includegraphics[scale=0.7]{images/wavefront.png}
+\end{center}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Gauß-Seidel-Wavefront}
+
+\begin{block}{Nachteile Wavefront}
+\begin{itemize}
+	\item Schlecht für Cache
+	\begin{center}
+	\includegraphics[scale=0.8]{images/cache_1.png} \qquad
+	\includegraphics[scale=0.8]{images/cache_2.png}
+	\end{center}
+	\item Aufwändige Berechnung der Indizes
+	\item Geringe Parallelität bei kleinen Diagonalen
+	\item Allgemein großer Overhead
+\end{itemize}
+\end{block}
+
 \end{frame}
 
 \begin{frame}
