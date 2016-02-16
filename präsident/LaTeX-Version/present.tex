@@ -76,10 +76,7 @@ $$\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^
 \includegraphics[scale=0.5]{images/aufgabenstellung.png}
 \\Approximation mit Methode der Finiten Differenzen
 \end{center}
-\begin{align}
--\Delta u(x,y) &= f(x,y) \quad \forall (x,y) \in (0,1)^2\\
-u(x,y) &= 0 \qquad \text{~~~~~} \forall (x,y) \in [0,1]^2 \backslash (0,1)^2
-\end{align}
+$$-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)$$
 \end{frame}
 
 \begin{frame}
