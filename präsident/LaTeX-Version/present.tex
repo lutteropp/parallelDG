@@ -326,7 +326,7 @@ $$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1
 \end{frame}
 
 \begin{frame}
-\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+\frametitle{Parallele Ansätze -- Gauß-Seidel Rot-Schwarz}
 \begin{block}{Zweite Möglichkeit: Rot-Schwarz-Iteration}
 	Färben der Matrixeinträge nach folgendem Schema:
 	\begin{center}
@@ -340,7 +340,7 @@ $$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1
 \end{frame}
 
 \begin{frame}
-\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+\frametitle{Parallele Ansätze -- Gauß-Seidel Rot-Schwarz}
 \begin{block}{Optimierung: Rot-Matrix und Schwarz-Matrix separat}
 \begin{itemize}
 \item Cache-Effizienz
@@ -354,7 +354,7 @@ $$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1
 \end{frame}
 
 \begin{frame}
-\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+\frametitle{Parallele Ansätze -- Gauß-Seidel Rot-Schwarz}
 \begin{block}{Berechnung der Indizes, $size$ ungerade für $size=7$}
 \begin{center}
 \includegraphics[scale=0.2]{images/indizes_ungerade.png}
@@ -363,7 +363,7 @@ $$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1
 \end{frame}
 
 \begin{frame}
-\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+\frametitle{Parallele Ansätze -- Gauß-Seidel Rot-Schwarz}
 \begin{block}{Berechnung der Indizes, $size$ gerade für $size=6$}
 \begin{center}
 \includegraphics[scale=0.2]{images/indizes_gerade.png}
@@ -406,10 +406,47 @@ Loop-Unrolling vermeidet Modulo-Operation!
 
 \begin{frame}
 \frametitle{Auswertung mit Abbruchkriterium}
+\begin{block}{Jacobi-Verfahren für $size=257$}
 \begin{center}
-\includegraphics[scale=0.45]{images/tabelle_auswertung_ohne_2.png}\\
-\includegraphics[scale=0.45]{images/tabelle_auswertung_ohne_3.png}
+\footnotesize
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c}{8 Threads} \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
+\hline 
+Sequentiell & 25.765 s & - & 24.8 s & - & 26.605 s & - \\
+\hline
+OpenMP & 43.427 s & 0.593 & 10.714 s & 2.315 & 6.867 s & 3.874 \\ 
+\hline
+OpenMP + SSE & 22.424 s & 1.149 & 5.655 s & 4.385 & 3.593 s & 7.405  \\ 
+\hline 
+\end{tabular}
 \end{center}
+\end{block}
+
+\begin{block}{Gauß-Seidel-Verfahren für $size=257$}
+\begin{center}
+\tiny
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c|c|c|c}
+ & \multicolumn{3}{c|}{1 Thread} & \multicolumn{3}{c|}{4 Threads} & \multicolumn{3}{c}{8 Threads}  \\ 
+\hline 
+ & Laufzeit & Speedup & Effizienz & Laufzeit & Speedup & Effizienz & Laufzeit & Speedup & Effizienz \\ 
+\hline 
+Sequentiell & 15,179 s & - & - &  14,963 s & - & - & 15,036 s & - & - \\
+\hline
+Rot-Schwarz OpenMP & 7,371 s & 2,059 & 2,059 & 1,973 s & 7,584 & 1,896 & 1,118 s & 13,449 & 1,681 \\ 
+\hline
+Rot-Schwarz OpenMP + SSE & 4,303 s & 3,528 & 3,528 & 1,196 s & 12,511 & 3,128 & 0,782 s & 19,228 & 2,404 \\ 
+\hline 
+\end{tabular}
+\end{center}
+\end{block}
+
+
+%\begin{center}
+%\includegraphics[scale=0.45]{images/tabelle_auswertung_ohne_2.png}\\
+%\includegraphics[scale=0.45]{images/tabelle_auswertung_ohne_3.png}
+%\end{center}
 \end{frame}
 
 \section{Fazit}
@@ -417,8 +454,10 @@ Loop-Unrolling vermeidet Modulo-Operation!
 \begin{frame}
 \frametitle{Fazit}
 \begin{itemize}
+\item Jacobi leichter zu parallelisieren
 \item Gauß-Seidel konvergiert doppelt so schnell
 \item Rot-Schwarz-Iteration liefert den besten Speedup
+\item Vektorisierung lohnt sich
 \end{itemize}
 \end{frame}
 
