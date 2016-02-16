@@ -480,17 +480,17 @@ OpenMP + SSE & 22,424 s & 1,149 & 5,655 s & 4,385 & 3,593 s & 7,405  \\
 
 \begin{block}{Gauß-Seidel-Verfahren für $size=257$}
 \begin{center}
-\tiny
-\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c|c|c|c}
- & \multicolumn{3}{c|}{1 Thread} & \multicolumn{3}{c|}{4 Threads} & \multicolumn{3}{c}{8 Threads}  \\ 
+\small
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c}{8 Threads}  \\ 
 \hline 
- & Laufzeit & Speedup & Effizienz & Laufzeit & Speedup & Effizienz & Laufzeit & Speedup & Effizienz \\ 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
 \hline 
-Sequentiell & 15,179 s & - & - &  14,963 s & - & - & 15,036 s & - & - \\
+\tiny{Sequentiell} & 15,179 s & - & 14,963 s & - & 15,036 s & - \\
 \hline
-Rot-Schwarz OpenMP & 7,371 s & 2,059 & 2,059 & 1,973 s & 7,584 & 1,896 & 1,118 s & 13,449 & 1,681 \\ 
+\tiny{Rot-Schwarz OpenMP} & 7,371 s & 2,059 & 1,973 s & 7,584 & 1,118 s & 13,449 \\ 
 \hline
-Rot-Schwarz OpenMP + SSE & 4,303 s & 3,528 & 3,528 & 1,196 s & 12,511 & 3,128 & 0,782 s & 19,228 & 2,404 \\ 
+\tiny{Rot-Schwarz OpenMP + SSE} & 4,303 s & 3,528 & 1,196 s & 12,511 & 0,782 s & 19,228 \\ 
 \hline 
 \end{tabular}
 \end{center}
