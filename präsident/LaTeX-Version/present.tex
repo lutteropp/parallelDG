@@ -106,21 +106,46 @@ $$\Leftrightarrow (D+L+R)u = b \Leftrightarrow \ldots$$
 \end{frame}
 
 \begin{frame}
+\frametitle{Konkretes Beispiel}
+TODO
+\end{frame}
+
+\begin{frame}
 \frametitle{Unsere Lösungsmatrix $U$}
-$$
+\begin{block}{Für $h=\frac{1}{3}$}
+
+Betrachte statt 
+
+$$u = \begin{pmatrix}
+u_{1,1} \\ 
+u_{1,2} \\ 
+u_{2,1} \\ 
+u_{2,2}
+\end{pmatrix} \qquad
 U=
 \begin{tabular}{|c|c|c|c|}
 \hline 
-\cellcolor[gray]{0.8}$u_{0,0}$ & \cellcolor[gray]{0.8}$u_{0,1}$ & \cellcolor[gray]{0.8}$u_{0,2}$ & \cellcolor[gray]{0.8}$u_{0,3}$ \\ 
+\cellcolor[gray]{0.8}$u_{0,0}$ & \cellcolor[gray]{0.8}$u_{1,0}$ & \cellcolor[gray]{0.8}$u_{2,0}$ & \cellcolor[gray]{0.8}$u_{3,0}$ \\ 
 \hline 
-\cellcolor[gray]{0.8}$u_{1,0}$ & $u_{1,1}$ & $u_{1,2}$ & \cellcolor[gray]{0.8}$u_{1,3}$ \\ 
+\cellcolor[gray]{0.8}$u_{0,1}$ & $u_{1,1}$ & $u_{2,1}$ & \cellcolor[gray]{0.8}$u_{3,1}$ \\ 
 \hline 
-\cellcolor[gray]{0.8}$u_{2,0}$ & $u_{2,1}$ & $u_{2,2}$ & \cellcolor[gray]{0.8}$u_{2,3}$ \\ 
+\cellcolor[gray]{0.8}$u_{0,2}$ & $u_{1,2}$ & $u_{2,2}$ & \cellcolor[gray]{0.8}$u_{3,2}$ \\ 
 \hline 
-\cellcolor[gray]{0.8}$u_{3,0}$ & \cellcolor[gray]{0.8}$u_{3,1}$ & \cellcolor[gray]{0.8}$u_{3,2}$ & \cellcolor[gray]{0.8}$u_{3,3}$ \\ 
+\cellcolor[gray]{0.8}$u_{0,3}$ & \cellcolor[gray]{0.8}$u_{1,3}$ & \cellcolor[gray]{0.8}$u_{2,3}$ & \cellcolor[gray]{0.8}$u_{3,3}$ \\ 
 \hline 
 \end{tabular} 
 $$
+
+(Die Randeinträge sind hierbei $0$)
+\end{block}
+
+\begin{block}{Vorteil}
+\begin{itemize}
+\item Jeder Eintrag in $U$ entspricht einem Punkt im Gitter
+\item Parallelisierung intuitiver
+\end{itemize}
+\end{block}
+
 \end{frame}
 
 \subsection*{Abbruchkriterium}

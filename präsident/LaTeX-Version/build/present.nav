@@ -20,50 +20,52 @@
 \headcommand {\beamer@framepages {6}{6}}
 \headcommand {\slideentry {2}{1}{3}{7/7}{Herleitung der Verfahren}{0}}
 \headcommand {\beamer@framepages {7}{7}}
-\headcommand {\beamer@subsectionentry {0}{2}{2}{8}{Abbruchkriterium}}\headcommand {\beamer@subsectionpages {5}{7}}
-\headcommand {\slideentry {2}{2}{1}{8/8}{Abbruchkriterium}{0}}
+\headcommand {\slideentry {2}{1}{4}{8/8}{Herleitung der Verfahren}{0}}
 \headcommand {\beamer@framepages {8}{8}}
-\headcommand {\slideentry {2}{2}{2}{9/9}{Abbruchkriterium}{0}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{9}{Abbruchkriterium}}\headcommand {\beamer@subsectionpages {5}{8}}
+\headcommand {\slideentry {2}{2}{1}{9/9}{Abbruchkriterium}{0}}
 \headcommand {\beamer@framepages {9}{9}}
-\headcommand {\sectionentry {3}{Parallelisierung}{10}{Parallelisierung}{0}}
-\headcommand {\beamer@sectionpages {5}{9}}
-\headcommand {\beamer@subsectionpages {8}{9}}
-\headcommand {\slideentry {3}{0}{3}{10/10}{}{0}}
+\headcommand {\slideentry {2}{2}{2}{10/10}{Abbruchkriterium}{0}}
 \headcommand {\beamer@framepages {10}{10}}
-\headcommand {\slideentry {3}{0}{4}{11/11}{}{0}}
+\headcommand {\sectionentry {3}{Parallelisierung}{11}{Parallelisierung}{0}}
+\headcommand {\beamer@sectionpages {5}{10}}
+\headcommand {\beamer@subsectionpages {9}{10}}
+\headcommand {\slideentry {3}{0}{3}{11/11}{}{0}}
 \headcommand {\beamer@framepages {11}{11}}
-\headcommand {\slideentry {3}{0}{5}{12/12}{}{0}}
+\headcommand {\slideentry {3}{0}{4}{12/12}{}{0}}
 \headcommand {\beamer@framepages {12}{12}}
-\headcommand {\slideentry {3}{0}{6}{13/13}{}{0}}
+\headcommand {\slideentry {3}{0}{5}{13/13}{}{0}}
 \headcommand {\beamer@framepages {13}{13}}
-\headcommand {\slideentry {3}{0}{7}{14/14}{}{0}}
+\headcommand {\slideentry {3}{0}{6}{14/14}{}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\slideentry {3}{0}{8}{15/15}{}{0}}
+\headcommand {\slideentry {3}{0}{7}{15/15}{}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\slideentry {3}{0}{9}{16/16}{}{0}}
+\headcommand {\slideentry {3}{0}{8}{16/16}{}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\slideentry {3}{0}{10}{17/17}{}{0}}
+\headcommand {\slideentry {3}{0}{9}{17/17}{}{0}}
 \headcommand {\beamer@framepages {17}{17}}
-\headcommand {\sectionentry {4}{Experimentelle Auswertung}{18}{Experimentelle Auswertung}{0}}
-\headcommand {\beamer@sectionpages {10}{17}}
-\headcommand {\beamer@subsectionpages {10}{17}}
-\headcommand {\slideentry {4}{0}{11}{18/18}{}{0}}
+\headcommand {\slideentry {3}{0}{10}{18/18}{}{0}}
 \headcommand {\beamer@framepages {18}{18}}
-\headcommand {\slideentry {4}{0}{12}{19/19}{}{0}}
+\headcommand {\sectionentry {4}{Experimentelle Auswertung}{19}{Experimentelle Auswertung}{0}}
+\headcommand {\beamer@sectionpages {11}{18}}
+\headcommand {\beamer@subsectionpages {11}{18}}
+\headcommand {\slideentry {4}{0}{11}{19/19}{}{0}}
 \headcommand {\beamer@framepages {19}{19}}
-\headcommand {\slideentry {4}{0}{13}{20/20}{}{0}}
+\headcommand {\slideentry {4}{0}{12}{20/20}{}{0}}
 \headcommand {\beamer@framepages {20}{20}}
-\headcommand {\slideentry {4}{0}{14}{21/21}{}{0}}
+\headcommand {\slideentry {4}{0}{13}{21/21}{}{0}}
 \headcommand {\beamer@framepages {21}{21}}
-\headcommand {\slideentry {4}{0}{15}{22/22}{}{0}}
+\headcommand {\slideentry {4}{0}{14}{22/22}{}{0}}
 \headcommand {\beamer@framepages {22}{22}}
-\headcommand {\sectionentry {5}{Fazit}{23}{Fazit}{0}}
-\headcommand {\beamer@sectionpages {18}{22}}
-\headcommand {\beamer@subsectionpages {18}{22}}
-\headcommand {\slideentry {5}{0}{16}{23/23}{}{0}}
+\headcommand {\slideentry {4}{0}{15}{23/23}{}{0}}
 \headcommand {\beamer@framepages {23}{23}}
-\headcommand {\beamer@partpages {1}{23}}
-\headcommand {\beamer@subsectionpages {23}{23}}
-\headcommand {\beamer@sectionpages {23}{23}}
-\headcommand {\beamer@documentpages {23}}
-\headcommand {\def \inserttotalframenumber {23}}
+\headcommand {\sectionentry {5}{Fazit}{24}{Fazit}{0}}
+\headcommand {\beamer@sectionpages {19}{23}}
+\headcommand {\beamer@subsectionpages {19}{23}}
+\headcommand {\slideentry {5}{0}{16}{24/24}{}{0}}
+\headcommand {\beamer@framepages {24}{24}}
+\headcommand {\beamer@partpages {1}{24}}
+\headcommand {\beamer@subsectionpages {24}{24}}
+\headcommand {\beamer@sectionpages {24}{24}}
+\headcommand {\beamer@documentpages {24}}
+\headcommand {\def \inserttotalframenumber {24}}
