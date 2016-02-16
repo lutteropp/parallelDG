@@ -528,6 +528,9 @@ INPUT ./images/code_jacobi.png
 INPUT ./images/code_jacobi.png
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
+INPUT images/simd.png
+INPUT ./images/simd.png
+INPUT ./images/simd.png
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT images/wavefront.png
