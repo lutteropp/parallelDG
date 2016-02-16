@@ -1,0 +1,119 @@
+\documentclass{beamer}
+\usetheme[deutsch]{KIT}
+
+%\usepackage{etex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{tikz,calc,ifthen}
+\usepackage{mathtools}
+\usepackage[normalem]{ulem}
+\usepackage{graphicx}
+\usepackage{listings, caption}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage{eurosym} % used for \euro
+%\usepackage{pgfplots}
+%\usepgfplotslibrary{statistics}
+\usetikzlibrary{positioning,calc,arrows,shapes}
+\tikzset{
+  every node/.style={transform shape},
+  auto,
+  block/.style={align=center,rectangle,draw,minimum height=20pt,minimum width=30pt},
+  >=triangle 60,
+  alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}
+  },
+  beameralert/.style={alt=<#1>{color=green!80!black}{}},
+  mythick/.style={line width=1.4pt}
+}
+
+\newcommand*{\maxwidthofm}[2]{\maxof{\widthof{$#1$}}{\widthof{$#2$}}}
+\newcommand<>*{\robustaltm}[2]{
+  \alt#3
+  {\mathmakebox[\maxwidthofm{#1}{#2}]{#1}\vphantom{#1#2}}
+    {\mathmakebox[\maxwidthofm{#1}{#2}]{#2}\vphantom{#1#2}}
+}
+
+\newcommand<>*{\nodealert}[1]{\only#2{\draw[overlay,mythick,color=green!80!black] (#1.north west) rectangle (#1.south east)}}
+
+\title{Projekt 1 -- Jacobi- und Gauß-Seidel-Verfahren}
+\author{Sarah Lutteropp und Johannes Sailer}
+\subtitle{\insertauthor}
+\institute[Lehrstuhl für Rechnerarchitektur und Parallelverarbeitung]{Lehrstuhl für Rechnerarchitektur und Parallelverarbeitung}
+\date{17.02.2016}
+\KITtitleimage{images/28740_the_matrix_matrix_code.jpg}
+
+\begin{document}
+
+\begin{frame}
+    \maketitle
+\end{frame}
+
+\begin{frame}
+   \frametitle{Gliederung}
+   \tableofcontents
+ \end{frame}
+
+\section{Aufgabenstellung}
+
+\begin{frame}
+\frametitle{Aufgabenstellung}
+TODO
+\end{frame}
+
+\section{Mathematischer Hintergrund}
+
+\subsection*{Herleitung der Verfahren}
+
+\begin{frame}
+\frametitle{Herleitung der Verfahren}
+TODO
+\end{frame}
+
+\subsection*{Abbruchkriterium}
+
+\begin{frame}
+\frametitle{Unser Abbruchkriterium}
+TODO
+\end{frame}
+
+\section{Parallelisierung}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Jacobi-Verfahren}
+TODO
+\end{frame}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Gauß-Seidel-Wavefront}
+TODO
+\end{frame}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+TODO
+\end{frame}
+
+\section{Experimentelle Auswertung}
+
+\begin{frame}
+\frametitle{Auswertung ohne Abbruchkriterium}
+TODO
+\end{frame}
+
+\begin{frame}
+\frametitle{Auswertung mit Abbruchkriterium}
+TODO
+\end{frame}
+
+\section{Fazit}
+
+\begin{frame}
+\frametitle{Fazit}
+TODO
+\end{frame}
+
+\end{document}
+
+
