@@ -59,7 +59,11 @@
 
 \begin{frame}
 \frametitle{Aufgabenstellung}
-TODO
+\begin{center}
+Approximation von Stoffkonzentrationen
+\includegraphics[scale=0.5]{images/aufgabenstellung.png}
+\\Löse $Au=b$
+\end{center}
 \end{frame}
 
 \section{Mathematischer Hintergrund}
@@ -75,14 +79,51 @@ TODO
 
 \begin{frame}
 \frametitle{Unser Abbruchkriterium}
-TODO
+\begin{huge}
+$$\frac{\sum_{i,j} {| u_{i,j}^{(k)} - u_{i,j}^{(k-1)} |}}{size * size} \leq \texttt{TOL}$$
+\end{huge}
+
+\begin{columns}[c]
+		\column[c]{5cm}
+		\vspace{0.6cm}
+		\begin{block}{Vorteile}
+\begin{itemize}
+	\item Sprunglos
+	\item Implementierung mit \texttt{\#pragma omp reduce}
+\end{itemize}
+\end{block}
+		\column{5cm}
+		\begin{block}{Nachteile}
+\begin{itemize}
+\item Maximum der Differenzen wäre exakter
+\end{itemize}
+\end{block}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unser Abbruchkriterium}
+\begin{center}
+Beide Verfahren konvergieren.
+\includegraphics[scale=0.232]{images/konvergenz.png}
+\end{center}
 \end{frame}
 
 \section{Parallelisierung}
 
 \begin{frame}
 \frametitle{Parallele Ansätze -- Jacobi-Verfahren}
-TODO
+Keine Abhängigkeiten innerhalb einer Iteration
+\begin{center}
+\includegraphics[scale=0.75]{images/code_jacobi.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Jacobi-Verfahren}
+\begin{block}{Zusätzliche Optimierung: SSE-Vektorinstruktionen}
+TODO: SSE-Bild
+\end{block}
 \end{frame}
 
 \begin{frame}
