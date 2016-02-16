@@ -132,7 +132,7 @@ Keine Abhängigkeiten innerhalb einer Iteration
 \frametitle{Parallele Ansätze -- Gauß-Seidel-Wavefront}
 \begin{itemize}
 \item Abhängigkeiten innerhalb einer Iteration:
-$$u_{i,j}^{k+1} = \frac{1}{4} u_{i,j-1}^{k+1} + u_{i-1,j}^{k+1} + u_{i,j+1}^{k} + u_{i+1,j}^{k} + h^2 f(x_i, y_j)$$
+$$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1}^{(k)} + u_{i+1,j}^{(k)} + h^2 f(x_i, y_j)$$
 \item 1. Möglichkeit: Wavefront
 \begin{center}
 \includegraphics[scale=0.7]{images/wavefront.png}
