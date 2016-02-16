@@ -45,6 +45,9 @@
 \date{17.02.2016}
 \KITtitleimage{images/28740_the_matrix_matrix_code.jpg}
 
+\definecolor{lightblue}{RGB}{154,192,205}
+\definecolor{darkblue}{RGB}{16,78,139}
+
 \begin{document}
 
 \begin{frame}
@@ -66,8 +69,6 @@
 u(x,y) &= 0 \qquad \text{~~~~~} \forall (x,y) \in [0,1]^2 \backslash (0,1)^2
 \end{align}
 
-\definecolor{lightblue}{RGB}{154,192,205}
-
 $$\textcolor{lightblue}{\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}}$$
 \end{block}
 \end{frame}
@@ -78,7 +79,7 @@ $$\textcolor{lightblue}{\Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\pa
 \includegraphics[scale=0.5]{images/aufgabenstellung.png}
 \\Approximation mit Methode der Finiten Differenzen
 \end{center}
-$$-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)$$
+$$\textcolor{darkblue}{-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)}$$
 \end{frame}
 
 \begin{frame}
@@ -124,8 +125,6 @@ $$-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)$$
 \vspace{-1cm}
 
 $$-u_{i,j-1} - u_{i-1,j} + 4 u_{i,j} - u_{i,j+1} - u_{i+1,j} = h^2 f(x_i, y_j)$$
-
-\definecolor{darkblue}{RGB}{16,78,139}
 
 $$
 \textcolor{darkblue}{
