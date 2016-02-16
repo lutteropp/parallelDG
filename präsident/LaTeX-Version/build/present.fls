@@ -462,8 +462,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/mathpazo/fplmr.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
-INPUT style/kit_logo_de_4c_positiv-rgb.pdf
-INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvr8t.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
@@ -528,6 +526,8 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/mathpazo/zplmr7y.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/helvetic/phvr8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvr8r.tfm
+INPUT style/kit_logo_de_4c_positiv-rgb.pdf
+INPUT style/kit_logo_de_4c_positiv-rgb.pdf
 INPUT images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png
 INPUT ./images/zerlegung_A.png
