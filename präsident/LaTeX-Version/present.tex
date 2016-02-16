@@ -11,6 +11,7 @@
 \usepackage{graphicx}
 \usepackage{listings, caption}
 \usepackage{color}
+\usepackage{colortbl}
 \usepackage{textcomp}
 \usepackage{eurosym} % used for \euro
 %\usepackage{pgfplots}
@@ -58,11 +59,6 @@
 \section{Aufgabenstellung}
 
 \begin{frame}
-\frametitle{Approximation von Stoffkonzentrationen}
-TODO: Mehr Motivation
-\end{frame}
-
-\begin{frame}
 \frametitle{Aufgabenstellung}
 \begin{center}
 Approximation von Stoffkonzentrationen
@@ -103,20 +99,28 @@ $$\Leftrightarrow (D+L+R)u = b \Leftrightarrow \ldots$$
 \end{center}
 
 \begin{itemize}
-\item Jacobi-Verfahren: $$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
-\item Gauß-Seidel-Verfahren: $$u_i^{(k)} = \frac{1}{a_{i,i}} * \left(b_i - \sum_{j=1}^{i-1}{a_{i,j} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{i,j}*u_j^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
+\item Jacobi-Verfahren: $$u_i^{(k)} = \frac{1}{a_{ii}} * \left(b_i - \sum_{j \neq i}{a_{ij} u_j^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
+\item Gauß-Seidel-Verfahren: $$u_i^{(k)} = \frac{1}{a_{ii}} * \left(b_i - \sum_{j=1}^{i-1}{a_{ij} u_j^{(k)}} - \sum_{j=i+1}^{n^2}{a_{ij}*u_j^{(k-1)}}\right) \quad \forall i = 1, \ldots, n^2$$
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Herleitung der Verfahren}
-TODO
-\end{frame}
-
-\begin{frame}
 \frametitle{Unsere Lösungsmatrix $U$}
-TODO
+$$
+U=
+\begin{tabular}{|c|c|c|c|}
+\hline 
+\cellcolor[gray]{0.8}$u_{0,0}$ & \cellcolor[gray]{0.8}$u_{0,1}$ & \cellcolor[gray]{0.8}$u_{0,2}$ & \cellcolor[gray]{0.8}$u_{0,3}$ \\ 
+\hline 
+\cellcolor[gray]{0.8}$u_{1,0}$ & $u_{1,1}$ & $u_{1,2}$ & \cellcolor[gray]{0.8}$u_{1,3}$ \\ 
+\hline 
+\cellcolor[gray]{0.8}$u_{2,0}$ & $u_{2,1}$ & $u_{2,2}$ & \cellcolor[gray]{0.8}$u_{2,3}$ \\ 
+\hline 
+\cellcolor[gray]{0.8}$u_{3,0}$ & \cellcolor[gray]{0.8}$u_{3,1}$ & \cellcolor[gray]{0.8}$u_{3,2}$ & \cellcolor[gray]{0.8}$u_{3,3}$ \\ 
+\hline 
+\end{tabular} 
+$$
 \end{frame}
 
 \subsection*{Abbruchkriterium}
