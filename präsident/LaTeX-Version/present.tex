@@ -58,6 +58,11 @@
 \section{Aufgabenstellung}
 
 \begin{frame}
+\frametitle{Approximation von Stoffkonzentrationen}
+TODO: Mehr Motivation
+\end{frame}
+
+\begin{frame}
 \frametitle{Aufgabenstellung}
 \begin{center}
 Approximation von Stoffkonzentrationen
@@ -66,12 +71,22 @@ Approximation von Stoffkonzentrationen
 \end{center}
 \end{frame}
 
+\begin{frame}
+\frametitle{Aufgabenstellung}
+TODO: Mehr Mathe
+\end{frame}
+
 \section{Mathematischer Hintergrund}
 
 \subsection*{Herleitung der Verfahren}
 
 \begin{frame}
 \frametitle{Herleitung der Verfahren}
+TODO
+\end{frame}
+
+\begin{frame}
+\frametitle{Unsere Lösungsmatrix $U$}
 TODO
 \end{frame}
 
@@ -160,8 +175,23 @@ $$u_{i,j}^{(k+1)} = \frac{1}{4} u_{i,j-1}^{(k+1)} + u_{i-1,j}^{(k+1)} + u_{i,j+1
 
 \begin{frame}
 \frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
-TODO
+\begin{block}{Zweite Möglichkeit: Rot-Schwarz-Iteration}
+	Färben der Matrixeinträge nach folgendem Schema:
+	\begin{center}
+	\includegraphics[scale=0.4]{images/rotschwarz_faerbung.png}
+	\end{center}
+	\begin{enumerate}
+	\item Berechnen aller roten Einträge
+	\item Berechnen aller schwarzen Einträge
+	\end{enumerate}
+\end{block}
 \end{frame}
+
+\begin{frame}
+\frametitle{Parallele Ansätze -- Gauß-Seidel-RotSchwarz}
+TODO: Berechnung der Indizes, Optimierungen
+\end{frame}
+
 
 \section{Experimentelle Auswertung}
 
