@@ -384,9 +384,35 @@ Loop-Unrolling vermeidet Modulo-Operation!
 
 \begin{frame}
 \frametitle{Auswertung mit Abbruchkriterium}
+\begin{block}{Für $size=128$}
 \begin{center}
-\includegraphics[scale=0.35]{images/tabelle_auswertung_mit.png}
+\small
+\begin{tabular}{p{1.5cm}|c|c|c|c|c|c}
+ & \multicolumn{2}{c|}{1 Thread} & \multicolumn{2}{c|}{4 Threads} & \multicolumn{2}{c}{8 Threads} \\ 
+\hline 
+ & Laufzeit & Speedup & Laufzeit & Speedup & Laufzeit & Speedup \\ 
+\hline 
+\tiny{Jacobi sequentiell} & 2.15 s & - & 2.15 s & - & 2.15 s & - \\
+\hline
+\tiny{Jacobi} & 4 s & 0.538 & 1.1 s & 1.955 & 0.73 s & 2.945 \\ 
+\hline
+\tiny{Jacobi SSE} & 2.15 s & 1 & 0.67 s & 3.209 & 0.550 s & 3.909  \\ 
+\hline 
+\tiny{Gauß-Seidel sequentiell} & 3.2 s & - & 3.2 s & - & 3.2 s & - \\
+\hline
+\tiny{Gauß-Seidel naiv} & 3.2 s & 1 & 0.9 s & 3.556 & 3.55 s & 5.818 \\ 
+\hline
+\tiny{Gauß-Seidel Rot-Schwarz} & 1.64 s & 1.951 & 0.5 s & 6.4 & 0.41 s & 7.805  \\ 
+\hline 
+\tiny{Gauß-Seidel Rot-Schwarz SSE} & 1.354 s & 2.363 & 0.44 s & 7.273 & 0.4 s & 8  \\ 
+\hline 
+\tiny{Gauß-Seidel Wavefront} & 2.6 s & 1.231 & 11.5 s & 0.278 & 22 s & 0.145  \\ 
+\hline 
+\tiny{Gauß-Seidel Wavefront Cache} & 2.47 s & 1.296 & 12.5 s & 0.256 & 27 s & 0.119  \\ 
+\hline 
+\end{tabular}
 \end{center}
+\end{block}
 \end{frame}
 
 \begin{frame}
