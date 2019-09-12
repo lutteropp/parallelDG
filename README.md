@@ -9,3 +9,5 @@ Parallelisierungsansatz mittels Wavefront als auch einen Parallelisierungsansatz
 Schwarz-Unterteilung gewählt. Unsere mit SIMD-Instruktionen beschleunigte Rot-Schwarz-
 Implementierung des Gauß-Seidel-Verfahrens zeigte die schnellste Laufzeit bei unseren Mes-
 sungen, gefolgt von der nicht vektorisierten Rot-Schwarz-Implementierung.
+
+Unsere Ausarbeitung ist in doc/doku.pdf zu finden.
